@@ -96,6 +96,21 @@ export const translations = {
           title: "APIs y Microservicios",
           description: "Desarrollamos APIs robustas y arquitecturas de microservicios para aplicaciones escalables.",
           price: "Desde 5.500 €"
+        },
+        {
+          title: "Marketing Corporativo",
+          description: "Desarrollamos estrategias de marketing B2B y corporativo para posicionar tu empresa en el mercado empresarial.",
+          price: "Desde 2.500 €/mes"
+        },
+        {
+          title: "Formación Digital para Directivos",
+          description: "Capacitamos a directivos y líderes empresariales en las últimas tendencias digitales y tecnológicas.",
+          price: "Desde 150 €/hora"
+        },
+        {
+          title: "Digitalización para PYMES",
+          description: "Ayudamos a las pequeñas y medianas empresas a digitalizar sus procesos y competir en el mercado digital.",
+          price: "Desde 3.500 €"
         }
       ],
       inquire: "Consultar →",
@@ -417,6 +432,105 @@ export const translations = {
           startingFrom: "A partir de",
           description: "Precios personalizados según la complejidad de los procesos",
           consult: "Consultar Precio"
+        }
+      },
+      // Marketing Corporativo
+      corporateMarketing: {
+        title: "Marketing Corporativo",
+        subtitle: "Desarrollamos estrategias de marketing B2B y corporativo para posicionar tu empresa en el mercado empresarial.",
+        services: {
+          title: "Servicios de Marketing B2B",
+          branding: "Branding corporativo y posicionamiento",
+          strategy: "Estrategias de marketing B2B",
+          content: "Content marketing y thought leadership",
+          digital: "Marketing digital para empresas",
+          analytics: "Análisis y métricas B2B"
+        },
+        channels: {
+          title: "Canales Corporativos"
+        },
+        process: {
+          title: "Nuestro Proceso",
+          audit: "Auditoría de Marca",
+          auditDesc: "Analizamos tu posicionamiento actual en el mercado B2B",
+          strategy: "Desarrollo de Estrategia",
+          strategyDesc: "Creamos una estrategia de marketing corporativo personalizada",
+          implementation: "Implementación",
+          implementationDesc: "Ejecutamos campañas y estrategias de marketing B2B",
+          optimization: "Optimización Continua",
+          optimizationDesc: "Mejoramos constantemente basándonos en métricas y resultados"
+        },
+        pricing: {
+          title: "Precios",
+          startingFrom: "A partir de",
+          description: "Planes personalizados según el tamaño y sector de tu empresa",
+          consult: "Consultar Plan"
+        }
+      },
+      // Formación Digital para Directivos
+      digitalTraining: {
+        title: "Formación Digital para Directivos",
+        subtitle: "Capacitamos a directivos y líderes empresariales en las últimas tendencias digitales y tecnológicas.",
+        programs: {
+          title: "Programas de Formación",
+          strategy: "Estrategia digital empresarial",
+          transformation: "Transformación digital",
+          innovation: "Innovación tecnológica",
+          leadership: "Liderazgo digital",
+          analytics: "Analytics para directivos"
+        },
+        methodologies: {
+          title: "Metodologías"
+        },
+        process: {
+          title: "Nuestro Proceso",
+          assessment: "Evaluación de Necesidades",
+          assessmentDesc: "Analizamos las necesidades formativas específicas de tu equipo directivo",
+          customization: "Personalización",
+          customizationDesc: "Adaptamos el programa a tu industria y objetivos empresariales",
+          implementation: "Implementación",
+          implementationDesc: "Ejecutamos sesiones formativas con metodologías prácticas",
+          followup: "Seguimiento y Soporte",
+          followupDesc: "Proporcionamos seguimiento continuo y soporte post-formación"
+        },
+        pricing: {
+          title: "Precios",
+          startingFrom: "A partir de",
+          description: "Programas personalizados según el número de participantes y duración",
+          consult: "Consultar Programa"
+        }
+      },
+      // Digitalización para PYMES
+      smeDigitalization: {
+        title: "Digitalización para PYMES",
+        subtitle: "Ayudamos a las pequeñas y medianas empresas a digitalizar sus procesos y competir en el mercado digital.",
+        solutions: {
+          title: "Soluciones Digitales",
+          erp: "Sistemas ERP adaptados a PYMES",
+          crm: "Gestión de clientes y CRM",
+          ecommerce: "Comercio electrónico y tiendas online",
+          automation: "Automatización de procesos",
+          cloud: "Migración a la nube"
+        },
+        benefits: {
+          title: "Beneficios"
+        },
+        process: {
+          title: "Nuestro Proceso",
+          diagnosis: "Diagnóstico Digital",
+          diagnosisDesc: "Evaluamos el estado actual de digitalización de tu PYME",
+          planning: "Planificación Estratégica",
+          planningDesc: "Desarrollamos un roadmap de digitalización personalizado",
+          implementation: "Implementación Gradual",
+          implementationDesc: "Implementamos soluciones digitales de forma progresiva",
+          support: "Soporte Continuo",
+          supportDesc: "Proporcionamos soporte técnico y formación continua"
+        },
+        pricing: {
+          title: "Precios",
+          startingFrom: "A partir de",
+          description: "Soluciones escalables según el tamaño y necesidades de tu PYME",
+          consult: "Consultar Solución"
         }
       },
       // Análisis de Datos y Business Intelligence
@@ -1308,6 +1422,21 @@ export const translations = {
           title: "APIs & Microservices",
           description: "We develop robust APIs and microservices architectures for scalable applications.",
           price: "From €5,500"
+        },
+        {
+          title: "Corporate Marketing",
+          description: "We develop B2B and corporate marketing strategies to position your company in the business market.",
+          price: "From €2,500/month"
+        },
+        {
+          title: "Digital Training for Executives",
+          description: "We train executives and business leaders in the latest digital and technological trends.",
+          price: "From €150/hour"
+        },
+        {
+          title: "SME Digitalization",
+          description: "We help small and medium enterprises digitize their processes and compete in the digital market.",
+          price: "From €3,500"
         }
       ],
       inquire: "Inquire →",
@@ -1629,6 +1758,105 @@ export const translations = {
           startingFrom: "Starting from",
           description: "Custom pricing based on process complexity",
           consult: "Request Quote"
+        }
+      },
+      // Corporate Marketing
+      corporateMarketing: {
+        title: "Corporate Marketing",
+        subtitle: "We develop B2B and corporate marketing strategies to position your company in the business market.",
+        services: {
+          title: "B2B Marketing Services",
+          branding: "Corporate branding and positioning",
+          strategy: "B2B marketing strategies",
+          content: "Content marketing and thought leadership",
+          digital: "Digital marketing for companies",
+          analytics: "B2B analytics and metrics"
+        },
+        channels: {
+          title: "Corporate Channels"
+        },
+        process: {
+          title: "Our Process",
+          audit: "Brand Audit",
+          auditDesc: "We analyze your current positioning in the B2B market",
+          strategy: "Strategy Development",
+          strategyDesc: "We create a personalized corporate marketing strategy",
+          implementation: "Implementation",
+          implementationDesc: "We execute B2B marketing campaigns and strategies",
+          optimization: "Continuous Optimization",
+          optimizationDesc: "We constantly improve based on metrics and results"
+        },
+        pricing: {
+          title: "Pricing",
+          startingFrom: "Starting from",
+          description: "Custom plans based on your company size and sector",
+          consult: "Request Plan"
+        }
+      },
+      // Digital Training for Executives
+      digitalTraining: {
+        title: "Digital Training for Executives",
+        subtitle: "We train executives and business leaders in the latest digital and technological trends.",
+        programs: {
+          title: "Training Programs",
+          strategy: "Business digital strategy",
+          transformation: "Digital transformation",
+          innovation: "Technology innovation",
+          leadership: "Digital leadership",
+          analytics: "Analytics for executives"
+        },
+        methodologies: {
+          title: "Methodologies"
+        },
+        process: {
+          title: "Our Process",
+          assessment: "Needs Assessment",
+          assessmentDesc: "We analyze the specific training needs of your executive team",
+          customization: "Customization",
+          customizationDesc: "We adapt the program to your industry and business objectives",
+          implementation: "Implementation",
+          implementationDesc: "We execute training sessions with practical methodologies",
+          followup: "Follow-up and Support",
+          followupDesc: "We provide continuous follow-up and post-training support"
+        },
+        pricing: {
+          title: "Pricing",
+          startingFrom: "Starting from",
+          description: "Custom programs based on number of participants and duration",
+          consult: "Request Program"
+        }
+      },
+      // SME Digitalization
+      smeDigitalization: {
+        title: "SME Digitalization",
+        subtitle: "We help small and medium enterprises digitize their processes and compete in the digital market.",
+        solutions: {
+          title: "Digital Solutions",
+          erp: "ERP systems adapted for SMEs",
+          crm: "Customer management and CRM",
+          ecommerce: "E-commerce and online stores",
+          automation: "Process automation",
+          cloud: "Cloud migration"
+        },
+        benefits: {
+          title: "Benefits"
+        },
+        process: {
+          title: "Our Process",
+          diagnosis: "Digital Diagnosis",
+          diagnosisDesc: "We evaluate the current digitalization status of your SME",
+          planning: "Strategic Planning",
+          planningDesc: "We develop a personalized digitalization roadmap",
+          implementation: "Gradual Implementation",
+          implementationDesc: "We implement digital solutions progressively",
+          support: "Continuous Support",
+          supportDesc: "We provide technical support and continuous training"
+        },
+        pricing: {
+          title: "Pricing",
+          startingFrom: "Starting from",
+          description: "Scalable solutions based on your SME size and needs",
+          consult: "Request Solution"
         }
       },
       // Data Analytics & Business Intelligence

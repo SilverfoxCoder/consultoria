@@ -1,4 +1,4 @@
-export const projectValidations = {
+nexport const projectValidations = {
   name: {
     required: true,
     maxLength: 255,

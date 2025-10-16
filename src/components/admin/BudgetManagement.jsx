@@ -4,9 +4,11 @@ import {
   ClockIcon,
   CheckCircleIcon,
   XCircleIcon,
-  ChatBubbleLeftRightIcon
+  ChatBubbleLeftRightIcon,
+  EyeIcon
 } from '@heroicons/react/24/outline';
 import budgetService from '../../services/budgetService';
+import BudgetDetailsModal from './BudgetDetailsModal';
 
 const BudgetManagement = () => {
   
@@ -16,6 +18,8 @@ const BudgetManagement = () => {
   const [filterStatus, setFilterStatus] = useState('EN_REVISION');
   const [selectedBudget, setSelectedBudget] = useState(null);
   const [showResponseForm, setShowResponseForm] = useState(false);
+  const [showDetailsModal, setShowDetailsModal] = useState(false);
+  const [selectedBudgetForDetails, setSelectedBudgetForDetails] = useState(null);
   const [responseData, setResponseData] = useState({
     status: '',
     responseNotes: '',
@@ -297,6 +301,11 @@ const BudgetManagement = () => {
     await handleStatusUpdate();
   };
 
+  const handleViewDetails = (budget) => {
+    setSelectedBudgetForDetails(budget);
+    setShowDetailsModal(true);
+  };
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -412,7 +421,11 @@ const BudgetManagement = () => {
               const budgetApprovedTimeline = budget.approvedTimeline || budgetTimeline;
               const budgetResponseNotes = budget.responseNotes || '';
               return (
-                <div key={budgetId} className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700 mb-4">
+                <div 
+                  key={budgetId} 
+                  className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700 mb-4 cursor-pointer hover:bg-gray-700/50 hover:border-gray-600 transition-all duration-200"
+                  onClick={() => handleViewDetails(budget)}
+                >
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <div className="flex items-center space-x-4">
@@ -471,19 +484,22 @@ const BudgetManagement = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="flex items-center space-x-2 ml-4">
+                    <div className="flex items-center space-x-2 ml-4" onClick={(e) => e.stopPropagation()}>
+                      <button onClick={() => handleViewDetails(budget)} className="p-2 text-gray-400 hover:text-white transition-colors duration-200" title="Ver Detalles">
+                        <EyeIcon className="h-5 w-5" />
+                      </button>
                       <button onClick={() => { setSelectedBudget(budget); setShowResponseForm(true); }} className="p-2 text-gray-400 hover:text-white transition-colors duration-200" title="Responder">
                         <ChatBubbleLeftRightIcon className="h-5 w-5" />
                       </button>
                       {budgetStatus === 'PENDIENTE' && (
                         <>
-                          <button onClick={() => handleQuickAction(budget, 'approve')} disabled={isSubmitting} className={`p-2 transition-colors duration-200 ${isSubmitting ? 'text-gray-500 cursor-not-allowed' : 'text-green-400 hover:text-green-300'}`} title="Aprobar">
+                          <button onClick={(e) => { e.stopPropagation(); handleQuickAction(budget, 'approve'); }} disabled={isSubmitting} className={`p-2 transition-colors duration-200 ${isSubmitting ? 'text-gray-500 cursor-not-allowed' : 'text-green-400 hover:text-green-300'}`} title="Aprobar">
                             <CheckCircleIcon className="h-5 w-5" />
                           </button>
-                          <button onClick={() => handleQuickAction(budget, 'reject')} disabled={isSubmitting} className={`p-2 transition-colors duration-200 ${isSubmitting ? 'text-gray-500 cursor-not-allowed' : 'text-red-400 hover:text-red-300'}`} title="Rechazar">
+                          <button onClick={(e) => { e.stopPropagation(); handleQuickAction(budget, 'reject'); }} disabled={isSubmitting} className={`p-2 transition-colors duration-200 ${isSubmitting ? 'text-gray-500 cursor-not-allowed' : 'text-red-400 hover:text-red-300'}`} title="Rechazar">
                             <XCircleIcon className="h-5 w-5" />
                           </button>
-                          <button onClick={() => handleQuickAction(budget, 'review')} disabled={isSubmitting} className={`p-2 transition-colors duration-200 ${isSubmitting ? 'text-gray-500 cursor-not-allowed' : 'text-blue-400 hover:text-blue-300'}`} title="Poner en Revisión">
+                          <button onClick={(e) => { e.stopPropagation(); handleQuickAction(budget, 'review'); }} disabled={isSubmitting} className={`p-2 transition-colors duration-200 ${isSubmitting ? 'text-gray-500 cursor-not-allowed' : 'text-blue-400 hover:text-blue-300'}`} title="Poner en Revisión">
                             <ClockIcon className="h-5 w-5" />
                           </button>
                         </>
@@ -627,6 +643,16 @@ const BudgetManagement = () => {
           </div>
         </div>
       )}
+
+      {/* Modal de Detalles del Presupuesto */}
+      <BudgetDetailsModal
+        budget={selectedBudgetForDetails}
+        isOpen={showDetailsModal}
+        onClose={() => {
+          setShowDetailsModal(false);
+          setSelectedBudgetForDetails(null);
+        }}
+      />
     </div>
   );
 };

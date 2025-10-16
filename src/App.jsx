@@ -6,7 +6,6 @@ import { NotificationProvider } from './contexts/NotificationContext';
 import Navbar from './components/Navbar';
 import Home from './components/Home';
 import Services from './components/Services';
-
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import TechBackground from './components/TechBackground';
@@ -30,6 +29,9 @@ import AutomatizacionProcesos from './components/services/AutomatizacionProcesos
 import AnalisisDatos from './components/services/AnalisisDatos';
 import IntegracionSistemas from './components/services/IntegracionSistemas';
 import APIsMicroservicios from './components/services/APIsMicroservicios';
+import MarketingCorporativo from './components/services/MarketingCorporativo';
+import FormacionDigital from './components/services/FormacionDigital';
+import DigitalizacionPYMES from './components/services/DigitalizacionPYMES';
 import OpenAPITester from './components/OpenAPITester';
 
 const AppContent = () => {
@@ -255,12 +257,15 @@ const AppContent = () => {
         {currentPage === 'analisis-datos' && <AnalisisDatos />}
         {currentPage === 'integracion-sistemas' && <IntegracionSistemas />}
         {currentPage === 'apis-microservicios' && <APIsMicroservicios />}
+        {currentPage === 'marketing-corporativo' && <MarketingCorporativo />}
+        {currentPage === 'formacion-digital' && <FormacionDigital />}
+        {currentPage === 'digitalizacion-pymes' && <DigitalizacionPYMES />}
         {currentPage === 'openapi-tester' && <OpenAPITester />}
       </main>
       
-      <Footer />
-      <WhatsAppButton currentService={currentPage} />
-      <ToastContainer />
+             <Footer onNavClick={handleNavClick} />
+       <WhatsAppButton currentService={currentPage} />
+       <ToastContainer />
     </div>
   );
 };
