@@ -11,9 +11,11 @@ import {
 } from '@heroicons/react/24/outline';
 import RequestBudgetModal from './modals/RequestBudgetModal';
 import budgetService from '../../services/budgetService';
+import { useAuth } from '../../contexts/AuthContext';
 
 const BudgetManagement = () => {
   const { t } = useTranslations();
+  const { user, clientId } = useAuth();
   
   const [budgets, setBudgets] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -115,8 +117,8 @@ const BudgetManagement = () => {
     console.log('Nuevo presupuesto solicitado:', data);
     
     try {
-      // Por ahora usamos el cliente ID 2 (Jose) como ejemplo
-      const clientId = 2;
+      // Usar el clientId del contexto de autenticación (recomendación implementada)
+      const finalClientId = clientId || user?.id || 2; // Fallback al cliente de prueba si no hay clientId
       
       // Preparar datos para el backend
       const budgetData = {
@@ -126,11 +128,11 @@ const BudgetManagement = () => {
         budget: data.budget ? parseFloat(data.budget.replace(/[^\d]/g, '')) : 0,
         timeline: data.timeline,
         additionalInfo: data.additionalInfo,
-        clientId: clientId
+        clientId: finalClientId
       };
       
       // Crear presupuesto en el backend
-      const newBudget = await budgetService.createBudgetForClient(clientId, budgetData);
+      const newBudget = await budgetService.createBudgetForClient(finalClientId, budgetData);
       
       // Agregar el nuevo presupuesto a la lista
       setBudgets(prev => [newBudget, ...prev]);

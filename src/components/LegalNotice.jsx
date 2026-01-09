@@ -8,7 +8,7 @@ const LegalNotice = () => {
     <div className="min-h-screen bg-gray-900 pt-16">
       <div className="container-max py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl p-8 lg:p-12">
-          
+
           {/* Header */}
           <div className="text-center mb-12">
             <h1 className="text-3xl md:text-4xl font-bold text-primary-600 mb-4">
@@ -21,16 +21,16 @@ const LegalNotice = () => {
 
           {/* Content */}
           <div className="prose prose-lg max-w-none text-gray-700 space-y-8">
-            
+
             {/* Información de la empresa */}
             <section>
               <h2 className="text-2xl font-bold text-primary-600 mb-4">1. Información de la Empresa</h2>
               <div className="bg-gray-50 p-6 rounded-lg">
-                <p className="mb-2"><strong>Razón Social:</strong> Codethics Consulting S.L.</p>
-                <p className="mb-2"><strong>NIF/CIF:</strong> B12345678</p>
+                <p className="mb-2"><strong>Razón Social:</strong> XperiencIA Consulting </p>
+                <p className="mb-2"><strong>NIF:</strong> B49054881</p>
                 <p className="mb-2"><strong>Domicilio Social:</strong> Calle Tecnología, 123, 28001 Madrid, España</p>
-                <p className="mb-2"><strong>Email:</strong> info@codethics.com</p>
-                <p className="mb-2"><strong>Teléfono:</strong> +34 91 123 45 67</p>
+                <p className="mb-2"><strong>Email:</strong> info@xperienciaia.com</p>
+                <p className="mb-2"><strong>Teléfono:</strong> +34 670 83 58 22</p>
                 <p className="mb-2"><strong>Inscrita en:</strong> Registro Mercantil de Madrid, Tomo 12345, Folio 123, Hoja M-123456</p>
               </div>
             </section>
@@ -39,7 +39,7 @@ const LegalNotice = () => {
             <section>
               <h2 className="text-2xl font-bold text-primary-600 mb-4">2. Objeto de la Empresa</h2>
               <p>
-                Codethics Consulting S.L. es una empresa de consultoría tecnológica especializada en:
+                XperiencIA Consulting es una empresa de consultoría tecnológica especializada en:
               </p>
               <ul className="list-disc pl-6 mt-4 space-y-2">
                 <li>Desarrollo de software y aplicaciones web</li>

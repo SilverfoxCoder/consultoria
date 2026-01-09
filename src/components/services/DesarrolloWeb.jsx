@@ -141,7 +141,7 @@ const DesarrolloWeb = () => {
                     {t('services.webDevelopment.pricing.startingFrom')}
                   </div>
                   <div className="text-6xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4 drop-shadow-sm">
-                    3.500 €
+                    500 €
                   </div>
                   <p className="text-white mb-6 font-medium">{t('services.webDevelopment.pricing.description')}</p>
                   <button className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-bold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105">

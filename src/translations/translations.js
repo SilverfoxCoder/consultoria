@@ -40,7 +40,7 @@ export const translations = {
         {
           title: "Desarrollo Web",
           description: "Creamos sitios web modernos, responsivos y optimizados para SEO que convierten visitantes en clientes.",
-          price: "Desde 3.500 €"
+          price: "Desde 500 €"
         },
         {
           title: "Aplicaciones Móviles",

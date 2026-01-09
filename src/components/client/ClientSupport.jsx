@@ -18,7 +18,7 @@ import { useAuth } from '../../contexts/AuthContext';
 
 const ClientSupport = () => {
   const { t } = useTranslations();
-  const { user } = useAuth();
+  const { user, clientId } = useAuth();
   
   // Estados para datos
   const [tickets, setTickets] = useState([]);
@@ -46,7 +46,8 @@ const ClientSupport = () => {
     const loadTickets = async () => {
       try {
         setIsLoading(true);
-        const data = await supportService.getTicketsByClient(user?.id || 1);
+        const finalClientId = clientId || user?.id || 1;
+        const data = await supportService.getTicketsByClient(finalClientId);
         setTickets(data);
       } catch (err) {
         setError('Error al cargar los tickets de soporte');
@@ -176,9 +177,10 @@ const ClientSupport = () => {
     try {
       setIsLoading(true);
       
+      const finalClientId = clientId || user?.id || 1;
       const ticketData = {
         ...formData,
-        clientId: user?.id || 1,
+        clientId: finalClientId,
         status: 'open'
       };
       

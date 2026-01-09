@@ -5,7 +5,7 @@ import { useAuth } from '../contexts/AuthContext';
 const Home = ({ onShowRegister, onShowDashboard, onShowServices }) => {
   const { t } = useTranslations();
   const { isAuthenticated } = useAuth();
-  
+
   const handleStartProject = () => {
     if (isAuthenticated) {
       // Si el usuario está logueado, ir al dashboard
@@ -15,7 +15,7 @@ const Home = ({ onShowRegister, onShowDashboard, onShowServices }) => {
       onShowRegister();
     }
   };
-  
+
   const handleViewServices = () => {
     if (isAuthenticated) {
       // Si el usuario está logueado, ir a servicios

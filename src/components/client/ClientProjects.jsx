@@ -19,7 +19,7 @@ import ClientProjectDetails from './ClientProjectDetails';
 
 const ClientProjects = () => {
   const { t } = useTranslations();
-  const { user } = useAuth();
+  const { user, clientId } = useAuth();
   
   // Estados para datos
   const [projects, setProjects] = useState([]);
@@ -36,7 +36,8 @@ const ClientProjects = () => {
     const loadProjects = async () => {
       try {
         setIsLoading(true);
-        const data = await projectService.getProjectsByClient(user?.id || 1);
+        const finalClientId = clientId || user?.id || 1;
+        const data = await projectService.getProjectsByClient(finalClientId);
         setProjects(data);
       } catch (err) {
         setError('Error al cargar los proyectos');

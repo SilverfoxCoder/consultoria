@@ -36,11 +36,10 @@ const Navbar = ({ onNavClick, currentPage, onShowLogin, onShowRegister, onShowDa
   };
 
   return (
-    <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-      isScrolled
-        ? 'bg-white/95 backdrop-blur-md shadow-lg border-b border-white/20'
-        : 'bg-white/20 backdrop-blur-sm'
-    }`}>
+    <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${isScrolled
+      ? 'bg-white/95 backdrop-blur-md shadow-lg border-b border-white/20'
+      : 'bg-white/20 backdrop-blur-sm'
+      }`}>
       <div className="container-max">
         <div className="flex items-center justify-between h-16 px-4 sm:px-6 lg:px-8">
           {/* Logo */}
@@ -52,9 +51,8 @@ const Navbar = ({ onNavClick, currentPage, onShowLogin, onShowRegister, onShowDa
               <div className="w-10 h-10 bg-gradient-to-r from-primary-500 to-primary-600 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-lg">C</span>
               </div>
-              <span className={`text-xl font-bold transition-colors duration-200 ${
-                isScrolled ? 'text-gray-800' : 'text-white'
-              }`}>CodexCore</span>
+              <span className={`text-xl font-bold transition-colors duration-200 ${isScrolled ? 'text-gray-800' : 'text-white'
+                }`}>XperiencIA Consulting</span>
             </button>
           </div>
 
@@ -63,13 +61,12 @@ const Navbar = ({ onNavClick, currentPage, onShowLogin, onShowRegister, onShowDa
             {/* Home */}
             <button
               onClick={() => handleNavClick('home')}
-              className={`font-medium transition-colors duration-200 ${
-                currentPage === 'home'
-                  ? 'text-primary-600'
-                  : isScrolled 
-                    ? 'text-gray-700 hover:text-primary-600' 
-                    : 'text-white hover:text-primary-400'
-              }`}
+              className={`font-medium transition-colors duration-200 ${currentPage === 'home'
+                ? 'text-primary-600'
+                : isScrolled
+                  ? 'text-gray-700 hover:text-primary-600'
+                  : 'text-white hover:text-primary-400'
+                }`}
             >
               {t('nav.home')}
             </button>
@@ -91,13 +88,12 @@ const Navbar = ({ onNavClick, currentPage, onShowLogin, onShowRegister, onShowDa
             {/* Contact */}
             <button
               onClick={() => handleNavClick('contact')}
-              className={`font-medium transition-colors duration-200 ${
-                currentPage === 'contact'
-                  ? 'text-primary-600'
-                  : isScrolled 
-                    ? 'text-gray-700 hover:text-primary-600' 
-                    : 'text-white hover:text-primary-400'
-              }`}
+              className={`font-medium transition-colors duration-200 ${currentPage === 'contact'
+                ? 'text-primary-600'
+                : isScrolled
+                  ? 'text-gray-700 hover:text-primary-600'
+                  : 'text-white hover:text-primary-400'
+                }`}
             >
               {t('nav.contact')}
             </button>
@@ -112,11 +108,10 @@ const Navbar = ({ onNavClick, currentPage, onShowLogin, onShowRegister, onShowDa
                 <div className="relative">
                   <button
                     onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                    className={`flex items-center space-x-2 transition-colors duration-200 ${
-                      isScrolled 
-                        ? 'text-gray-800 hover:text-primary-600' 
-                        : 'text-white hover:text-primary-400'
-                    }`}
+                    className={`flex items-center space-x-2 transition-colors duration-200 ${isScrolled
+                      ? 'text-gray-800 hover:text-primary-600'
+                      : 'text-white hover:text-primary-400'
+                      }`}
                   >
                     <div className="w-8 h-8 bg-primary-500 rounded-full flex items-center justify-center text-white text-sm font-medium">
                       {user?.name?.charAt(0) || 'U'}
@@ -192,77 +187,70 @@ const Navbar = ({ onNavClick, currentPage, onShowLogin, onShowRegister, onShowDa
             <div className="px-4 pt-2 pb-3 space-y-1">
               <button
                 onClick={() => handleNavClick('home')}
-                className={`block w-full text-left px-3 py-2 text-base font-medium transition-colors duration-200 ${
-                  currentPage === 'home'
-                    ? 'text-primary-600 bg-primary-50'
-                    : 'text-gray-700 hover:text-primary-600 hover:bg-primary-50'
-                }`}
+                className={`block w-full text-left px-3 py-2 text-base font-medium transition-colors duration-200 ${currentPage === 'home'
+                  ? 'text-primary-600 bg-primary-50'
+                  : 'text-gray-700 hover:text-primary-600 hover:bg-primary-50'
+                  }`}
               >
                 {t('nav.home')}
               </button>
 
               <button
                 onClick={() => handleNavClick('desarrollo-web')}
-                className={`block w-full text-left px-3 py-2 text-base font-medium transition-colors duration-200 ${
-                  currentPage === 'desarrollo-web'
-                    ? 'text-primary-600 bg-primary-50'
-                    : 'text-gray-700 hover:text-primary-600 hover:bg-primary-50'
-                }`}
+                className={`block w-full text-left px-3 py-2 text-base font-medium transition-colors duration-200 ${currentPage === 'desarrollo-web'
+                  ? 'text-primary-600 bg-primary-50'
+                  : 'text-gray-700 hover:text-primary-600 hover:bg-primary-50'
+                  }`}
               >
                 {t('services.webDevelopment.title')}
               </button>
 
               <button
                 onClick={() => handleNavClick('aplicaciones-moviles')}
-                className={`block w-full text-left px-3 py-2 text-base font-medium transition-colors duration-200 ${
-                  currentPage === 'aplicaciones-moviles'
-                    ? 'text-primary-600 bg-primary-50'
-                    : 'text-gray-700 hover:text-primary-600 hover:bg-primary-50'
-                }`}
+                className={`block w-full text-left px-3 py-2 text-base font-medium transition-colors duration-200 ${currentPage === 'aplicaciones-moviles'
+                  ? 'text-primary-600 bg-primary-50'
+                  : 'text-gray-700 hover:text-primary-600 hover:bg-primary-50'
+                  }`}
               >
                 {t('services.mobileDevelopment.title')}
               </button>
 
               <button
                 onClick={() => handleNavClick('cloud-devops')}
-                className={`block w-full text-left px-3 py-2 text-base font-medium transition-colors duration-200 ${
-                  currentPage === 'cloud-devops'
-                    ? 'text-primary-600 bg-primary-50'
-                    : 'text-gray-700 hover:text-primary-600 hover:bg-primary-50'
-                }`}
+                className={`block w-full text-left px-3 py-2 text-base font-medium transition-colors duration-200 ${currentPage === 'cloud-devops'
+                  ? 'text-primary-600 bg-primary-50'
+                  : 'text-gray-700 hover:text-primary-600 hover:bg-primary-50'
+                  }`}
               >
                 {t('services.cloudSolutions.title')}
               </button>
 
               <button
                 onClick={() => handleNavClick('consultoria-it')}
-                className={`block w-full text-left px-3 py-2 text-base font-medium transition-colors duration-200 ${
-                  currentPage === 'consultoria-it'
-                    ? 'text-primary-600 bg-primary-50'
-                    : 'text-gray-700 hover:text-primary-600 hover:bg-primary-50'
-                }`}
+                className={`block w-full text-left px-3 py-2 text-base font-medium transition-colors duration-200 ${currentPage === 'consultoria-it'
+                  ? 'text-primary-600 bg-primary-50'
+                  : 'text-gray-700 hover:text-primary-600 hover:bg-primary-50'
+                  }`}
               >
                 {t('services.consulting.title')}
               </button>
 
               <button
                 onClick={() => handleNavClick('inteligencia-artificial')}
-                className={`block w-full text-left px-3 py-2 text-base font-medium transition-colors duration-200 ${
-                  currentPage === 'inteligencia-artificial'
-                    ? 'text-primary-600 bg-primary-50'
-                    : 'text-gray-700 hover:text-primary-600 hover:bg-primary-50'
-                }`}
+                className={`block w-full text-left px-3 py-2 text-base font-medium transition-colors duration-200 ${currentPage === 'inteligencia-artificial'
+                  ? 'text-primary-600 bg-primary-50'
+                  : 'text-gray-700 hover:text-primary-600 hover:bg-primary-50'
+                  }`}
               >
                 {t('services.aiMl.title')}
               </button>
 
               <button
                 onClick={() => handleNavClick('contact')}
-                className={`block w-full text-left px-3 py-2 text-base font-medium transition-colors duration-200 ${
-                  currentPage === 'contact'
-                    ? 'text-primary-600 bg-primary-50'
-                    : 'text-gray-700 hover:text-primary-600 hover:bg-primary-50'
-                }`}
+                className={`block w-full text-left px-3 py-2 text-base font-medium transition-colors duration-200 ${currentPage === 'contact'
+                  ? 'text-primary-600 bg-primary-50'
+                  : 'text-gray-700 hover:text-primary-600 hover:bg-primary-50'
+                  }`}
               >
                 {t('nav.contact')}
               </button>

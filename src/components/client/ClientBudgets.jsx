@@ -16,7 +16,7 @@ import { useAuth } from '../../contexts/AuthContext';
 
 const ClientBudgets = () => {
   const { t } = useTranslations();
-  const { user } = useAuth();
+  const { user, clientId } = useAuth();
   
   // Estados para datos
   const [budgets, setBudgets] = useState([]);
@@ -32,7 +32,8 @@ const ClientBudgets = () => {
       try {
         setIsLoading(true);
         setError('');
-        const data = await budgetService.getBudgetsByClient(user?.id || 1);
+        const finalClientId = clientId || user?.id || 1;
+        const data = await budgetService.getBudgetsByClient(finalClientId);
         // Asegurar que data es un array
         setBudgets(Array.isArray(data) ? data : []);
       } catch (err) {

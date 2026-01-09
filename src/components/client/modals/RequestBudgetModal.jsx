@@ -6,7 +6,7 @@ import { useAuth } from '../../../contexts/AuthContext';
 
 const RequestBudgetModal = ({ isOpen, onClose, onSubmit }) => {
   const { t } = useTranslations();
-  const { user } = useAuth();
+  const { user, clientId } = useAuth();
   
   const [formData, setFormData] = useState({
     title: '',
@@ -86,8 +86,8 @@ const RequestBudgetModal = ({ isOpen, onClose, onSubmit }) => {
         return;
       }
       
-      // Usar el ID del usuario autenticado
-      const clientId = user?.id || 5; // Fallback al cliente de prueba si no hay usuario
+      // Usar el clientId del contexto de autenticación (recomendación implementada)
+      const finalClientId = clientId || user?.id || 5; // Fallback al cliente de prueba si no hay clientId
       
       // Preparar datos para el backend
       const budgetData = {
@@ -97,15 +97,16 @@ const RequestBudgetModal = ({ isOpen, onClose, onSubmit }) => {
         budget: parseFloat(formData.budget.replace(/[^\d]/g, '')),
         timeline: formData.timeline,
         additionalInfo: formData.additionalInfo.trim(),
-        clientId: clientId
+        clientId: finalClientId
       };
       
       console.log('🔍 Datos del usuario:', user);
-      console.log('🔍 Client ID usado:', clientId);
+      console.log('🔍 Client ID del contexto:', clientId);
+      console.log('🔍 Client ID final usado:', finalClientId);
       console.log('🔍 Datos del presupuesto a enviar:', budgetData);
       
       // Crear presupuesto en el backend
-      const newBudget = await budgetService.createBudgetForClient(clientId, budgetData);
+      const newBudget = await budgetService.createBudgetForClient(finalClientId, budgetData);
       
       console.log('Presupuesto creado exitosamente:', newBudget);
       

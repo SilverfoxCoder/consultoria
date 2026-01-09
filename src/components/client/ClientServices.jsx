@@ -17,7 +17,7 @@ import { useAuth } from '../../contexts/AuthContext';
 
 const ClientServices = () => {
   const { t } = useTranslations();
-  const { user } = useAuth();
+  const { user, clientId } = useAuth();
   
   // Estados para datos
   const [services, setServices] = useState([]);
@@ -32,7 +32,8 @@ const ClientServices = () => {
     const loadServices = async () => {
       try {
         setIsLoading(true);
-        const data = await serviceService.getServicesByClient(user?.id || 1);
+        const finalClientId = clientId || user?.id || 1;
+        const data = await serviceService.getServicesByClient(finalClientId);
         setServices(data);
       } catch (err) {
         setError('Error al cargar los servicios');

@@ -23,6 +23,7 @@ export const AuthProvider = ({ children }) => {
   const [userType, setUserType] = useState('client');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [clientId, setClientId] = useState(null);
 
   // Verificar si hay un usuario guardado en localStorage al cargar la app
   useEffect(() => {
@@ -30,6 +31,7 @@ export const AuthProvider = ({ children }) => {
       const savedUser = localStorage.getItem('codethics_user');
       const savedToken = localStorage.getItem('codethics_token');
       const savedUserType = localStorage.getItem('codethics_userType');
+      const savedClientId = localStorage.getItem('codethics_clientId');
       
       if (savedUser && savedToken) {
         try {
@@ -42,6 +44,10 @@ export const AuthProvider = ({ children }) => {
             setUser(userData);
             setIsAuthenticated(true);
             setUserType(savedUserType || getUserType(userData.email));
+            // Restaurar clientId si existe y el usuario es cliente
+            if (savedClientId && (savedUserType || getUserType(userData.email)) === 'client') {
+              setClientId(parseInt(savedClientId));
+            }
           } else {
             // Token inválido, limpiar datos
             logout();
@@ -65,11 +71,19 @@ export const AuthProvider = ({ children }) => {
     console.log('  ID:', userData.id);
     console.log('  Email:', userData.email);
     console.log('  Tipo:', type);
+    console.log('  ClientId:', userData.clientId);
     
     // Guardar en localStorage
     localStorage.setItem('codethics_user', JSON.stringify(userData));
     localStorage.setItem('codethics_token', token);
     localStorage.setItem('codethics_userType', type);
+    
+    // Guardar clientId si el usuario es cliente y tiene clientId
+    if (type === 'client' && userData.clientId) {
+      localStorage.setItem('codethics_clientId', userData.clientId.toString());
+      setClientId(userData.clientId);
+    }
+    
     // Actualizar estado
     setUser(userData);
     setIsAuthenticated(true);
@@ -93,18 +107,31 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('codethics_user');
     localStorage.removeItem('codethics_token');
     localStorage.removeItem('codethics_userType');
+    localStorage.removeItem('codethics_clientId');
     // Actualizar estado
     setUser(null);
     setIsAuthenticated(false);
     setUserType('client');
+    setClientId(null);
   };
 
   const updateUser = (userData) => {
     setUser(userData);
     localStorage.setItem('codethics_user', JSON.stringify(userData));
     // Actualizar userType si cambia el email
-    setUserType(getUserType(userData.email));
-    localStorage.setItem('codethics_userType', getUserType(userData.email));
+    const newUserType = getUserType(userData.email);
+    setUserType(newUserType);
+    localStorage.setItem('codethics_userType', newUserType);
+    
+    // Actualizar clientId si el usuario es cliente y tiene clientId
+    if (newUserType === 'client' && userData.clientId) {
+      localStorage.setItem('codethics_clientId', userData.clientId.toString());
+      setClientId(userData.clientId);
+    } else if (newUserType !== 'client') {
+      // Limpiar clientId si el usuario ya no es cliente
+      localStorage.removeItem('codethics_clientId');
+      setClientId(null);
+    }
   };
 
   // Login con Google OAuth
@@ -150,6 +177,7 @@ export const AuthProvider = ({ children }) => {
     userType,
     isAuthenticated,
     isLoading,
+    clientId,
     login,
     logout,
     updateUser,

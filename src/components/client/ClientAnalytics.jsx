@@ -17,7 +17,7 @@ import { useAuth } from '../../contexts/AuthContext';
 
 const ClientAnalytics = () => {
   const { t } = useTranslations();
-  const { user } = useAuth();
+  const { user, clientId } = useAuth();
   
   // Estados para datos
   const [timeRange, setTimeRange] = useState('month');
@@ -39,10 +39,11 @@ const ClientAnalytics = () => {
       
       try {
         // Intentar cargar datos del backend primero
+        const finalClientId = clientId || user?.id || 1;
         const [analytics, budgets, projects] = await Promise.allSettled([
-          analyticsService.getAnalyticsByClient(user?.id || 1),
-          budgetService.getBudgetsByClient(user?.id || 1),
-          projectService.getProjectsByClient(user?.id || 1)
+          analyticsService.getAnalyticsByClient(finalClientId),
+          budgetService.getBudgetsByClient(finalClientId),
+          projectService.getProjectsByClient(finalClientId)
         ]);
 
         // Verificar si el backend respondió correctamente

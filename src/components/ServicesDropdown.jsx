@@ -172,17 +172,16 @@ const ServicesDropdown = ({ onServiceClick, isOpen, onToggle, isScrolled }) => {
       {/* Botón del dropdown */}
       <button
         onClick={() => onToggle(!isOpen)}
-        className={`flex items-center space-x-1 font-medium transition-colors duration-200 drop-shadow-sm ${
-          isScrolled 
-            ? 'text-gray-800 hover:text-primary-600' 
+        className={`flex items-center space-x-1 font-medium transition-colors duration-200 drop-shadow-sm ${isScrolled
+            ? 'text-gray-800 hover:text-primary-600'
             : 'text-white hover:text-primary-400'
-        }`}
+          }`}
       >
         <span>{t('nav.services')}</span>
-        <svg 
-          className={`w-4 h-4 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} 
-          fill="none" 
-          stroke="currentColor" 
+        <svg
+          className={`w-4 h-4 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+          fill="none"
+          stroke="currentColor"
           viewBox="0 0 24 24"
         >
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />

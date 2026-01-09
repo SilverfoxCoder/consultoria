@@ -22,7 +22,7 @@ import ViewInvoicesModal from './modals/ViewInvoicesModal';
 
 const ClientDashboard = () => {
   const { t, currentLanguage, translations } = useTranslations();
-  const { user } = useAuth();
+  const { user, clientId } = useAuth();
   
   // Estados para datos
   const [isLoading, setIsLoading] = useState(true);
@@ -47,11 +47,12 @@ const ClientDashboard = () => {
       
       try {
         // Intentar cargar datos del backend primero
+        const finalClientId = clientId || user?.id || 1;
         const [budgets, services, projects, tickets] = await Promise.allSettled([
-          budgetService.getBudgetsByClient(user?.id || 1),
-          serviceService.getServicesByClient(user?.id || 1),
-          projectService.getProjectsByClient(user?.id || 1),
-          supportService.getTicketsByClient(user?.id || 1)
+          budgetService.getBudgetsByClient(finalClientId),
+          serviceService.getServicesByClient(finalClientId),
+          projectService.getProjectsByClient(finalClientId),
+          supportService.getTicketsByClient(finalClientId)
         ]);
 
         // Verificar si el backend respondió correctamente

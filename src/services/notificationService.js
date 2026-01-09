@@ -295,16 +295,23 @@ class NotificationService {
 
       // Transformar datos al formato esperado por el backend según OpenAPI
       const backendNotificationData = {
-        userId: parseInt(notificationData.targetUserId) || notificationData.targetUserId,
+        userId: notificationData.targetUserId != null && notificationData.targetUserId !== ''
+          ? (isNaN(notificationData.targetUserId) ? notificationData.targetUserId : parseInt(notificationData.targetUserId))
+          : undefined,
+        targetRole: notificationData.targetRole || undefined,
         title: String(notificationData.title || ''),
         message: String(notificationData.message || ''),
         type: String(notificationData.type || 'info'),
+        priority: notificationData.priority || undefined,
+        relatedEntityId: notificationData.relatedEntityId || undefined,
+        relatedEntityType: notificationData.relatedEntityType || undefined,
+        metadata: notificationData.metadata || undefined,
         isRead: false
       };
 
       // Validar que todos los campos requeridos están presentes
-      if (!backendNotificationData.userId) {
-        throw new Error('userId es requerido para crear la notificación');
+      if (!backendNotificationData.userId && !backendNotificationData.targetRole) {
+        throw new Error('userId o targetRole es requerido para crear la notificación');
       }
       if (!backendNotificationData.title) {
         throw new Error('title es requerido para crear la notificación');

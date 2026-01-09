@@ -21,7 +21,7 @@ import { useAuth } from '../../contexts/AuthContext';
 
 const ClientProfile = () => {
   const { t } = useTranslations();
-  const { user } = useAuth();
+  const { user, clientId } = useAuth();
   
   // Estados para datos
   const [activeTab, setActiveTab] = useState('profile');
@@ -37,7 +37,8 @@ const ClientProfile = () => {
     const loadProfile = async () => {
       try {
         setIsLoading(true);
-        const userData = await userService.getUserById(user?.id || 1);
+        const finalClientId = clientId || user?.id || 1;
+        const userData = await userService.getUserById(finalClientId);
         
         setProfileData({
           name: userData.name || '',
