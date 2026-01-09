@@ -3,15 +3,15 @@ import { useTranslations } from '../hooks/useTranslations';
 
 const Contact = () => {
   const { t } = useTranslations();
-  
+
   const handleCalendlyClick = () => {
     // En un caso real, esto abriría Calendly
-    // window.open('https://calendly.com/codethics', '_blank');
+    // window.open('https://calendly.com/XperiencIA', '_blank');
     alert('En un entorno real, esto abriría Calendly para programar una cita.');
   };
 
   const handleEmailClick = () => {
-    window.location.href = 'mailto:contacto@codethics.com';
+    window.location.href = 'mailto:contacto@XperiencIA.com';
   };
 
   return (
@@ -22,7 +22,7 @@ const Contact = () => {
           <h2 className="text-3xl md:text-4xl font-bold text-primary-500 mb-4 drop-shadow-sm">
             {t('contact.title')}
           </h2>
-                      <p className="text-xl text-white max-w-3xl mx-auto drop-shadow-sm">
+          <p className="text-xl text-white max-w-3xl mx-auto drop-shadow-sm">
             {t('contact.subtitle')}
           </p>
         </div>
@@ -76,7 +76,7 @@ const Contact = () => {
                     onClick={handleEmailClick}
                     className="btn-secondary"
                   >
-                    contacto@codethics.com
+                    contacto@XperiencIA.com
                   </button>
                 </div>
               </div>
@@ -85,7 +85,7 @@ const Contact = () => {
             {/* Additional Info */}
             <div className="bg-white/80 backdrop-blur-sm rounded-lg p-6 border border-white/20">
               <h4 className="font-semibold text-primary-500 mb-3">{t('contact.consultation.title')}</h4>
-                              <ul className="space-y-2 text-white">
+              <ul className="space-y-2 text-white">
                 {t('contact.consultation.items').map((item, idx) => (
                   <li key={idx} className="flex items-start">
                     <svg className="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">

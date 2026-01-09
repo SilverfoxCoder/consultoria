@@ -67,10 +67,10 @@ const LegalNotice = () => {
             <section>
               <h2 className="text-2xl font-bold text-primary-600 mb-4">4. Propiedad Intelectual</h2>
               <p>
-                Todos los contenidos de este sitio web, incluyendo textos, fotografías, gráficos, imágenes, iconos, tecnología, enlaces, contenidos audiovisuales o sonoros, así como su diseño gráfico y códigos fuente, son propiedad intelectual de Codethics Consulting S.L. o de terceros, sin que puedan entenderse cedidos al usuario ninguno de los derechos de explotación reconocidos por la normativa vigente en materia de propiedad intelectual.
+                Todos los contenidos de este sitio web, incluyendo textos, fotografías, gráficos, imágenes, iconos, tecnología, enlaces, contenidos audiovisuales o sonoros, así como su diseño gráfico y códigos fuente, son propiedad intelectual de XperiencIA Consulting S.L. o de terceros, sin que puedan entenderse cedidos al usuario ninguno de los derechos de explotación reconocidos por la normativa vigente en materia de propiedad intelectual.
               </p>
               <p className="mt-4">
-                Queda expresamente prohibida la reproducción, distribución, comunicación pública y transformación, total o parcial, de los contenidos de este sitio web, con fines comerciales, en cualquier soporte y por cualquier medio técnico, sin la autorización previa y por escrito de Codethics Consulting S.L.
+                Queda expresamente prohibida la reproducción, distribución, comunicación pública y transformación, total o parcial, de los contenidos de este sitio web, con fines comerciales, en cualquier soporte y por cualquier medio técnico, sin la autorización previa y por escrito de XperiencIA Consulting S.L.
               </p>
             </section>
 
@@ -78,7 +78,7 @@ const LegalNotice = () => {
             <section>
               <h2 className="text-2xl font-bold text-primary-600 mb-4">5. Responsabilidad</h2>
               <p>
-                Codethics Consulting S.L. no se hace responsable de los daños y perjuicios que se pudieran derivar de interferencias, omisiones, interrupciones, informáticos, averías telefónicas o desconexiones en el funcionamiento operativo del sistema electrónico, motivadas por causas ajenas a la empresa.
+                XperiencIA Consulting S.L. no se hace responsable de los daños y perjuicios que se pudieran derivar de interferencias, omisiones, interrupciones, informáticos, averías telefónicas o desconexiones en el funcionamiento operativo del sistema electrónico, motivadas por causas ajenas a la empresa.
               </p>
               <p className="mt-4">
                 Asimismo, la empresa no garantiza la ausencia de virus u otros elementos que puedan causar alteraciones en los sistemas informáticos, documentos electrónicos o ficheros de los usuarios de este sitio web.
@@ -92,7 +92,7 @@ const LegalNotice = () => {
                 En cumplimiento de lo dispuesto en el Reglamento (UE) 2016/679 del Parlamento Europeo y del Consejo, de 27 de abril de 2016, relativo a la protección de las personas físicas en lo que respecta al tratamiento de datos personales y a la libre circulación de estos datos, se informa que:
               </p>
               <ul className="list-disc pl-6 mt-4 space-y-2">
-                <li><strong>Responsable del tratamiento:</strong> Codethics Consulting S.L.</li>
+                <li><strong>Responsable del tratamiento:</strong> XperiencIA Consulting S.L.</li>
                 <li><strong>Finalidad:</strong> Gestión de consultas, prestación de servicios y envío de comunicaciones comerciales</li>
                 <li><strong>Legitimación:</strong> Consentimiento del interesado y ejecución de contratos</li>
                 <li><strong>Destinatarios:</strong> No se ceden datos a terceros, salvo obligación legal</li>
@@ -121,7 +121,7 @@ const LegalNotice = () => {
             <section>
               <h2 className="text-2xl font-bold text-primary-600 mb-4">9. Modificaciones</h2>
               <p>
-                Codethics Consulting S.L. se reserva el derecho de efectuar sin previo aviso las modificaciones que considere oportunas en su sitio web, pudiendo cambiar, suprimir o añadir tanto los contenidos y servicios que se prestan a través de la misma como la forma en la que éstos aparezcan presentados o localizados en su sitio web.
+                XperiencIA Consulting S.L. se reserva el derecho de efectuar sin previo aviso las modificaciones que considere oportunas en su sitio web, pudiendo cambiar, suprimir o añadir tanto los contenidos y servicios que se prestan a través de la misma como la forma en la que éstos aparezcan presentados o localizados en su sitio web.
               </p>
             </section>
 
@@ -132,7 +132,7 @@ const LegalNotice = () => {
                 Para cualquier consulta relacionada con este Aviso Legal, puede contactar con nosotros a través de:
               </p>
               <div className="bg-gray-50 p-6 rounded-lg mt-4">
-                <p className="mb-2"><strong>Email:</strong> legal@codethics.com</p>
+                <p className="mb-2"><strong>Email:</strong> legal@XperiencIA.com</p>
                 <p className="mb-2"><strong>Teléfono:</strong> +34 91 123 45 67</p>
                 <p className="mb-2"><strong>Dirección:</strong> Calle Tecnología, 123, 28001 Madrid, España</p>
               </div>
@@ -143,7 +143,7 @@ const LegalNotice = () => {
           {/* Footer */}
           <div className="mt-12 pt-8 border-t border-gray-200 text-center">
             <p className="text-gray-500 text-sm">
-              © {new Date().getFullYear()} Codethics Consulting S.L. Todos los derechos reservados.
+              © {new Date().getFullYear()} XperiencIA Consulting S.L. Todos los derechos reservados.
             </p>
           </div>
 

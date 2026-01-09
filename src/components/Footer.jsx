@@ -5,12 +5,12 @@ import LegalNotice from './LegalNotice';
 const Footer = ({ onNavClick }) => {
   const { t } = useTranslations();
   const [showLegalNotice, setShowLegalNotice] = useState(false);
-  
+
   const handleNavLink = (section) => {
     // Si estamos en una página diferente a home, navegar primero a home
     if (onNavClick) {
       onNavClick('home');
-      
+
       // Hacer scroll a la sección después de que se renderice la página home
       setTimeout(() => {
         const element = document.getElementById(section);
@@ -26,7 +26,7 @@ const Footer = ({ onNavClick }) => {
       }
     }
   };
-  
+
   return (
     <>
       <footer className="bg-gray-900/95 backdrop-blur-sm text-white border-t border-gray-800">
@@ -35,7 +35,7 @@ const Footer = ({ onNavClick }) => {
             {/* Logo and Copyright */}
             <div className="flex items-center mb-4 md:mb-0">
               <h3 className="text-xl font-bold text-primary-400 mr-4">
-                Codethics
+                XperiencIA
               </h3>
               <span className="text-gray-400">
                 {t('footer.copyright')}
@@ -87,7 +87,7 @@ const Footer = ({ onNavClick }) => {
             <div className="fixed inset-0 transition-opacity" aria-hidden="true">
               <div className="absolute inset-0 bg-gray-900 opacity-75"></div>
             </div>
-            
+
             <div className="relative inline-block w-full max-w-6xl">
               <div className="relative bg-white rounded-lg shadow-xl">
                 <div className="absolute top-4 right-4">
