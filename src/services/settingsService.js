@@ -32,7 +32,22 @@ class SettingsService {
       if (!storedSettings) {
         return defaultSettings;
       }
-      return { ...defaultSettings, ...JSON.parse(storedSettings) };
+      
+      const parsedSettings = JSON.parse(storedSettings);
+      
+      // Deep merge for integrations and company to preserve defaults
+      return {
+        ...defaultSettings,
+        ...parsedSettings,
+        integrations: {
+          ...defaultSettings.integrations,
+          ...(parsedSettings.integrations || {})
+        },
+        company: {
+          ...defaultSettings.company,
+          ...(parsedSettings.company || {})
+        }
+      };
     } catch (error) {
       console.error('Error loading settings:', error);
       return defaultSettings;
