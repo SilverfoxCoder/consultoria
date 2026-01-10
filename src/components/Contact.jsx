@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+// Calendly Integration v1.1
 import { useTranslations } from '../hooks/useTranslations';
 import { PopupModal } from 'react-calendly';
 import { settingsService } from '../services/settingsService';
