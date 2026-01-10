@@ -35,14 +35,22 @@ class SettingsService {
       
       const parsedSettings = JSON.parse(storedSettings);
       
+      
       // Deep merge for integrations and company to preserve defaults
+      const mergedIntegrations = {
+        ...defaultSettings.integrations,
+        ...(parsedSettings.integrations || {})
+      };
+
+      // Fallback for empty or invalid Calendly URL in storage
+      if (!mergedIntegrations.calendly || mergedIntegrations.calendly === 'https://calendly.com/') {
+        mergedIntegrations.calendly = defaultSettings.integrations.calendly;
+      }
+
       return {
         ...defaultSettings,
         ...parsedSettings,
-        integrations: {
-          ...defaultSettings.integrations,
-          ...(parsedSettings.integrations || {})
-        },
+        integrations: mergedIntegrations,
         company: {
           ...defaultSettings.company,
           ...(parsedSettings.company || {})
