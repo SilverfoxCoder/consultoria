@@ -1,13 +1,28 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslations } from '../hooks/useTranslations';
+import { PopupModal } from 'react-calendly';
+import { settingsService } from '../services/settingsService';
 
 const Contact = () => {
   const { t } = useTranslations();
+  const [isCalendlyOpen, setIsCalendlyOpen] = useState(false);
+  const [calendlyUrl, setCalendlyUrl] = useState('');
+
+  useEffect(() => {
+    // Cargar URL de Calendly de la configuración
+    const integrations = settingsService.getSection('integrations');
+    if (integrations.calendly) {
+      setCalendlyUrl(integrations.calendly);
+    }
+  }, []);
 
   const handleCalendlyClick = () => {
-    // En un caso real, esto abriría Calendly
-    // window.open('https://calendly.com/XperiencIA', '_blank');
-    alert('En un entorno real, esto abriría Calendly para programar una cita.');
+    if (calendlyUrl) {
+      setIsCalendlyOpen(true);
+    } else {
+      alert('La integración con Calendly no está configurada. Por favor contacta al administrador.');
+      // Fallback opcional: window.open('https://calendly.com/', '_blank');
+    }
   };
 
   const handleEmailClick = () => {
@@ -130,8 +145,16 @@ const Contact = () => {
           </div>
         </div>
       </div>
+
+      {/* Calendly Widget */}
+      <PopupModal
+        url={calendlyUrl}
+        onModalClose={() => setIsCalendlyOpen(false)}
+        open={isCalendlyOpen}
+        rootElement={document.getElementById('root')}
+      />
     </section>
   );
 };
 
-export default Contact; 
+export default Contact;

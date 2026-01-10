@@ -498,7 +498,7 @@ const AuthProvider = ({ children }) => {
   // Verificación automática al cargar
   useEffect(() => {
     const verifyStoredAuth = async () => {
-      const token = localStorage.getItem('codethics_token');
+      const token = localStorage.getItem('XperiencIA_token');
       if (token) {
         const isValid = await userService.verifyAuth(token);
         if (!isValid) logout();
@@ -760,7 +760,7 @@ const backendNotificationData = {
 ### JWT Implementation
 ```javascript
 // Token storage
-localStorage.setItem('codethics_token', token);
+localStorage.setItem('XperiencIA_token', token);
 
 // Authorization header
 headers: {

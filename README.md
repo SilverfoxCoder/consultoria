@@ -1,6 +1,6 @@
-# Codethics - Landing Page
+# XperiencIA - Landing Page
 
-Una landing page profesional y moderna para la consultora IT "Codethics", desarrollada con React y Tailwind CSS.
+Una landing page profesional y moderna para la consultora IT "XperiencIA", desarrollada con React y Tailwind CSS.
 
 ## 🚀 Características Principales
 
@@ -193,7 +193,7 @@ Los archivos optimizados se generarán en la carpeta `build/`.
 
 ## 📄 Licencia
 
-© Codethics 2025. Todos los derechos reservados.
+© XperiencIA 2025. Todos los derechos reservados.
 
 ## 🤝 Contribución
 
@@ -425,7 +425,7 @@ El sistema incluye clientes de ejemplo para demostrar las funcionalidades:
 
 ### **Características del Login**
 - **Acceso exclusivo para empleados**: Sin zona de registro público
-- **Credenciales de demo**: admin@codethics.com / admin123
+- **Credenciales de demo**: admin@XperiencIA.com / admin123
 - **Persistencia de sesión**: Login automático con localStorage
 - **Interfaz moderna**: Diseño glassmorphism consistente con el sitio
 - **Validación de formularios**: Mensajes de error en tiempo real
@@ -544,9 +544,9 @@ npm start
 
 ## 📞 Contacto
 
-- **Email**: contacto@codethics.com
-- **Calendly**: [Agendar consulta gratuita](https://calendly.com/codethics)
+- **Email**: contacto@XperiencIA.com
+- **Calendly**: [Agendar consulta gratuita](https://calendly.com/XperiencIA)
 
 ---
 
-Desarrollado con ❤️ por el equipo de Codethics 
+Desarrollado con ❤️ por el equipo de XperiencIA 

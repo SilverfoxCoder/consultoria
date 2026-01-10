@@ -35,7 +35,7 @@ const Footer = ({ onNavClick }) => {
             {/* Logo and Copyright */}
             <div className="flex items-center mb-4 md:mb-0">
               <h3 className="text-xl font-bold text-primary-400 mr-4">
-                XperiencIA
+                XperiencIA Consulting
               </h3>
               <span className="text-gray-400">
                 {t('footer.copyright')}

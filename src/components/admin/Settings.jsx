@@ -11,6 +11,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import AdminNotifications from './AdminNotifications';
 import AdminStats from './AdminStats';
 import AdminTest from './AdminTest';
+import { settingsService } from '../../services/settingsService';
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
@@ -19,7 +20,7 @@ function classNames(...classes) {
 const Settings = ({ defaultTab = 'profile' }) => {
   const { lang } = useTranslations();
   const { user: authUser } = useAuth();
-  
+
   // Estados para datos
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
@@ -32,13 +33,13 @@ const Settings = ({ defaultTab = 'profile' }) => {
     notifications: true
   });
   const [company, setCompany] = useState({
-    name: 'CodexCore',
+    name: 'Xperiencia',
     logo: '',
     address: 'Calle Gran Vía 123, Madrid',
     phone: '+34 670 83 58 22',
-    email: 'contacto@codexcore.com',
+    email: 'contacto@xperienciaconsulting.com',
     taxId: 'B12345678',
-    website: 'www.codexcore.com',
+    website: 'https://xperiecia-consulting.vercel.app',
     social: {
       linkedin: '',
       twitter: '',
@@ -54,7 +55,7 @@ const Settings = ({ defaultTab = 'profile' }) => {
   const [showDeleted, setShowDeleted] = useState(false);
   const [integrations, setIntegrations] = useState({
     whatsapp: '+34 670 83 58 22',
-    calendly: 'https://calendly.com/codexcore',
+    calendly: 'https://calendly.com/xperiencia',
     apiKey: 'sk-xxxxxxx',
     webhook: 'https://webhook.site/xxxxxx'
   });
@@ -63,7 +64,7 @@ const Settings = ({ defaultTab = 'profile' }) => {
     lastLogin: '2024-04-10 09:32',
     sessions: 2
   });
-  
+
   // Estado para controlar la pestaña seleccionada
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
 
@@ -82,10 +83,10 @@ const Settings = ({ defaultTab = 'profile' }) => {
     const loadSettings = async () => {
       try {
         setIsLoading(true);
-        
+
         // Cargar datos del usuario actual
         const userData = await userService.getUserById(authUser?.id || 1);
-        
+
         setUser({
           name: userData.name || '',
           email: userData.email || '',
@@ -99,7 +100,7 @@ const Settings = ({ defaultTab = 'profile' }) => {
         try {
           const allUsers = await userService.getAllUsers();
           console.log('📋 Settings: Usuarios cargados:', allUsers);
-          
+
           // Mapear los datos de la BD al formato del componente
           const mappedUsers = allUsers.map(dbUser => ({
             id: dbUser.id,
@@ -110,12 +111,21 @@ const Settings = ({ defaultTab = 'profile' }) => {
             phone: dbUser.phone || '',
             registeredAt: dbUser.registered_at || ''
           }));
-          
+
           setUsers(mappedUsers);
         } catch (usersError) {
           console.error('❌ Error al cargar usuarios:', usersError);
           // Mantener array vacío si falla la carga de usuarios
           setUsers([]);
+        }
+
+        // Cargar configuraciones del servicio local
+        const savedSettings = settingsService.getSettings();
+        if (savedSettings.integrations) {
+          setIntegrations(savedSettings.integrations);
+        }
+        if (savedSettings.company) {
+          setCompany(prev => ({ ...prev, ...savedSettings.company }));
         }
       } catch (err) {
         setError('Error al cargar la configuración');
@@ -145,21 +155,21 @@ const Settings = ({ defaultTab = 'profile' }) => {
   const handleToggleUserStatus = async (user) => {
     const newStatus = !user.active;
     const action = newStatus ? 'activar' : 'desactivar';
-    
+
     if (window.confirm(`¿Estás seguro de que quieres ${action} a ${user.name}?`)) {
       try {
         console.log(`🔄 ${newStatus ? 'Activando' : 'Desactivando'} usuario:`, user.id);
-        
+
         // Llamar a la API para actualizar el estado en la base de datos
         await userService.updateUserStatus(user.id, newStatus ? 'active' : 'inactive');
-        
+
         // Solo actualizar localmente SI la API respondió exitosamente
-        setUsers(prevUsers => 
-          prevUsers.map(u => 
+        setUsers(prevUsers =>
+          prevUsers.map(u =>
             u.id === user.id ? { ...u, active: newStatus } : u
           )
         );
-        
+
         console.log(`✅ Usuario ${user.name} ${newStatus ? 'activado' : 'desactivado'} exitosamente`);
       } catch (error) {
         console.error('❌ Error al cambiar estado del usuario:', error);
@@ -172,59 +182,59 @@ const Settings = ({ defaultTab = 'profile' }) => {
   const handleDeleteUser = async (user) => {
     if (window.confirm(`¿Estás seguro de que quieres eliminar a ${user.name}? El usuario será desactivado permanentemente.`)) {
       console.log('🗑️ Iniciando proceso de eliminación para usuario:', user.id);
-      
+
       try {
         // Primero intentar eliminación física
         console.log('🔍 Paso 1: Intentando eliminación física...');
         await userService.deleteUser(user.id);
-        
+
         // ✅ Eliminación física exitosa
         console.log('✅ Eliminación física exitosa');
         setUsers(prevUsers => prevUsers.filter(u => u.id !== user.id));
         alert(`Usuario ${user.name} eliminado exitosamente de la base de datos`);
-        
+
       } catch (deleteError) {
         console.log('⚠️ Eliminación física falló, analizando error...');
         console.error('Error de eliminación física:', deleteError);
-        
+
         // Verificar si es foreign key constraint
-        const isForeignKeyError = deleteError.message.includes('foreign key constraint') || 
-                                 deleteError.message.includes('constraint fails') ||
-                                 deleteError.message.includes('cannot delete') ||
-                                 deleteError.message.includes('Cannot delete or update a parent row');
-        
+        const isForeignKeyError = deleteError.message.includes('foreign key constraint') ||
+          deleteError.message.includes('constraint fails') ||
+          deleteError.message.includes('cannot delete') ||
+          deleteError.message.includes('Cannot delete or update a parent row');
+
         if (isForeignKeyError) {
           console.log('🎯 ¡CONFIRMADO! Error de foreign key constraint detectado');
           console.log('🔄 Aplicando eliminación lógica automáticamente...');
-          
+
           try {
             // Aplicar eliminación lógica
             await userService.updateUserStatus(user.id, 'deleted');
             console.log('✅ Eliminación lógica aplicada exitosamente');
-            
+
             // Actualizar en la UI para mostrar como eliminado
-            setUsers(prevUsers => 
-              prevUsers.map(u => 
-                u.id === user.id 
-                  ? { 
-                      ...u, 
-                      active: false, 
-                      status: 'deleted', 
-                      name: `${u.name} (Eliminado)`,
-                      email: `${u.email} (Eliminado)`
-                    }
+            setUsers(prevUsers =>
+              prevUsers.map(u =>
+                u.id === user.id
+                  ? {
+                    ...u,
+                    active: false,
+                    status: 'deleted',
+                    name: `${u.name} (Eliminado)`,
+                    email: `${u.email} (Eliminado)`
+                  }
                   : u
               )
             );
-            
+
             alert(`Usuario ${user.name} desactivado exitosamente (eliminación lógica aplicada debido a registros asociados)`);
             console.log('✅ Proceso de eliminación lógica completado');
-            
+
           } catch (logicalError) {
             console.error('❌ Error en eliminación lógica:', logicalError);
             alert(`Error al aplicar eliminación lógica: ${logicalError.message}`);
           }
-          
+
         } else {
           // Si es otro tipo de error, mostrarlo
           console.error('❌ Error diferente (no foreign key constraint):', deleteError);
@@ -236,12 +246,12 @@ const Settings = ({ defaultTab = 'profile' }) => {
 
   // Filtrar usuarios según los criterios de búsqueda
   const filteredUsers = users.filter(user => {
-    const matchesSearch = !searchTerm || 
+    const matchesSearch = !searchTerm ||
       user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       user.email.toLowerCase().includes(searchTerm.toLowerCase());
-    
+
     const matchesRole = roleFilter === 'all' || user.role === roleFilter;
-    
+
     let matchesStatus = true;
     if (statusFilter === 'active') {
       matchesStatus = user.active && user.status !== 'deleted';
@@ -251,10 +261,10 @@ const Settings = ({ defaultTab = 'profile' }) => {
       matchesStatus = user.status === 'deleted';
     }
     // Si statusFilter === 'all', mostrar todos
-    
+
     // Ocultar usuarios eliminados por defecto, a menos que se solicite explícitamente
     const shouldShow = showDeleted || user.status !== 'deleted';
-    
+
     return matchesSearch && matchesRole && matchesStatus && shouldShow;
   });
 
@@ -262,22 +272,22 @@ const Settings = ({ defaultTab = 'profile' }) => {
   const handleSaveUser = async (formData, existingUser) => {
     try {
       console.log('💾 Guardando usuario en la base de datos:', formData);
-      
+
       if (existingUser) {
         // Actualizar usuario existente en la base de datos
         await userService.updateUser(existingUser.id, formData);
-        
+
         // Solo actualizar localmente SI la actualización en la BD fue exitosa
-        setUsers(prevUsers => 
-          prevUsers.map(u => 
-            u.id === existingUser.id 
-              ? { 
-                  ...u, 
-                  ...formData, 
-                  id: existingUser.id,
-                  // Mantener campos que no se editan en el modal
-                  registeredAt: u.registeredAt 
-                }
+        setUsers(prevUsers =>
+          prevUsers.map(u =>
+            u.id === existingUser.id
+              ? {
+                ...u,
+                ...formData,
+                id: existingUser.id,
+                // Mantener campos que no se editan en el modal
+                registeredAt: u.registeredAt
+              }
               : u
           )
         );
@@ -286,7 +296,7 @@ const Settings = ({ defaultTab = 'profile' }) => {
       } else {
         // Crear nuevo usuario en la base de datos
         const createdUser = await userService.createUser(formData);
-        
+
         // Agregar el usuario creado con el ID real de la BD
         const newUser = {
           id: createdUser.id || Math.max(...users.map(u => u.id), 0) + 1,
@@ -297,7 +307,7 @@ const Settings = ({ defaultTab = 'profile' }) => {
           phone: formData.phone || '',
           registeredAt: createdUser.registered_at || new Date().toISOString()
         };
-        
+
         setUsers(prevUsers => [...prevUsers, newUser]);
         console.log('✅ Usuario creado exitosamente en la base de datos');
         alert(`Usuario ${formData.name} creado exitosamente`);
@@ -313,6 +323,17 @@ const Settings = ({ defaultTab = 'profile' }) => {
         alert(`Error al guardar usuario: ${error.message}`);
       }
       throw error;
+    }
+  };
+
+  const handleSaveIntegrations = (e) => {
+    e.preventDefault();
+    try {
+      settingsService.updateSection('integrations', integrations);
+      alert('Integraciones guardadas correctamente');
+    } catch (error) {
+      console.error('Error saving integrations:', error);
+      alert('Error al guardar integraciones');
     }
   };
 
@@ -377,8 +398,7 @@ const Settings = ({ defaultTab = 'profile' }) => {
                       key={option.value}
                       value={option.value}
                       className={({ active, selected }) =>
-                        `cursor-pointer select-none relative py-2 pl-4 pr-4 ${
-                          active ? 'bg-gray-100 text-gray-800' : 'text-gray-800'
+                        `cursor-pointer select-none relative py-2 pl-4 pr-4 ${active ? 'bg-gray-100 text-gray-800' : 'text-gray-800'
                         } ${selected ? 'font-semibold' : ''}`
                       }
                     >
@@ -402,8 +422,7 @@ const Settings = ({ defaultTab = 'profile' }) => {
                       key={option.value}
                       value={option.value}
                       className={({ active, selected }) =>
-                        `cursor-pointer select-none relative py-2 pl-4 pr-4 ${
-                          active ? 'bg-gray-100 text-gray-800' : 'text-gray-800'
+                        `cursor-pointer select-none relative py-2 pl-4 pr-4 ${active ? 'bg-gray-100 text-gray-800' : 'text-gray-800'
                         } ${selected ? 'font-semibold' : ''}`
                       }
                     >
@@ -489,7 +508,7 @@ const Settings = ({ defaultTab = 'profile' }) => {
                 </select>
               </div>
             </div>
-            
+
             {/* Opción para mostrar usuarios eliminados */}
             <div className="flex items-center mt-4">
               <input
@@ -585,8 +604,8 @@ const Settings = ({ defaultTab = 'profile' }) => {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                           </svg>
                           <div className="text-gray-400">
-                            {users.length === 0 
-                              ? (lang === 'es' ? 'Cargando usuarios...' : 'Loading users...') 
+                            {users.length === 0
+                              ? (lang === 'es' ? 'Cargando usuarios...' : 'Loading users...')
                               : (lang === 'es' ? 'No se encontraron usuarios con estos filtros' : 'No users found with these filters')
                             }
                           </div>
@@ -607,153 +626,153 @@ const Settings = ({ defaultTab = 'profile' }) => {
                     </tr>
                   ) : (
                     filteredUsers.map(u => (
-                    <tr key={u.id} className={classNames(
-                      "transition-colors duration-200",
-                      u.status === 'deleted' 
-                        ? "bg-red-500/5 opacity-60 hover:bg-red-500/10" 
-                        : "hover:bg-white/10"
-                    )}>
-                      <td className="px-4 py-4 text-sm text-gray-300 font-mono">#{u.id}</td>
-                      <td className="px-6 py-4">
-                        <div className="flex items-center space-x-3">
-                          <div className={classNames(
-                            "w-10 h-10 rounded-full flex items-center justify-center text-white font-semibold",
-                            u.status === 'deleted' 
-                              ? "bg-gradient-to-br from-red-600 to-gray-600"
-                              : "bg-gradient-to-br from-blue-500 to-purple-600"
-                          )}>
-                            {u.status === 'deleted' ? '✕' : (u.name ? u.name[0].toUpperCase() : '?')}
-                          </div>
-                          <div>
+                      <tr key={u.id} className={classNames(
+                        "transition-colors duration-200",
+                        u.status === 'deleted'
+                          ? "bg-red-500/5 opacity-60 hover:bg-red-500/10"
+                          : "hover:bg-white/10"
+                      )}>
+                        <td className="px-4 py-4 text-sm text-gray-300 font-mono">#{u.id}</td>
+                        <td className="px-6 py-4">
+                          <div className="flex items-center space-x-3">
                             <div className={classNames(
-                              "font-medium",
-                              u.status === 'deleted' ? "text-red-300 line-through" : "text-white"
+                              "w-10 h-10 rounded-full flex items-center justify-center text-white font-semibold",
+                              u.status === 'deleted'
+                                ? "bg-gradient-to-br from-red-600 to-gray-600"
+                                : "bg-gradient-to-br from-blue-500 to-purple-600"
                             )}>
-                              {u.name}
-                              {u.status === 'deleted' && (
-                                <span className="ml-2 text-xs text-red-400 bg-red-500/20 px-2 py-1 rounded">
-                                  {lang === 'es' ? 'ELIMINADO' : 'DELETED'}
-                                </span>
-                              )}
+                              {u.status === 'deleted' ? '✕' : (u.name ? u.name[0].toUpperCase() : '?')}
                             </div>
-                            <div className="text-gray-400 text-sm">{u.phone || 'Sin teléfono'}</div>
+                            <div>
+                              <div className={classNames(
+                                "font-medium",
+                                u.status === 'deleted' ? "text-red-300 line-through" : "text-white"
+                              )}>
+                                {u.name}
+                                {u.status === 'deleted' && (
+                                  <span className="ml-2 text-xs text-red-400 bg-red-500/20 px-2 py-1 rounded">
+                                    {lang === 'es' ? 'ELIMINADO' : 'DELETED'}
+                                  </span>
+                                )}
+                              </div>
+                              <div className="text-gray-400 text-sm">{u.phone || 'Sin teléfono'}</div>
+                            </div>
                           </div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4">
-                        <div className={classNames(
-                          "text-sm",
-                          u.status === 'deleted' ? "text-gray-500 line-through" : "text-gray-300"
-                        )}>
-                          {u.email}
-                        </div>
-                      </td>
-                      <td className="px-6 py-4">
-                        <span className={classNames(
-                          'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium',
-                          u.status === 'deleted' 
-                            ? 'bg-red-500/20 text-red-400 border border-red-500/30'
-                            : u.role === 'Administrador' ? 'bg-red-500/20 text-red-300 border border-red-500/30' :
-                              u.role === 'Cliente' ? 'bg-blue-500/20 text-blue-300 border border-blue-500/30' :
-                              u.role === 'Gestor' ? 'bg-purple-500/20 text-purple-300 border border-purple-500/30' :
-                              'bg-gray-500/20 text-gray-300 border border-gray-500/30'
-                        )}>
-                          {u.role}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4">
-                        <div className="flex items-center">
+                        </td>
+                        <td className="px-6 py-4">
                           <div className={classNames(
-                            'w-2 h-2 rounded-full mr-2',
-                            u.status === 'deleted' ? 'bg-red-500' :
-                            u.active ? 'bg-green-400' : 'bg-gray-400'
-                          )}></div>
-                          <span className={classNames(
-                            'text-sm font-medium',
-                            u.status === 'deleted' ? 'text-red-400' :
-                            u.active ? 'text-green-300' : 'text-gray-400'
+                            "text-sm",
+                            u.status === 'deleted' ? "text-gray-500 line-through" : "text-gray-300"
                           )}>
-                            {u.status === 'deleted' ? (lang === 'es' ? 'Eliminado' : 'Deleted') :
-                             u.active ? (lang === 'es' ? 'Activo' : 'Active') : (lang === 'es' ? 'Inactivo' : 'Inactive')}
+                            {u.email}
+                          </div>
+                        </td>
+                        <td className="px-6 py-4">
+                          <span className={classNames(
+                            'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium',
+                            u.status === 'deleted'
+                              ? 'bg-red-500/20 text-red-400 border border-red-500/30'
+                              : u.role === 'Administrador' ? 'bg-red-500/20 text-red-300 border border-red-500/30' :
+                                u.role === 'Cliente' ? 'bg-blue-500/20 text-blue-300 border border-blue-500/30' :
+                                  u.role === 'Gestor' ? 'bg-purple-500/20 text-purple-300 border border-purple-500/30' :
+                                    'bg-gray-500/20 text-gray-300 border border-gray-500/30'
+                          )}>
+                            {u.role}
                           </span>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 text-gray-300 text-sm">
-                        {u.registeredAt ? new Date(u.registeredAt).toLocaleDateString('es-ES', {
-                          year: 'numeric',
-                          month: 'short',
-                          day: 'numeric'
-                        }) : '-'}
-                      </td>
-                      <td className="px-6 py-4">
-                        <div className="flex items-center justify-center space-x-2">
-                          {u.status !== 'deleted' ? (
-                            <>
-                              <button 
-                                onClick={() => {
-                                  setEditingUser(u);
-                                  setShowUserModal(true);
-                                }}
-                                className="p-2 text-blue-400 hover:text-blue-300 hover:bg-blue-500/10 rounded-lg transition-colors"
-                                title={lang === 'es' ? 'Editar usuario' : 'Edit user'}
-                              >
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                </svg>
-                              </button>
-                              <button 
-                                onClick={() => handleToggleUserStatus(u)}
-                                className={classNames(
-                                  'p-2 rounded-lg transition-colors',
-                                  u.active 
-                                    ? 'text-red-400 hover:text-red-300 hover:bg-red-500/10'
-                                    : 'text-green-400 hover:text-green-300 hover:bg-green-500/10'
-                                )}
-                                title={u.active ? (lang === 'es' ? 'Desactivar' : 'Deactivate') : (lang === 'es' ? 'Activar' : 'Activate')}
-                              >
-                                {u.active ? (
+                        </td>
+                        <td className="px-6 py-4">
+                          <div className="flex items-center">
+                            <div className={classNames(
+                              'w-2 h-2 rounded-full mr-2',
+                              u.status === 'deleted' ? 'bg-red-500' :
+                                u.active ? 'bg-green-400' : 'bg-gray-400'
+                            )}></div>
+                            <span className={classNames(
+                              'text-sm font-medium',
+                              u.status === 'deleted' ? 'text-red-400' :
+                                u.active ? 'text-green-300' : 'text-gray-400'
+                            )}>
+                              {u.status === 'deleted' ? (lang === 'es' ? 'Eliminado' : 'Deleted') :
+                                u.active ? (lang === 'es' ? 'Activo' : 'Active') : (lang === 'es' ? 'Inactivo' : 'Inactive')}
+                            </span>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 text-gray-300 text-sm">
+                          {u.registeredAt ? new Date(u.registeredAt).toLocaleDateString('es-ES', {
+                            year: 'numeric',
+                            month: 'short',
+                            day: 'numeric'
+                          }) : '-'}
+                        </td>
+                        <td className="px-6 py-4">
+                          <div className="flex items-center justify-center space-x-2">
+                            {u.status !== 'deleted' ? (
+                              <>
+                                <button
+                                  onClick={() => {
+                                    setEditingUser(u);
+                                    setShowUserModal(true);
+                                  }}
+                                  className="p-2 text-blue-400 hover:text-blue-300 hover:bg-blue-500/10 rounded-lg transition-colors"
+                                  title={lang === 'es' ? 'Editar usuario' : 'Edit user'}
+                                >
                                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L18.364 5.636M5.636 18.364l12.728-12.728" />
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                   </svg>
-                                ) : (
+                                </button>
+                                <button
+                                  onClick={() => handleToggleUserStatus(u)}
+                                  className={classNames(
+                                    'p-2 rounded-lg transition-colors',
+                                    u.active
+                                      ? 'text-red-400 hover:text-red-300 hover:bg-red-500/10'
+                                      : 'text-green-400 hover:text-green-300 hover:bg-green-500/10'
+                                  )}
+                                  title={u.active ? (lang === 'es' ? 'Desactivar' : 'Deactivate') : (lang === 'es' ? 'Activar' : 'Activate')}
+                                >
+                                  {u.active ? (
+                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L18.364 5.636M5.636 18.364l12.728-12.728" />
+                                    </svg>
+                                  ) : (
+                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                  )}
+                                </button>
+                                <button
+                                  onClick={() => handleDeleteUser(u)}
+                                  className="p-2 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-colors"
+                                  title={lang === 'es' ? 'Eliminar usuario' : 'Delete user'}
+                                >
                                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                   </svg>
-                                )}
-                              </button>
-                              <button 
-                                onClick={() => handleDeleteUser(u)}
-                                className="p-2 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-colors"
-                                title={lang === 'es' ? 'Eliminar usuario' : 'Delete user'}
-                              >
+                                </button>
+                              </>
+                            ) : (
+                              <div className="flex items-center space-x-2 text-gray-500">
                                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L18.364 5.636M5.636 18.364l12.728-12.728" />
                                 </svg>
-                              </button>
-                            </>
-                          ) : (
-                            <div className="flex items-center space-x-2 text-gray-500">
-                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L18.364 5.636M5.636 18.364l12.728-12.728" />
-                              </svg>
-                              <span className="text-xs">{lang === 'es' ? 'Sin acciones' : 'No actions'}</span>
-                            </div>
-                          )}
-                        </div>
-                      </td>
-                    </tr>
-                  ))
+                                <span className="text-xs">{lang === 'es' ? 'Sin acciones' : 'No actions'}</span>
+                              </div>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    ))
                   )}
                 </tbody>
               </table>
             </div>
-            
+
             {/* Información de resultados */}
             {filteredUsers.length > 0 && (
               <div className="bg-white/5 px-6 py-3 border-t border-white/10">
                 <div className="flex items-center justify-between text-sm text-gray-400">
                   <div>
-                    {lang === 'es' 
+                    {lang === 'es'
                       ? `Mostrando ${filteredUsers.length} de ${users.length} usuarios`
                       : `Showing ${filteredUsers.length} of ${users.length} users`
                     }
@@ -779,22 +798,74 @@ const Settings = ({ defaultTab = 'profile' }) => {
       name: lang === 'es' ? 'Integraciones' : 'Integrations',
       icon: LinkIcon,
       content: (
-        <form className="space-y-6 max-w-xl">
+        <form onSubmit={handleSaveIntegrations} className="space-y-6 max-w-xl">
           <div>
             <label className="block text-sm font-medium text-gray-200 mb-2">WhatsApp</label>
             <input type="text" value={integrations.whatsapp} onChange={e => setIntegrations(i => ({ ...i, whatsapp: e.target.value }))} className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none" />
+          </div >
+          <div>
+            <label className="block text-sm font-medium text-gray-200 mb-2">Calendly URL</label>
+            <div className="flex space-x-2">
+              <input
+                type="text"
+                value={integrations.calendly}
+                onChange={e => setIntegrations(i => ({ ...i, calendly: e.target.value }))}
+                placeholder="https://calendly.com/tu-usuario"
+                className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none"
+              />
+              <button
+                type="button"
+                onClick={async () => {
+                  if (!integrations.apiKey) {
+                    alert('Por favor ingresa tu API Key primero');
+                    return;
+                  }
+                  try {
+                    const url = await settingsService.fetchCalendlyUrl(integrations.apiKey);
+                    setIntegrations(i => ({ ...i, calendly: url }));
+                    alert('URL sincronizada correctamente: ' + url);
+                  } catch (error) {
+                    alert('Error al sincronizar: ' + error.message);
+                  }
+                }}
+                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors"
+                title="Sincronizar URL usando API Key"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+              </button>
+            </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-200 mb-2">Calendly</label>
-            <input type="text" value={integrations.calendly} onChange={e => setIntegrations(i => ({ ...i, calendly: e.target.value }))} className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none" />
+            <label className="block text-sm font-medium text-gray-200 mb-2">API Key (Personal Access Token)</label>
+            <input
+              type="password"
+              value={integrations.apiKey}
+              onChange={e => setIntegrations(i => ({ ...i, apiKey: e.target.value }))}
+              className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none"
+            />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-200 mb-2">API Key</label>
-            <input type="text" value={integrations.apiKey} onChange={e => setIntegrations(i => ({ ...i, apiKey: e.target.value }))} className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none" />
+            <label className="block text-sm font-medium text-gray-200 mb-2">Client ID</label>
+            <input
+              type="text"
+              value={integrations.clientId || ''}
+              onChange={e => setIntegrations(i => ({ ...i, clientId: e.target.value }))}
+              className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none"
+            />
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-200 mb-2">Webhook</label>
             <input type="text" value={integrations.webhook} onChange={e => setIntegrations(i => ({ ...i, webhook: e.target.value }))} className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none" />
+          </div>
+          <div className="pt-4">
+            <button
+              type="submit"
+              className="px-6 py-2 bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white rounded-lg font-medium transition-all duration-200"
+            >
+              {lang === 'es' ? 'Guardar Integraciones' : 'Save Integrations'}
+            </button>
           </div>
         </form>
       )
@@ -878,7 +949,7 @@ const Settings = ({ defaultTab = 'profile' }) => {
     const deletedUsers = users.filter(u => u.status === 'deleted').length;
     const logicalDeletions = deletedUsers; // Todos los eliminados son lógicos
     const physicalDeletions = 0; // Por ahora no hay eliminaciones físicas
-    
+
     return {
       total: totalUsers,
       active: activeUsers,
@@ -926,7 +997,7 @@ const Settings = ({ defaultTab = 'profile' }) => {
           <p className="text-gray-300 mt-1">{lang === 'es' ? 'Gestiona tu perfil, empresa, usuarios y preferencias.' : 'Manage your profile, company, users and preferences.'}</p>
         </div>
       </div>
-      
+
       {/* Dashboard de Estadísticas de Eliminaciones */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -1005,7 +1076,7 @@ const Settings = ({ defaultTab = 'profile' }) => {
           </div>
         </div>
       </div>
-      
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Tab.Group selectedIndex={selectedTabIndex} onChange={setSelectedTabIndex}>
           <Tab.List className="flex space-x-2 rounded-xl bg-white/10 p-2 mb-8">
@@ -1038,8 +1109,7 @@ const Settings = ({ defaultTab = 'profile' }) => {
                                 key={option.value}
                                 value={option.value}
                                 className={({ active, selected }) =>
-                                  `cursor-pointer select-none relative py-2 pl-4 pr-4 ${
-                                    active ? 'bg-gray-100 text-gray-800' : 'text-gray-800'
+                                  `cursor-pointer select-none relative py-2 pl-4 pr-4 ${active ? 'bg-gray-100 text-gray-800' : 'text-gray-800'
                                   } ${selected ? 'font-semibold' : ''}`
                                 }
                               >
@@ -1063,8 +1133,7 @@ const Settings = ({ defaultTab = 'profile' }) => {
                                 key={option.value}
                                 value={option.value}
                                 className={({ active, selected }) =>
-                                  `cursor-pointer select-none relative py-2 pl-4 pr-4 ${
-                                    active ? 'bg-gray-100 text-gray-800' : 'text-gray-800'
+                                  `cursor-pointer select-none relative py-2 pl-4 pr-4 ${active ? 'bg-gray-100 text-gray-800' : 'text-gray-800'
                                   } ${selected ? 'font-semibold' : ''}`
                                 }
                               >
@@ -1176,7 +1245,7 @@ const UserModal = ({ isOpen, onClose, user, onSave, lang }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) return;
 
     setIsLoading(true);
@@ -1196,7 +1265,7 @@ const UserModal = ({ isOpen, onClose, user, onSave, lang }) => {
       ...prev,
       [name]: type === 'checkbox' ? checked : value
     }));
-    
+
     if (errors[name]) {
       setErrors(prev => ({ ...prev, [name]: '' }));
     }
@@ -1209,7 +1278,7 @@ const UserModal = ({ isOpen, onClose, user, onSave, lang }) => {
       <div className="bg-white/10 backdrop-blur-lg rounded-2xl border border-white/20 p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-bold text-white">
-            {user 
+            {user
               ? (lang === 'es' ? 'Editar Usuario' : 'Edit User')
               : (lang === 'es' ? 'Nuevo Usuario' : 'New User')
             }
@@ -1236,9 +1305,8 @@ const UserModal = ({ isOpen, onClose, user, onSave, lang }) => {
                 name="name"
                 value={formData.name}
                 onChange={handleInputChange}
-                className={`w-full px-4 py-2 bg-white/10 border rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary-500 ${
-                  errors.name ? 'border-red-500' : 'border-white/20'
-                }`}
+                className={`w-full px-4 py-2 bg-white/10 border rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary-500 ${errors.name ? 'border-red-500' : 'border-white/20'
+                  }`}
                 placeholder={lang === 'es' ? 'Nombre del usuario' : 'User name'}
               />
               {errors.name && <p className="text-red-400 text-sm mt-1">{errors.name}</p>}
@@ -1254,9 +1322,8 @@ const UserModal = ({ isOpen, onClose, user, onSave, lang }) => {
                 name="email"
                 value={formData.email}
                 onChange={handleInputChange}
-                className={`w-full px-4 py-2 bg-white/10 border rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary-500 ${
-                  errors.email ? 'border-red-500' : 'border-white/20'
-                }`}
+                className={`w-full px-4 py-2 bg-white/10 border rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary-500 ${errors.email ? 'border-red-500' : 'border-white/20'
+                  }`}
                 placeholder="usuario@ejemplo.com"
               />
               {errors.email && <p className="text-red-400 text-sm mt-1">{errors.email}</p>}
@@ -1307,9 +1374,8 @@ const UserModal = ({ isOpen, onClose, user, onSave, lang }) => {
                     name="password"
                     value={formData.password}
                     onChange={handleInputChange}
-                    className={`w-full px-4 py-2 bg-white/10 border rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary-500 ${
-                      errors.password ? 'border-red-500' : 'border-white/20'
-                    }`}
+                    className={`w-full px-4 py-2 bg-white/10 border rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary-500 ${errors.password ? 'border-red-500' : 'border-white/20'
+                      }`}
                     placeholder={lang === 'es' ? 'Mínimo 6 caracteres' : 'Minimum 6 characters'}
                   />
                   {errors.password && <p className="text-red-400 text-sm mt-1">{errors.password}</p>}
@@ -1324,9 +1390,8 @@ const UserModal = ({ isOpen, onClose, user, onSave, lang }) => {
                     name="confirmPassword"
                     value={formData.confirmPassword}
                     onChange={handleInputChange}
-                    className={`w-full px-4 py-2 bg-white/10 border rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary-500 ${
-                      errors.confirmPassword ? 'border-red-500' : 'border-white/20'
-                    }`}
+                    className={`w-full px-4 py-2 bg-white/10 border rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary-500 ${errors.confirmPassword ? 'border-red-500' : 'border-white/20'
+                      }`}
                     placeholder={lang === 'es' ? 'Repite la contraseña' : 'Repeat password'}
                   />
                   {errors.confirmPassword && <p className="text-red-400 text-sm mt-1">{errors.confirmPassword}</p>}
@@ -1372,7 +1437,7 @@ const UserModal = ({ isOpen, onClose, user, onSave, lang }) => {
                   {lang === 'es' ? 'Guardando...' : 'Saving...'}
                 </div>
               ) : (
-                user 
+                user
                   ? (lang === 'es' ? 'Actualizar' : 'Update')
                   : (lang === 'es' ? 'Crear Usuario' : 'Create User')
               )}
