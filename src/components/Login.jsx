@@ -49,15 +49,15 @@ const Login = ({ onLogin, onBack }) => {
 
     try {
       const result = await loginWithGoogle(googleUserData);
-      
+
       if (result.success) {
         console.log('🎉 Login: Google OAuth exitoso');
         // No necesitamos llamar onLogin() aquí porque loginWithGoogle ya maneja el login
         // El AuthContext se encargará de actualizar el estado de autenticación
         if (window.showToast) {
           window.showToast({
-            message: result.isNewUser ? 
-              t('login.accountCreatedSuccess') : 
+            message: result.isNewUser ?
+              t('login.accountCreatedSuccess') :
               t('login.signInSuccess'),
             type: 'success'
           });
@@ -82,7 +82,7 @@ const Login = ({ onLogin, onBack }) => {
   const handleRegisterSuccess = (registerData) => {
     console.log('✅ Login: Registro exitoso, redirigiendo al login');
     setShowRegisterModal(false);
-    
+
     // Mostrar mensaje de éxito
     if (window.showToast) {
       window.showToast({
@@ -211,9 +211,9 @@ const Login = ({ onLogin, onBack }) => {
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-white/20" />
               </div>
-                          <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-transparent text-gray-300">{t('login.continueWith')}</span>
-            </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-2 bg-transparent text-gray-300">{t('login.continueWith')}</span>
+              </div>
             </div>
 
             {/* Google Login Button */}
@@ -254,19 +254,7 @@ const Login = ({ onLogin, onBack }) => {
           </div>
         </div>
 
-        {/* Demo Credentials */}
-        <div className="bg-blue-500/20 backdrop-blur-sm rounded-xl p-4 border border-blue-500/30">
-          <div className="text-center">
-            <h3 className="text-sm font-medium text-blue-200 mb-2">
-              {t('login.demoCredentials')}
-            </h3>
-            <div className="text-xs text-blue-300 space-y-1">
-              <p><strong>{t('login.demoEmailAdmin')}</strong> admin@codexcore.com</p>
-              <p><strong>{t('login.demoEmailClient')}</strong> cliente@empresa.com</p>
-              <p><strong>{t('login.demoPassword')}</strong> admin123</p>
-            </div>
-          </div>
-        </div>
+
       </div>
 
       {/* Register Modal */}
