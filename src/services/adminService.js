@@ -15,7 +15,7 @@ class AdminService {
    */
   async request(endpoint, options = {}) {
     const url = `${this.baseURL}${endpoint}`;
-    const token = localStorage.getItem('codethics_token');
+    const token = localStorage.getItem('xperiecia_token');
     
     try {
       console.log('🔍 AdminService: Realizando petición');

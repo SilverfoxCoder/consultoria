@@ -819,7 +819,7 @@ const AuthContext = createContext();
 Para soporte técnico o preguntas sobre el proyecto:
 - **Email:** fullconnectivity@gmail.com
 - **Desarrollador:** Fernando Noguera Rodriguez
-- **Empresa:** CodeXCore - Consultoría IT
+- **Empresa:** Xperiecia Consulting
 
 ---
 

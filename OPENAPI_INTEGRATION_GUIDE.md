@@ -2,7 +2,7 @@
 
 ## Descripción General
 
-Esta integración de OpenAPI proporciona una capa de abstracción completa para interactuar con la API del backend de CodeXCore. El sistema incluye:
+Esta integración de OpenAPI proporciona una capa de abstracción completa para interactuar con la API del backend de Xperiecia Consulting. El sistema incluye:
 
 - **Especificación OpenAPI completa** (`openapi-spec.json`)
 - **Cliente generador automático** (`src/utils/openapiClient.js`)

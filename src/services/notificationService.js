@@ -117,7 +117,7 @@ class NotificationService {
   async getUserNotifications(userId, page = 0, size = 20) {
     try {
       const url = `${API_CONFIG.BASE_URL}/notifications/user/${userId}?page=${page}&size=${size}`;
-      const token = localStorage.getItem('codethics_token');
+      const token = localStorage.getItem('xperiecia_token');
       
       console.log('🔍 NotificationService: Obteniendo notificaciones');
       console.log('  URL:', url);
@@ -153,7 +153,7 @@ class NotificationService {
   // Marcar notificación como leída
   async markAsRead(notificationId) {
     try {
-      const token = localStorage.getItem('codethics_token');
+      const token = localStorage.getItem('xperiecia_token');
       
       console.log('🔄 NotificationService: Marcando notificación como leída:', notificationId);
       
@@ -186,7 +186,7 @@ class NotificationService {
   // Marcar todas las notificaciones como leídas
   async markAllAsRead(userId) {
     try {
-      const token = localStorage.getItem('codethics_token');
+      const token = localStorage.getItem('xperiecia_token');
       
       console.log('🔄 NotificationService: Marcando todas las notificaciones como leídas para usuario:', userId);
       
@@ -219,7 +219,7 @@ class NotificationService {
   // Eliminar notificación
   async deleteNotification(notificationId) {
     try {
-      const token = localStorage.getItem('codethics_token');
+      const token = localStorage.getItem('xperiecia_token');
       
       console.log('🗑️ NotificationService: Eliminando notificación:', notificationId);
       console.log('  Token disponible:', !!token);
@@ -252,7 +252,7 @@ class NotificationService {
   // Obtener estadísticas de notificaciones
   async getNotificationStats(userId) {
     try {
-      const token = localStorage.getItem('codethics_token');
+      const token = localStorage.getItem('xperiecia_token');
       
       console.log('📊 NotificationService: Obteniendo estadísticas para usuario:', userId);
       console.log('  Token disponible:', !!token);
@@ -334,7 +334,7 @@ class NotificationService {
       }
 
       // Método tradicional como fallback
-      const token = localStorage.getItem('codethics_token');
+      const token = localStorage.getItem('xperiecia_token');
       console.log('🔄 NotificationService: Usando método tradicional, token disponible:', !!token);
 
       const response = await fetch(`${API_CONFIG.BASE_URL}/notifications/create`, {

@@ -15,7 +15,7 @@ export const useAuth = () => {
 const getUserType = (email) => {
   if (!email) return 'client';
   // Cambia el dominio según tu empresa
-  return email.endsWith('@codexcore.com') ? 'admin' : 'client';
+  return email.endsWith('@xperiecia-consulting.com') ? 'admin' : 'client';
 };
 
 export const AuthProvider = ({ children }) => {
@@ -28,18 +28,18 @@ export const AuthProvider = ({ children }) => {
   // Verificar si hay un usuario guardado en localStorage al cargar la app
   useEffect(() => {
     const verifyStoredAuth = async () => {
-      const savedUser = localStorage.getItem('codethics_user');
-      const savedToken = localStorage.getItem('codethics_token');
-      const savedUserType = localStorage.getItem('codethics_userType');
-      const savedClientId = localStorage.getItem('codethics_clientId');
-      
+      const savedUser = localStorage.getItem('xperiecia_user');
+      const savedToken = localStorage.getItem('xperiecia_token');
+      const savedUserType = localStorage.getItem('xperiecia_userType');
+      const savedClientId = localStorage.getItem('xperiecia_clientId');
+
       if (savedUser && savedToken) {
         try {
           const userData = JSON.parse(savedUser);
-          
+
           // Verificar si el token sigue siendo válido
           const isValid = await userService.verifyAuth(savedToken);
-          
+
           if (isValid) {
             setUser(userData);
             setIsAuthenticated(true);
@@ -66,24 +66,24 @@ export const AuthProvider = ({ children }) => {
   const login = (authData) => {
     const { user: userData, token } = authData;
     const type = getUserType(userData.email);
-    
+
     console.log('🔑 AuthContext: Login exitoso para usuario:', userData);
     console.log('  ID:', userData.id);
     console.log('  Email:', userData.email);
     console.log('  Tipo:', type);
     console.log('  ClientId:', userData.clientId);
-    
+
     // Guardar en localStorage
-    localStorage.setItem('codethics_user', JSON.stringify(userData));
-    localStorage.setItem('codethics_token', token);
-    localStorage.setItem('codethics_userType', type);
-    
+    localStorage.setItem('xperiecia_user', JSON.stringify(userData));
+    localStorage.setItem('xperiecia_token', token);
+    localStorage.setItem('xperiecia_userType', type);
+
     // Guardar clientId si el usuario es cliente y tiene clientId
     if (type === 'client' && userData.clientId) {
-      localStorage.setItem('codethics_clientId', userData.clientId.toString());
+      localStorage.setItem('xperiecia_clientId', userData.clientId.toString());
       setClientId(userData.clientId);
     }
-    
+
     // Actualizar estado
     setUser(userData);
     setIsAuthenticated(true);
@@ -92,8 +92,8 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = async () => {
-    const token = localStorage.getItem('codethics_token');
-    
+    const token = localStorage.getItem('xperiecia_token');
+
     // Intentar cerrar sesión en el backend
     if (token) {
       try {
@@ -102,12 +102,12 @@ export const AuthProvider = ({ children }) => {
         console.error('Error during logout:', error);
       }
     }
-    
+
     // Limpiar localStorage
-    localStorage.removeItem('codethics_user');
-    localStorage.removeItem('codethics_token');
-    localStorage.removeItem('codethics_userType');
-    localStorage.removeItem('codethics_clientId');
+    localStorage.removeItem('xperiecia_user');
+    localStorage.removeItem('xperiecia_token');
+    localStorage.removeItem('xperiecia_userType');
+    localStorage.removeItem('xperiecia_clientId');
     // Actualizar estado
     setUser(null);
     setIsAuthenticated(false);
@@ -117,19 +117,19 @@ export const AuthProvider = ({ children }) => {
 
   const updateUser = (userData) => {
     setUser(userData);
-    localStorage.setItem('codethics_user', JSON.stringify(userData));
+    localStorage.setItem('xperiecia_user', JSON.stringify(userData));
     // Actualizar userType si cambia el email
     const newUserType = getUserType(userData.email);
     setUserType(newUserType);
-    localStorage.setItem('codethics_userType', newUserType);
-    
+    localStorage.setItem('xperiecia_userType', newUserType);
+
     // Actualizar clientId si el usuario es cliente y tiene clientId
     if (newUserType === 'client' && userData.clientId) {
-      localStorage.setItem('codethics_clientId', userData.clientId.toString());
+      localStorage.setItem('xperiecia_clientId', userData.clientId.toString());
       setClientId(userData.clientId);
     } else if (newUserType !== 'client') {
       // Limpiar clientId si el usuario ya no es cliente
-      localStorage.removeItem('codethics_clientId');
+      localStorage.removeItem('xperiecia_clientId');
       setClientId(null);
     }
   };
@@ -138,11 +138,11 @@ export const AuthProvider = ({ children }) => {
   const loginWithGoogle = async (googleUserData) => {
     try {
       console.log('🟢 AuthContext: Iniciando login con Google');
-      
+
       // Intentar autenticación con usuario existente
       const authService = await import('../services/authService');
       let authData;
-      
+
       try {
         authData = await authService.default.googleAuth(googleUserData);
         console.log('✅ AuthContext: Usuario existente autenticado con Google');
@@ -152,22 +152,22 @@ export const AuthProvider = ({ children }) => {
         authData = await authService.default.googleRegister(googleUserData);
         console.log('✅ AuthContext: Usuario registrado y autenticado con Google');
       }
-      
+
       // Procesar el login
       const loginSuccess = login(authData);
-      
+
       if (loginSuccess) {
         console.log('🎉 AuthContext: Login con Google completado exitosamente');
         return { success: true, isNewUser: !authData.existingUser };
       }
-      
+
       return { success: false, error: 'Error procesando la autenticación' };
-      
+
     } catch (error) {
       console.error('❌ AuthContext: Error en login con Google:', error);
-      return { 
-        success: false, 
-        error: error.message || 'Error al autenticar con Google' 
+      return {
+        success: false,
+        error: error.message || 'Error al autenticar con Google'
       };
     }
   };

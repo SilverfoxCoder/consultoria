@@ -1,6 +1,6 @@
 {
-  "short_name": "CodeXCore",
-  "name": "CodeXCore - Consultoría IT",
+  "short_name": "Xperiecia",
+  "name": "Xperiecia Consulting",
   "icons": [
     {
       "src": "favicon.ico",
@@ -12,4 +12,4 @@
   "display": "standalone",
   "theme_color": "#000000",
   "background_color": "#ffffff"
-} 
+}

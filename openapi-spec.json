@@ -1,9 +1,9 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "title": "CodeXCore API",
+    "title": "Xperiecia Consulting API",
     "version": "v1.0.0",
-    "description": "API completa para el sistema de gestión de proyectos y clientes de CodeXCore"
+    "description": "API completa para el sistema de gestión de proyectos y clientes de Xperiecia Consulting"
   },
   "servers": [
     {
@@ -64,7 +64,9 @@
   "paths": {
     "/api/auth/login": {
       "post": {
-        "tags": ["Authentication"],
+        "tags": [
+          "Authentication"
+        ],
         "summary": "Autenticar usuario",
         "operationId": "login",
         "requestBody": {
@@ -96,7 +98,9 @@
     },
     "/api/auth/google": {
       "post": {
-        "tags": ["Authentication"],
+        "tags": [
+          "Authentication"
+        ],
         "summary": "Login con Google OAuth",
         "operationId": "googleAuth",
         "requestBody": {
@@ -130,7 +134,9 @@
     },
     "/api/auth/google/register": {
       "post": {
-        "tags": ["Authentication"],
+        "tags": [
+          "Authentication"
+        ],
         "summary": "Registrar usuario con Google OAuth",
         "operationId": "googleRegister",
         "requestBody": {
@@ -170,7 +176,9 @@
     },
     "/api/auth/logout": {
       "post": {
-        "tags": ["Authentication"],
+        "tags": [
+          "Authentication"
+        ],
         "summary": "Cerrar sesión",
         "operationId": "logout",
         "responses": {
@@ -182,7 +190,9 @@
     },
     "/api/users": {
       "get": {
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "summary": "Obtener todos los usuarios",
         "operationId": "getAllUsers",
         "responses": {
@@ -202,7 +212,9 @@
         }
       },
       "post": {
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "summary": "Crear un nuevo usuario",
         "operationId": "createUser",
         "requestBody": {
@@ -231,7 +243,9 @@
     },
     "/api/users/{id}": {
       "get": {
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "summary": "Obtener un usuario por ID",
         "operationId": "getUserById",
         "parameters": [
@@ -259,7 +273,9 @@
         }
       },
       "put": {
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "summary": "Actualizar un usuario",
         "operationId": "updateUser",
         "parameters": [
@@ -297,7 +313,9 @@
         }
       },
       "delete": {
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "summary": "Eliminar un usuario",
         "operationId": "deleteUser",
         "parameters": [
@@ -320,7 +338,9 @@
     },
     "/api/users/{id}/status": {
       "patch": {
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "summary": "Cambiar estado de un usuario",
         "operationId": "updateUserStatus",
         "parameters": [
@@ -358,7 +378,9 @@
     },
     "/api/users/{id}/restore": {
       "post": {
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "summary": "Restaurar un usuario eliminado lógicamente",
         "operationId": "restoreUser",
         "parameters": [
@@ -381,7 +403,9 @@
     },
     "/api/users/email/{email}": {
       "get": {
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "summary": "Obtener un usuario por email",
         "operationId": "getUserByEmail",
         "parameters": [
@@ -410,7 +434,9 @@
     },
     "/api/users/by-status/{status}": {
       "get": {
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "summary": "Obtener usuarios por estado",
         "operationId": "getUsersByStatus",
         "parameters": [
@@ -442,7 +468,9 @@
     },
     "/api/clients": {
       "get": {
-        "tags": ["Clients"],
+        "tags": [
+          "Clients"
+        ],
         "summary": "Obtener todos los clientes",
         "operationId": "getAllClients",
         "responses": {
@@ -462,7 +490,9 @@
         }
       },
       "post": {
-        "tags": ["Clients"],
+        "tags": [
+          "Clients"
+        ],
         "summary": "Crear un nuevo cliente",
         "operationId": "createClient",
         "requestBody": {
@@ -491,7 +521,9 @@
     },
     "/api/clients/{id}": {
       "get": {
-        "tags": ["Clients"],
+        "tags": [
+          "Clients"
+        ],
         "summary": "Obtener un cliente por ID",
         "operationId": "getClientById",
         "parameters": [
@@ -519,7 +551,9 @@
         }
       },
       "put": {
-        "tags": ["Clients"],
+        "tags": [
+          "Clients"
+        ],
         "summary": "Actualizar un cliente",
         "operationId": "updateClient",
         "parameters": [
@@ -557,7 +591,9 @@
         }
       },
       "delete": {
-        "tags": ["Clients"],
+        "tags": [
+          "Clients"
+        ],
         "summary": "Eliminar un cliente",
         "operationId": "deleteClient",
         "parameters": [
@@ -580,7 +616,9 @@
     },
     "/api/budgets": {
       "get": {
-        "tags": ["Budgets"],
+        "tags": [
+          "Budgets"
+        ],
         "summary": "Obtener todos los presupuestos",
         "operationId": "getAllBudgets",
         "responses": {
@@ -600,7 +638,9 @@
         }
       },
       "post": {
-        "tags": ["Budgets"],
+        "tags": [
+          "Budgets"
+        ],
         "summary": "Crear un nuevo presupuesto",
         "operationId": "createBudget",
         "requestBody": {
@@ -629,7 +669,9 @@
     },
     "/api/budgets/{id}": {
       "get": {
-        "tags": ["Budgets"],
+        "tags": [
+          "Budgets"
+        ],
         "summary": "Obtener un presupuesto por ID",
         "operationId": "getBudgetById",
         "parameters": [
@@ -659,7 +701,9 @@
     },
     "/api/budgets/{id}/status": {
       "put": {
-        "tags": ["Budgets"],
+        "tags": [
+          "Budgets"
+        ],
         "summary": "Actualizar estado de un presupuesto",
         "operationId": "updateBudgetStatus",
         "parameters": [
@@ -704,7 +748,9 @@
     },
     "/api/budgets/client/{clientId}": {
       "get": {
-        "tags": ["Budgets"],
+        "tags": [
+          "Budgets"
+        ],
         "summary": "Obtener presupuestos de un cliente",
         "operationId": "getBudgetsByClient",
         "parameters": [
@@ -737,7 +783,9 @@
     },
     "/api/notifications": {
       "post": {
-        "tags": ["Notifications"],
+        "tags": [
+          "Notifications"
+        ],
         "summary": "Crear una nueva notificación",
         "operationId": "createNotification",
         "requestBody": {
@@ -766,7 +814,9 @@
     },
     "/api/notifications/user/{userId}": {
       "get": {
-        "tags": ["Notifications"],
+        "tags": [
+          "Notifications"
+        ],
         "summary": "Obtener notificaciones de un usuario",
         "operationId": "getUserNotifications",
         "parameters": [
@@ -816,7 +866,9 @@
     },
     "/api/notifications/user/{userId}/stats": {
       "get": {
-        "tags": ["Notifications"],
+        "tags": [
+          "Notifications"
+        ],
         "summary": "Obtener estadísticas de notificaciones",
         "operationId": "getNotificationStats",
         "parameters": [
@@ -854,7 +906,9 @@
     },
     "/api/notifications/{id}/read": {
       "put": {
-        "tags": ["Notifications"],
+        "tags": [
+          "Notifications"
+        ],
         "summary": "Marcar notificación como leída",
         "operationId": "markAsRead",
         "parameters": [
@@ -877,7 +931,9 @@
     },
     "/api/notifications/user/{userId}/read-all": {
       "put": {
-        "tags": ["Notifications"],
+        "tags": [
+          "Notifications"
+        ],
         "summary": "Marcar todas las notificaciones como leídas",
         "operationId": "markAllAsRead",
         "parameters": [
@@ -900,7 +956,9 @@
     },
     "/api/projects": {
       "get": {
-        "tags": ["Projects"],
+        "tags": [
+          "Projects"
+        ],
         "summary": "Obtener todos los proyectos",
         "operationId": "getAllProjects",
         "responses": {
@@ -920,7 +978,9 @@
         }
       },
       "post": {
-        "tags": ["Projects"],
+        "tags": [
+          "Projects"
+        ],
         "summary": "Crear un nuevo proyecto",
         "operationId": "createProject",
         "requestBody": {
@@ -949,7 +1009,9 @@
     },
     "/api/projects/{id}": {
       "get": {
-        "tags": ["Projects"],
+        "tags": [
+          "Projects"
+        ],
         "summary": "Obtener un proyecto por ID",
         "operationId": "getProjectById",
         "parameters": [
@@ -977,7 +1039,9 @@
         }
       },
       "put": {
-        "tags": ["Projects"],
+        "tags": [
+          "Projects"
+        ],
         "summary": "Actualizar un proyecto",
         "operationId": "updateProject",
         "parameters": [
@@ -1015,7 +1079,9 @@
         }
       },
       "delete": {
-        "tags": ["Projects"],
+        "tags": [
+          "Projects"
+        ],
         "summary": "Eliminar un proyecto",
         "operationId": "deleteProject",
         "parameters": [
@@ -1038,7 +1104,9 @@
     },
     "/api/dashboard/summary": {
       "get": {
-        "tags": ["Dashboard"],
+        "tags": [
+          "Dashboard"
+        ],
         "summary": "Obtener resumen del dashboard",
         "operationId": "getDashboardSummary",
         "responses": {
@@ -1071,7 +1139,9 @@
     },
     "/api/dashboard/data": {
       "get": {
-        "tags": ["Dashboard"],
+        "tags": [
+          "Dashboard"
+        ],
         "summary": "Obtener datos del dashboard",
         "operationId": "getDashboardData",
         "responses": {
@@ -1104,7 +1174,9 @@
     },
     "/api/health": {
       "get": {
-        "tags": ["Health"],
+        "tags": [
+          "Health"
+        ],
         "summary": "Verificar salud del sistema",
         "operationId": "getHealth",
         "responses": {
@@ -1144,7 +1216,10 @@
             "type": "string"
           }
         },
-        "required": ["email", "password"]
+        "required": [
+          "email",
+          "password"
+        ]
       },
       "LoginResponse": {
         "type": "object",
@@ -1173,11 +1248,18 @@
           },
           "role": {
             "type": "string",
-            "enum": ["admin", "user"]
+            "enum": [
+              "admin",
+              "user"
+            ]
           },
           "status": {
             "type": "string",
-            "enum": ["active", "inactive", "deleted"]
+            "enum": [
+              "active",
+              "inactive",
+              "deleted"
+            ]
           },
           "createdAt": {
             "type": "string",
@@ -1211,7 +1293,10 @@
           },
           "status": {
             "type": "string",
-            "enum": ["active", "inactive"]
+            "enum": [
+              "active",
+              "inactive"
+            ]
           },
           "createdAt": {
             "type": "string",
@@ -1242,11 +1327,20 @@
           },
           "status": {
             "type": "string",
-            "enum": ["pending", "active", "completed", "cancelled"]
+            "enum": [
+              "pending",
+              "active",
+              "completed",
+              "cancelled"
+            ]
           },
           "priority": {
             "type": "string",
-            "enum": ["low", "medium", "high"]
+            "enum": [
+              "low",
+              "medium",
+              "high"
+            ]
           },
           "startDate": {
             "type": "string",
@@ -1284,11 +1378,20 @@
           },
           "status": {
             "type": "string",
-            "enum": ["pending", "active", "completed", "cancelled"]
+            "enum": [
+              "pending",
+              "active",
+              "completed",
+              "cancelled"
+            ]
           },
           "priority": {
             "type": "string",
-            "enum": ["low", "medium", "high"]
+            "enum": [
+              "low",
+              "medium",
+              "high"
+            ]
           },
           "startDate": {
             "type": "string",
@@ -1302,7 +1405,10 @@
             "type": "number"
           }
         },
-        "required": ["name", "clientId"]
+        "required": [
+          "name",
+          "clientId"
+        ]
       },
       "BudgetRequest": {
         "type": "object",
@@ -1323,10 +1429,17 @@
           },
           "status": {
             "type": "string",
-            "enum": ["pending", "approved", "rejected"]
+            "enum": [
+              "pending",
+              "approved",
+              "rejected"
+            ]
           }
         },
-        "required": ["clientId", "amount"]
+        "required": [
+          "clientId",
+          "amount"
+        ]
       },
       "BudgetResponse": {
         "type": "object",
@@ -1351,7 +1464,11 @@
           },
           "status": {
             "type": "string",
-            "enum": ["pending", "approved", "rejected"]
+            "enum": [
+              "pending",
+              "approved",
+              "rejected"
+            ]
           },
           "createdAt": {
             "type": "string",
@@ -1382,7 +1499,12 @@
           },
           "type": {
             "type": "string",
-            "enum": ["info", "success", "warning", "error"]
+            "enum": [
+              "info",
+              "success",
+              "warning",
+              "error"
+            ]
           },
           "isRead": {
             "type": "boolean"
@@ -1429,4 +1551,4 @@
       }
     }
   }
-} 
+}

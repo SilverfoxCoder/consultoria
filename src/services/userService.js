@@ -29,7 +29,7 @@ class UserService {
 
   // Obtener todos los usuarios
   async getAllUsers() {
-    const token = localStorage.getItem('codethics_token');
+    const token = localStorage.getItem('xperiecia_token');
     return this.request('/users', {
       method: 'GET',
       headers: {
@@ -41,7 +41,7 @@ class UserService {
 
   // Obtener usuario por ID
   async getUserById(id) {
-    const token = localStorage.getItem('codethics_token');
+    const token = localStorage.getItem('xperiecia_token');
     return this.request(`/users/${id}`, {
       method: 'GET',
       headers: {
@@ -58,7 +58,7 @@ class UserService {
 
   // Crear usuario
   async createUser(userData) {
-    const token = localStorage.getItem('codethics_token');
+    const token = localStorage.getItem('xperiecia_token');
     return this.request('/users', {
       method: 'POST',
       headers: {
@@ -71,7 +71,7 @@ class UserService {
 
   // Actualizar usuario
   async updateUser(id, userData) {
-    const token = localStorage.getItem('codethics_token');
+    const token = localStorage.getItem('xperiecia_token');
     return this.request(`/users/${id}`, {
       method: 'PUT',
       headers: {
@@ -84,7 +84,7 @@ class UserService {
 
   // Eliminar usuario
   async deleteUser(id) {
-    const token = localStorage.getItem('codethics_token');
+    const token = localStorage.getItem('xperiecia_token');
     console.log(`🗑️ UserService: Eliminando usuario ${id}`);
     console.log(`🔑 Token disponible: ${!!token}`);
     
@@ -99,7 +99,7 @@ class UserService {
 
   // Cambiar estado de usuario (activar/desactivar)
   async updateUserStatus(id, status) {
-    const token = localStorage.getItem('codethics_token');
+    const token = localStorage.getItem('xperiecia_token');
     console.log(`🔄 UserService: Cambiando estado usuario ${id} a ${status}`);
     console.log(`🔑 Token disponible: ${!!token}`);
     

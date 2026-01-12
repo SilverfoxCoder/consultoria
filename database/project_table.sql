@@ -1,5 +1,5 @@
 -- SQL Query para crear la tabla de proyectos
--- Base de datos: codethics
+-- Base de datos: xperiecia_db
 -- Tabla: proyectos
 
 CREATE TABLE IF NOT EXISTS proyectos (

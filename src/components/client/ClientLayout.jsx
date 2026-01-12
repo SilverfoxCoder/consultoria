@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { useTranslations } from '../../hooks/useTranslations';
-import { 
-  Bars3Icon, 
-  XMarkIcon, 
-  HomeIcon, 
-  DocumentTextIcon, 
-  WrenchScrewdriverIcon, 
-  FolderIcon, 
-  ExclamationTriangleIcon, 
-  ChartBarIcon, 
+import {
+  Bars3Icon,
+  XMarkIcon,
+  HomeIcon,
+  DocumentTextIcon,
+  WrenchScrewdriverIcon,
+  FolderIcon,
+  ExclamationTriangleIcon,
+  ChartBarIcon,
   UserIcon,
   ArrowLeftOnRectangleIcon
 } from '@heroicons/react/24/outline';
@@ -47,7 +47,7 @@ const ClientLayout = ({ children, onBack, currentSection, onSectionChange }) => 
               </button>
               <div className="flex items-center ml-4 lg:ml-0">
                 <div className="flex-shrink-0">
-                  <h1 className="text-xl font-bold text-white">CodexCore</h1>
+                  <h1 className="text-xl font-bold text-white">Xperiecia</h1>
                 </div>
                 <div className="hidden sm:block sm:ml-6">
                   <div className="flex space-x-4">
@@ -99,11 +99,10 @@ const ClientLayout = ({ children, onBack, currentSection, onSectionChange }) => 
                     onSectionChange(item.href);
                     setSidebarOpen(false);
                   }}
-                  className={`group flex items-center px-2 py-2 text-sm font-medium rounded-md w-full transition-colors ${
-                    currentSection === item.href
+                  className={`group flex items-center px-2 py-2 text-sm font-medium rounded-md w-full transition-colors ${currentSection === item.href
                       ? 'bg-primary-600 text-white'
                       : 'text-gray-300 hover:bg-gray-700 hover:text-white'
-                  }`}
+                    }`}
                 >
                   <item.icon className="mr-3 h-5 w-5" />
                   {item.name}
@@ -122,11 +121,10 @@ const ClientLayout = ({ children, onBack, currentSection, onSectionChange }) => 
               <button
                 key={item.name}
                 onClick={() => onSectionChange(item.href)}
-                className={`group flex items-center px-2 py-2 text-sm font-medium rounded-md w-full transition-colors ${
-                  currentSection === item.href
+                className={`group flex items-center px-2 py-2 text-sm font-medium rounded-md w-full transition-colors ${currentSection === item.href
                     ? 'bg-primary-600 text-white'
                     : 'text-gray-300 hover:bg-gray-700 hover:text-white'
-                }`}
+                  }`}
               >
                 <item.icon className="mr-3 h-5 w-5" />
                 {item.name}

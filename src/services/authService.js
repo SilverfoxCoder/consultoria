@@ -93,7 +93,7 @@ class AuthService {
   // Verificar token de autenticación
   async verifyToken() {
     try {
-      const token = localStorage.getItem('codethics_token');
+      const token = localStorage.getItem('xperiecia_token');
       
       if (!token) {
         throw new Error('No hay token disponible');
@@ -119,7 +119,7 @@ class AuthService {
   // Logout
   async logout() {
     try {
-      const token = localStorage.getItem('codethics_token');
+      const token = localStorage.getItem('xperiecia_token');
       
       if (token) {
         console.log('🚪 AuthService: Cerrando sesión en servidor');
@@ -133,13 +133,13 @@ class AuthService {
       }
 
       // Limpiar token local independientemente del resultado del servidor
-      localStorage.removeItem('codethics_token');
+      localStorage.removeItem('xperiecia_token');
       console.log('✅ AuthService: Sesión cerrada localmente');
       
     } catch (error) {
       console.error('❌ AuthService: Error en logout (limpiando localmente):', error);
       // Limpiar token local incluso si falla el logout en servidor
-      localStorage.removeItem('codethics_token');
+      localStorage.removeItem('xperiecia_token');
     }
   }
 
@@ -182,7 +182,7 @@ class AuthService {
   // Cambiar contraseña (usuario autenticado)
   async changePassword(currentPassword, newPassword) {
     try {
-      const token = localStorage.getItem('codethics_token');
+      const token = localStorage.getItem('xperiecia_token');
       
       if (!token) {
         throw new Error('Usuario no autenticado');

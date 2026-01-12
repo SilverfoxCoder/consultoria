@@ -426,7 +426,7 @@ El sistema incluye clientes de ejemplo para demostrar las funcionalidades:
 ### **Características del Login**
 - **Acceso exclusivo para empleados**: Sin zona de registro público
 - **Credenciales de demo**:
-  - Admin: `admin@codexcore.com` / `admin123`
+  - Admin: `admin@xperiecia-consulting.com` / `admin123`
   - Cliente: `cliente@empresa.com` / `admin123`
 - **Persistencia de sesión**: Login automático con localStorage
 - **Interfaz moderna**: Diseño glassmorphism consistente con el sitio

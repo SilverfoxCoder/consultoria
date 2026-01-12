@@ -723,7 +723,7 @@ export const translations = {
 
     // Footer
     footer: {
-      copyright: "© Codethics 2025. Todos los derechos reservados.",
+      copyright: "© Xperiecia Consulting 2025. All rights reserved.",
       tagline: "Transformando ideas en soluciones digitales innovadoras"
     },
 
@@ -2049,7 +2049,7 @@ export const translations = {
 
     // Footer
     footer: {
-      copyright: "© Codethics 2025. All rights reserved.",
+      copyright: "© Xperiecia Consulting 2025. All rights reserved.",
       tagline: "Transforming ideas into innovative digital solutions"
     },
 

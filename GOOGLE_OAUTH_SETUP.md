@@ -38,7 +38,7 @@ REACT_APP_API_BASE_URL=http://localhost:8080/api
 REACT_APP_GOOGLE_CLIENT_ID=tu-google-client-id-aqui
 
 # Configuraciones adicionales
-REACT_APP_COMPANY_EMAIL=admin@codexcore.com
+REACT_APP_COMPANY_EMAIL=admin@xperiecia-consulting.com
 REACT_APP_WHATSAPP_NUMBER=+34670835822
 ```
 
