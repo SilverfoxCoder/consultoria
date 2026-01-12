@@ -49,7 +49,7 @@ const Navbar = ({ onNavClick, currentPage, onShowLogin, onShowRegister, onShowDa
               className="flex items-center space-x-2"
             >
               <span className={`text-xl font-bold transition-colors duration-200 ${isScrolled ? 'text-gray-800' : 'text-white'
-                }`}>Xperiecia Consulting</span>
+                }`}>XperiecIA Consulting</span>
             </button>
           </div>
 
