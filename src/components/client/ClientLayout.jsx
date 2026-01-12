@@ -47,7 +47,11 @@ const ClientLayout = ({ children, onBack, currentSection, onSectionChange }) => 
               </button>
               <div className="flex items-center ml-4 lg:ml-0">
                 <div className="flex-shrink-0">
-                  <h1 className="text-xl font-bold text-white">Xperiecia</h1>
+                  <img
+                    src="/logo-xperiecia.png"
+                    alt="Xperiecia Consulting"
+                    className="h-8 w-auto"
+                  />
                 </div>
                 <div className="hidden sm:block sm:ml-6">
                   <div className="flex space-x-4">
@@ -100,8 +104,8 @@ const ClientLayout = ({ children, onBack, currentSection, onSectionChange }) => 
                     setSidebarOpen(false);
                   }}
                   className={`group flex items-center px-2 py-2 text-sm font-medium rounded-md w-full transition-colors ${currentSection === item.href
-                      ? 'bg-primary-600 text-white'
-                      : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+                    ? 'bg-primary-600 text-white'
+                    : 'text-gray-300 hover:bg-gray-700 hover:text-white'
                     }`}
                 >
                   <item.icon className="mr-3 h-5 w-5" />
@@ -122,8 +126,8 @@ const ClientLayout = ({ children, onBack, currentSection, onSectionChange }) => 
                 key={item.name}
                 onClick={() => onSectionChange(item.href)}
                 className={`group flex items-center px-2 py-2 text-sm font-medium rounded-md w-full transition-colors ${currentSection === item.href
-                    ? 'bg-primary-600 text-white'
-                    : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+                  ? 'bg-primary-600 text-white'
+                  : 'text-gray-300 hover:bg-gray-700 hover:text-white'
                   }`}
               >
                 <item.icon className="mr-3 h-5 w-5" />
