@@ -32,6 +32,11 @@ const Home = ({ onShowRegister, onShowDashboard, onShowServices }) => {
         <div className="text-center max-w-4xl mx-auto">
           {/* Hero Content */}
           <div className="mb-8">
+            <img
+              src="/logo-xperiecia.png"
+              alt="Xperiecia Consulting"
+              className="mx-auto h-48 md:h-64 w-auto mb-8 animate-fade-in drop-shadow-2xl"
+            />
             <h1 className="text-4xl md:text-6xl font-bold text-primary-500 mb-6 leading-tight drop-shadow-sm">
               {t('home.hero.title')}
               <span className="text-primary-400 block drop-shadow-sm">{t('home.hero.titleHighlight')}</span>

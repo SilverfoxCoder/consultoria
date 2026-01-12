@@ -48,11 +48,8 @@ const Navbar = ({ onNavClick, currentPage, onShowLogin, onShowRegister, onShowDa
               onClick={() => handleNavClick('home')}
               className="flex items-center space-x-2"
             >
-              <img
-                src="/logo-xperiecia.png"
-                alt="Xperiecia Consulting"
-                className="h-10 w-auto"
-              />
+              <span className={`text-xl font-bold transition-colors duration-200 ${isScrolled ? 'text-gray-800' : 'text-white'
+                }`}>Xperiecia Consulting</span>
             </button>
           </div>
 
