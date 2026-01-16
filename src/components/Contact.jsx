@@ -26,6 +26,8 @@ const Contact = () => {
     }
   };
 
+  // Handler for email click
+
   const handleEmailClick = () => {
     window.location.href = 'mailto:experienciaitservices@gmail.com';
   };
