@@ -1,4 +1,5 @@
-# XperiencIA - Landing Page
+# Xperiecia Consulting Landing Page
+<!-- Last updated check: 2026-01-16 -->
 
 Una landing page profesional y moderna para la consultora IT "XperiencIA", desarrollada con React y Tailwind CSS.
 
