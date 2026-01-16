@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslations } from '../../hooks/useTranslations';
-import { 
-  ChartBarIcon, 
+import {
+  ChartBarIcon,
   CurrencyDollarIcon,
   ClockIcon,
   CheckCircleIcon,
@@ -18,11 +18,10 @@ import { useAuth } from '../../contexts/AuthContext';
 const ClientAnalytics = () => {
   const { t } = useTranslations();
   const { user, clientId } = useAuth();
-  
+
   // Estados para datos
   const [timeRange, setTimeRange] = useState('month');
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState('');
   const [kpis, setKpis] = useState([]);
   const [monthlyData, setMonthlyData] = useState([]);
   const [projectPerformance, setProjectPerformance] = useState([]);
@@ -32,11 +31,11 @@ const ClientAnalytics = () => {
   // Cargar datos al montar el componente
   useEffect(() => {
     let isMounted = true;
-    
+
     const loadAnalytics = async () => {
       if (!isMounted) return;
       setIsLoading(true);
-      
+
       try {
         // Intentar cargar datos del backend primero
         const finalClientId = clientId || user?.id || 1;
@@ -47,13 +46,13 @@ const ClientAnalytics = () => {
         ]);
 
         // Verificar si el backend respondió correctamente
-        const hasBackendData = analytics.status === 'fulfilled' && 
-                              budgets.status === 'fulfilled' && 
-                              projects.status === 'fulfilled';
+        const hasBackendData = analytics.status === 'fulfilled' &&
+          budgets.status === 'fulfilled' &&
+          projects.status === 'fulfilled';
 
         if (hasBackendData) {
           console.log('✅ Backend disponible - usando datos reales para Analytics');
-          
+
           // Usar datos del backend
           const analyticsData = analytics.value || {};
           const budgetsData = Array.isArray(budgets.value) ? budgets.value : [];
@@ -62,7 +61,7 @@ const ClientAnalytics = () => {
           // Calcular KPIs reales
           const totalSpent = budgetsData.reduce((sum, b) => sum + (b.amount || 0), 0);
           const activeProjects = projectsData.filter(p => p.status === 'En Progreso').length;
-          
+
           const kpisData = [
             {
               name: t('client.totalSpent'),
@@ -112,7 +111,7 @@ const ClientAnalytics = () => {
             status: p.status === 'Completado' ? 'completed' : 'on-track'
           })));
           setServiceBreakdown(analyticsData.serviceBreakdown || []);
-          
+
           // Datos mockeados para actividad reciente (siempre)
           setRecentActivity([
             {
@@ -146,7 +145,7 @@ const ClientAnalytics = () => {
           ]);
         } else {
           console.log('⚠️ Backend no disponible - usando datos mockeados para Analytics');
-          
+
           // Usar datos mockeados
           const kpisData = [
             {
@@ -257,7 +256,7 @@ const ClientAnalytics = () => {
       } catch (error) {
         console.log('❌ Error al cargar datos - usando datos mockeados para Analytics');
         console.error('Error:', error);
-        
+
         // Datos mockeados como fallback
         const kpisData = [
           {
@@ -376,7 +375,7 @@ const ClientAnalytics = () => {
     return () => {
       isMounted = false;
     };
-  }, []); // Solo ejecutar una vez al montar el componente
+  }, [clientId, user, t]);
 
   const getActivityIcon = (type) => {
     switch (type) {
@@ -419,16 +418,7 @@ const ClientAnalytics = () => {
     );
   }
 
-  // Mostrar error
-  if (error) {
-    return (
-      <div className="space-y-6">
-        <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-4">
-          <p className="text-red-400">{error}</p>
-        </div>
-      </div>
-    );
-  }
+
 
   return (
     <div className="space-y-6">
@@ -476,9 +466,8 @@ const ClientAnalytics = () => {
                   ) : (
                     <ArrowDownIcon className="h-4 w-4 text-red-400 mr-1" />
                   )}
-                  <span className={`text-sm ${
-                    kpi.changeType === 'positive' ? 'text-green-400' : 'text-red-400'
-                  }`}>
+                  <span className={`text-sm ${kpi.changeType === 'positive' ? 'text-green-400' : 'text-red-400'
+                    }`}>
                     {kpi.change}
                   </span>
                   <span className="text-sm text-gray-400 ml-1">
@@ -510,7 +499,7 @@ const ClientAnalytics = () => {
                   <span className="text-sm text-gray-400 w-12">{data.month}</span>
                   <div className="flex-1 mx-4">
                     <div className="w-full bg-gray-700 rounded-full h-3">
-                      <div 
+                      <div
                         className="bg-primary-500 h-3 rounded-full transition-all duration-300"
                         style={{ width: `${(data.spent / 25000) * 100}%` }}
                       />
@@ -535,11 +524,10 @@ const ClientAnalytics = () => {
               {serviceBreakdown.map((service, index) => (
                 <div key={index} className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
-                    <div className={`w-3 h-3 rounded-full ${
-                      index === 0 ? 'bg-blue-400' :
+                    <div className={`w-3 h-3 rounded-full ${index === 0 ? 'bg-blue-400' :
                       index === 1 ? 'bg-green-400' :
-                      index === 2 ? 'bg-yellow-400' : 'bg-purple-400'
-                    }`} />
+                        index === 2 ? 'bg-yellow-400' : 'bg-purple-400'
+                      }`} />
                     <span className="text-sm text-white">{service.service}</span>
                   </div>
                   <div className="text-right">
@@ -566,13 +554,12 @@ const ClientAnalytics = () => {
               <div key={index} className="bg-gray-700/30 rounded-lg p-4">
                 <div className="flex items-center justify-between mb-3">
                   <h4 className="text-sm font-medium text-white">{project.name}</h4>
-                  <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                    project.status === 'completed' ? 'text-green-400 bg-green-400/10' :
+                  <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${project.status === 'completed' ? 'text-green-400 bg-green-400/10' :
                     project.status === 'on-track' ? 'text-blue-400 bg-blue-400/10' :
-                    'text-yellow-400 bg-yellow-400/10'
-                  }`}>
+                      'text-yellow-400 bg-yellow-400/10'
+                    }`}>
                     {project.status === 'completed' ? t('client.completed') :
-                     project.status === 'on-track' ? t('client.onTrack') : t('client.delayed')}
+                      project.status === 'on-track' ? t('client.onTrack') : t('client.delayed')}
                   </span>
                 </div>
                 <div className="space-y-2">
@@ -581,7 +568,7 @@ const ClientAnalytics = () => {
                     <span className="text-white">{project.progress}%</span>
                   </div>
                   <div className="w-full bg-gray-700 rounded-full h-2">
-                    <div 
+                    <div
                       className="bg-primary-500 h-2 rounded-full transition-all duration-300"
                       style={{ width: `${project.progress}%` }}
                     />

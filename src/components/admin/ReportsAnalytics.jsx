@@ -4,7 +4,7 @@ import { Listbox } from '@headlessui/react';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell, Legend
 } from 'recharts';
-import { analyticsService } from '../../services/analyticsService';
+
 import { projectService } from '../../services/projectService';
 import { clientService } from '../../services/clientService';
 import { supportService } from '../../services/supportService';
@@ -12,13 +12,13 @@ import { supportService } from '../../services/supportService';
 const COLORS = ['#3b82f6', '#a78bfa', '#f59e42', '#10b981', '#ef4444', '#6366f1', '#f472b6'];
 
 const ReportsAnalytics = () => {
-  const { t, lang, translations } = useTranslations();
+  const { t, translations } = useTranslations();
 
   // Months array - moved inside component to access t function
   const months = [
-    t('reportsAnalytics.months.jan'), t('reportsAnalytics.months.feb'), t('reportsAnalytics.months.mar'), 
-    t('reportsAnalytics.months.apr'), t('reportsAnalytics.months.may'), t('reportsAnalytics.months.jun'), 
-    t('reportsAnalytics.months.jul'), t('reportsAnalytics.months.aug'), t('reportsAnalytics.months.sep'), 
+    t('reportsAnalytics.months.jan'), t('reportsAnalytics.months.feb'), t('reportsAnalytics.months.mar'),
+    t('reportsAnalytics.months.apr'), t('reportsAnalytics.months.may'), t('reportsAnalytics.months.jun'),
+    t('reportsAnalytics.months.jul'), t('reportsAnalytics.months.aug'), t('reportsAnalytics.months.sep'),
     t('reportsAnalytics.months.oct'), t('reportsAnalytics.months.nov'), t('reportsAnalytics.months.dec')
   ];
 
@@ -27,7 +27,6 @@ const ReportsAnalytics = () => {
   const [serviceFilter, setServiceFilter] = useState('todos');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
-  const [analyticsData, setAnalyticsData] = useState([]);
   const [projectsData, setProjectsData] = useState([]);
   const [clientsData, setClientsData] = useState([]);
   const [supportTicketsData, setSupportTicketsData] = useState([]);
@@ -54,22 +53,19 @@ const ReportsAnalytics = () => {
       try {
         setIsLoading(true);
         console.log('🔄 Cargando datos del dashboard...');
-        
-        const [analytics, projects, clients, supportTickets] = await Promise.all([
-          analyticsService.getAllAnalytics(),
+
+        const [projects, clients, supportTickets] = await Promise.all([
           projectService.getAllProjects(),
           clientService.getAllClients(),
           supportService.getAllTickets()
         ]);
-        
+
         console.log('📊 Datos cargados:', {
-          analytics: analytics,
           projects: projects.length,
           clients: clients.length,
           supportTickets: supportTickets.length
         });
-        
-        setAnalyticsData(analytics);
+
         setProjectsData(projects);
         setClientsData(clients);
         setSupportTicketsData(supportTickets);
@@ -86,33 +82,33 @@ const ReportsAnalytics = () => {
 
   // KPIs con datos reales
   const kpis = [
-    { 
-      label: t('reportsAnalytics.monthlyRevenue'), 
+    {
+      label: t('reportsAnalytics.monthlyRevenue'),
       value: `€${(() => {
         // Calcular ingresos totales de todos los proyectos
         const totalRevenue = projectsData.reduce((sum, p) => sum + (p.budget || 0), 0);
         return totalRevenue.toLocaleString();
-      })()}`, 
-      icon: '💶', 
-      color: 'from-blue-500 to-blue-700' 
+      })()}`,
+      icon: '💶',
+      color: 'from-blue-500 to-blue-700'
     },
-    { 
-      label: t('reportsAnalytics.activeProjects'), 
-      value: projectsData.filter(p => 
-        p.status === 'EN_PROGRESO' || 
-        p.status === 'PLANIFICACION' || 
-        p.status === 'en_progress' || 
+    {
+      label: t('reportsAnalytics.activeProjects'),
+      value: projectsData.filter(p =>
+        p.status === 'EN_PROGRESO' ||
+        p.status === 'PLANIFICACION' ||
+        p.status === 'en_progress' ||
         p.status === 'active'
-      ).length, 
-      icon: '📁', 
-      color: 'from-purple-500 to-purple-700' 
+      ).length,
+      icon: '📁',
+      color: 'from-purple-500 to-purple-700'
     },
-    { 
-      label: t('reportsAnalytics.newClients'), 
+    {
+      label: t('reportsAnalytics.newClients'),
       value: (() => {
         const lastMonth = new Date();
         lastMonth.setMonth(lastMonth.getMonth() - 1);
-        
+
         return clientsData.filter(c => {
           let clientDate;
           if (c.createdAt) {
@@ -124,37 +120,37 @@ const ReportsAnalytics = () => {
           } else {
             clientDate = new Date();
           }
-          
+
           if (isNaN(clientDate.getTime())) {
             clientDate = new Date();
           }
-          
+
           return clientDate >= lastMonth;
         }).length;
-      })(), 
-      icon: '🧑‍💼', 
-      color: 'from-green-500 to-green-700' 
+      })(),
+      icon: '🧑‍💼',
+      color: 'from-green-500 to-green-700'
     },
-    { 
-      label: t('reportsAnalytics.supportTickets'), 
-      value: supportTicketsData.filter(t => 
-        t.status === 'open' || 
-        t.status === 'in-progress' || 
+    {
+      label: t('reportsAnalytics.supportTickets'),
+      value: supportTicketsData.filter(t =>
+        t.status === 'open' ||
+        t.status === 'in-progress' ||
         t.status === 'in_progress'
-      ).length, 
-      icon: '🎫', 
-      color: 'from-pink-500 to-pink-700' 
+      ).length,
+      icon: '🎫',
+      color: 'from-pink-500 to-pink-700'
     },
   ];
 
   // Datos reales para gráficas
   const revenueData = months.map((m, i) => {
-    const monthAnalytics = analyticsData.monthlyData?.find(a => a.month === m) || {};
-    
+
+
     // Calcular proyectos y clientes reales para este mes
     const currentMonth = new Date();
     const targetMonth = new Date(currentMonth.getFullYear(), i, 1);
-    
+
     // Proyectos creados en este mes
     const monthProjects = projectsData.filter(p => {
       // Intentar diferentes campos de fecha para el proyecto
@@ -169,16 +165,16 @@ const ReportsAnalytics = () => {
         // Si no hay fecha, usar la fecha actual como fallback
         projectDate = new Date();
       }
-      
+
       // Verificar que la fecha es válida
       if (isNaN(projectDate.getTime())) {
         projectDate = new Date();
       }
-      
-      return projectDate.getMonth() === targetMonth.getMonth() && 
-             projectDate.getFullYear() === targetMonth.getFullYear();
+
+      return projectDate.getMonth() === targetMonth.getMonth() &&
+        projectDate.getFullYear() === targetMonth.getFullYear();
     }).length;
-    
+
     // Clientes creados en este mes
     const monthClients = clientsData.filter(c => {
       // Intentar diferentes campos de fecha para el cliente
@@ -193,16 +189,16 @@ const ReportsAnalytics = () => {
         // Si no hay fecha, usar la fecha actual como fallback
         clientDate = new Date();
       }
-      
+
       // Verificar que la fecha es válida
       if (isNaN(clientDate.getTime())) {
         clientDate = new Date();
       }
-      
-      return clientDate.getMonth() === targetMonth.getMonth() && 
-             clientDate.getFullYear() === targetMonth.getFullYear();
+
+      return clientDate.getMonth() === targetMonth.getMonth() &&
+        clientDate.getFullYear() === targetMonth.getFullYear();
     }).length;
-    
+
     // Calcular ingresos reales para este mes
     const monthRevenue = projectsData.filter(p => {
       let projectDate;
@@ -215,15 +211,15 @@ const ReportsAnalytics = () => {
       } else {
         projectDate = new Date();
       }
-      
+
       if (isNaN(projectDate.getTime())) {
         projectDate = new Date();
       }
-      
-      return projectDate.getMonth() === targetMonth.getMonth() && 
-             projectDate.getFullYear() === targetMonth.getFullYear();
+
+      return projectDate.getMonth() === targetMonth.getMonth() &&
+        projectDate.getFullYear() === targetMonth.getFullYear();
     }).reduce((sum, p) => sum + (p.budget || 0), 0);
-    
+
     return {
       month: m,
       revenue: monthRevenue,
@@ -236,12 +232,12 @@ const ReportsAnalytics = () => {
   const projectsByService = projectsData.reduce((acc, project) => {
     // Usar el tipo de servicio del proyecto o inferir del nombre/descripción
     let serviceType = project.serviceType;
-    
+
     if (!serviceType) {
       // Inferir tipo de servicio basado en el nombre o descripción
       const name = (project.name || '').toLowerCase();
       const description = (project.description || '').toLowerCase();
-      
+
       if (name.includes('web') || description.includes('web') || name.includes('sitio')) {
         serviceType = 'Desarrollo Web';
       } else if (name.includes('app') || name.includes('móvil') || name.includes('mobile')) {
@@ -258,7 +254,7 @@ const ReportsAnalytics = () => {
         serviceType = 'Desarrollo Web'; // Por defecto
       }
     }
-    
+
     acc[serviceType] = (acc[serviceType] || 0) + 1;
     return acc;
   }, {});
@@ -342,8 +338,7 @@ const ReportsAnalytics = () => {
                     key={option.value}
                     value={option.value}
                     className={({ active, selected }) =>
-                      `cursor-pointer select-none relative py-2 pl-4 pr-4 ${
-                        active ? 'bg-gray-100 text-gray-800' : 'text-gray-800'
+                      `cursor-pointer select-none relative py-2 pl-4 pr-4 ${active ? 'bg-gray-100 text-gray-800' : 'text-gray-800'
                       } ${selected ? 'font-semibold' : ''}`
                     }
                   >
@@ -364,8 +359,7 @@ const ReportsAnalytics = () => {
                     key={option.value}
                     value={option.value}
                     className={({ active, selected }) =>
-                      `cursor-pointer select-none relative py-2 pl-4 pr-4 ${
-                        active ? 'bg-gray-100 text-gray-800' : 'text-gray-800'
+                      `cursor-pointer select-none relative py-2 pl-4 pr-4 ${active ? 'bg-gray-100 text-gray-800' : 'text-gray-800'
                       } ${selected ? 'font-semibold' : ''}`
                     }
                   >

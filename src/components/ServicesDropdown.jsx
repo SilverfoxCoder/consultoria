@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { useTranslations } from '../hooks/useTranslations';
 
 const ServicesDropdown = ({ onServiceClick, isOpen, onToggle, isScrolled }) => {
@@ -173,8 +173,8 @@ const ServicesDropdown = ({ onServiceClick, isOpen, onToggle, isScrolled }) => {
       <button
         onClick={() => onToggle(!isOpen)}
         className={`flex items-center space-x-1 font-medium transition-colors duration-200 drop-shadow-sm ${isScrolled
-            ? 'text-gray-800 hover:text-primary-600'
-            : 'text-white hover:text-primary-400'
+          ? 'text-gray-800 hover:text-primary-600'
+          : 'text-white hover:text-primary-400'
           }`}
       >
         <span>{t('nav.services')}</span>

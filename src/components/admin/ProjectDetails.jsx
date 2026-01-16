@@ -5,7 +5,6 @@ import {
   CheckCircleIcon,
   XCircleIcon,
   ExclamationTriangleIcon,
-  UserIcon,
   CalendarIcon,
   CurrencyEuroIcon,
   ChartBarIcon,
@@ -36,13 +35,8 @@ const ProjectDetails = ({ project, onBack, onUpdate }) => {
   const [tasks, setTasks] = useState([]);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    if (project?.id) {
-      loadTasks();
-    }
-  }, [project]);
-
-  const loadTasks = async () => {
+  const loadTasks = React.useCallback(async () => {
+    if (!project?.id) return;
     try {
       setError(null);
       const data = await taskService.getTasksByProject(project.id);
@@ -51,7 +45,13 @@ const ProjectDetails = ({ project, onBack, onUpdate }) => {
       console.error('Error loading tasks:', error);
       setError('Error cargando tareas. Es posible que existan datos incompatibles en la base de datos (ej: "Media" vs "MEDIA").');
     }
-  };
+  }, [project?.id]);
+
+  useEffect(() => {
+    if (project?.id) {
+      loadTasks();
+    }
+  }, [project, loadTasks]);
 
   const [comments, setComments] = useState([
     { id: 1, user: 'Sistema', text: 'Proyecto creado y asignado.', date: new Date().toISOString() }

@@ -12,10 +12,9 @@ import {
   EyeIcon,
   PlusIcon
 } from '@heroicons/react/24/outline';
-import { useAuth } from '../../contexts/AuthContext';
+
 
 const ClientProjectDetails = ({ project, onBack }) => {
-  const { } = useAuth();
   const [activeTab, setActiveTab] = useState('overview');
 
   const getStatusColor = (status) => {

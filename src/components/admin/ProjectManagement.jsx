@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslations } from '../../hooks/useTranslations';
 import { Listbox } from '@headlessui/react';
-import { 
-  CloudIcon, 
-  ExclamationTriangleIcon, 
-  CheckCircleIcon,
+import {
+  CloudIcon,
+  ExclamationTriangleIcon,
   ClockIcon,
-  UserGroupIcon,
   ChartBarIcon,
   CogIcon,
   ArrowTopRightOnSquareIcon,
@@ -18,7 +16,7 @@ import ProjectDetails from './ProjectDetails';
 
 const ProjectManagement = () => {
   const { t } = useTranslations();
-  
+
   // Estados para gestión de proyectos
   const [projects, setProjects] = useState([]);
   const [clients, setClients] = useState([]);
@@ -54,7 +52,7 @@ const ProjectManagement = () => {
 
     loadData();
   }, []);
-  
+
   // Estados para Jira
   const [showJiraModal, setShowJiraModal] = useState(false);
   const [showJiraConfigModal, setShowJiraConfigModal] = useState(false);
@@ -127,24 +125,24 @@ const ProjectManagement = () => {
   const filteredProjects = projects.filter(project => {
     const matchesStatus = filterStatus === 'todos' || project.status === filterStatus;
     const matchesSearch = project.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         (() => {
-                           const client = clients.find(c => c.id === project.clientId);
-                           return client ? client.name.toLowerCase().includes(searchTerm.toLowerCase()) : false;
-                         })();
+      (() => {
+        const client = clients.find(c => c.id === project.clientId);
+        return client ? client.name.toLowerCase().includes(searchTerm.toLowerCase()) : false;
+      })();
     return matchesStatus && matchesSearch;
   });
 
   // Calcular estadísticas
   const stats = {
     total: projects.length,
-    enProgreso: projects.filter(p => 
-      p.status === 'EN_PROGRESO' || 
-      p.status === 'En Progreso' || 
+    enProgreso: projects.filter(p =>
+      p.status === 'EN_PROGRESO' ||
+      p.status === 'En Progreso' ||
       p.status === 'en_progress'
     ).length,
-    completados: projects.filter(p => 
-      p.status === 'COMPLETADO' || 
-      p.status === 'Completado' || 
+    completados: projects.filter(p =>
+      p.status === 'COMPLETADO' ||
+      p.status === 'Completado' ||
       p.status === 'completed'
     ).length,
     presupuestoTotal: projects.reduce((sum, p) => sum + (p.budget || 0), 0),
@@ -177,11 +175,11 @@ const ProjectManagement = () => {
   const handleEditProject = (project) => {
     setModalType('edit');
     setSelectedProject(project);
-    
+
     // Buscar el nombre del cliente por ID
     const client = clients.find(c => c.id === project.clientId);
     const clientName = client ? client.name : '';
-    
+
     setFormData({
       name: project.name,
       clientName: clientName, // Use client name instead of ID
@@ -217,13 +215,13 @@ const ProjectManagement = () => {
     try {
       // Aquí se implementaría la actualización del proyecto
       console.log('Actualizando proyecto:', updatedData);
-      
+
       // Actualizar la lista de proyectos
-      const updatedProjects = projects.map(p => 
+      const updatedProjects = projects.map(p =>
         p.id === currentProject.id ? { ...p, ...updatedData } : p
       );
       setProjects(updatedProjects);
-      
+
       // Cerrar la vista de detalles
       setShowProjectDetails(false);
       setCurrentProject(null);
@@ -235,29 +233,29 @@ const ProjectManagement = () => {
   const handleSaveProject = async () => {
     try {
       setIsLoading(true);
-      
+
       // Validar campos requeridos
       if (!formData.name || !formData.clientName || !formData.startDate || !formData.endDate || !formData.budget) {
         setError('Por favor, complete todos los campos requeridos');
         return;
       }
-      
+
       // Buscar el cliente por nombre y obtener su ID
       const selectedClient = clients.find(client => client.name === formData.clientName);
       if (!selectedClient) {
         setError('El cliente seleccionado no existe');
         return;
       }
-      
+
       const clientId = selectedClient.id;
-      
+
       // Validar que el presupuesto sea un número válido
       const budgetValue = parseFloat(formData.budget);
       if (isNaN(budgetValue) || budgetValue <= 0) {
         setError('El presupuesto debe ser un número válido mayor a 0');
         return;
       }
-      
+
       // Mapear los valores del frontend al formato esperado por el backend
       const statusMapping = {
         'Planificación': 'PLANIFICACION',
@@ -266,16 +264,16 @@ const ProjectManagement = () => {
         'Cancelado': 'CANCELADO',
         'Pausado': 'PAUSADO'
       };
-      
+
       const priorityMapping = {
         'Baja': 'BAJA',
         'Media': 'MEDIA',
         'Alta': 'ALTA',
         'Crítica': 'CRITICA'
       };
-      
+
       // Usar el clientId ya validado
-      
+
       const projectData = {
         name: formData.name,
         clientId: clientId, // ✅ Backend expects clientId (Long)
@@ -288,9 +286,9 @@ const ProjectManagement = () => {
         priority: priorityMapping[formData.priority] || 'MEDIA', // ✅ Convert to uppercase enum
         description: formData.description || ''
       };
-      
+
       console.log('Sending project data:', projectData);
-      
+
       if (modalType === 'add') {
         // Crear nuevo proyecto
         const newProject = await projectService.createProject(projectData);
@@ -298,12 +296,12 @@ const ProjectManagement = () => {
       } else {
         // Actualizar proyecto existente
         const updatedProject = await projectService.updateProject(selectedProject.id, projectData);
-        const updatedProjects = projects.map(p => 
+        const updatedProjects = projects.map(p =>
           p.id === selectedProject.id ? updatedProject : p
         );
         setProjects(updatedProjects);
       }
-      
+
       setShowModal(false);
       setSelectedProject(null);
       setFormData({
@@ -369,18 +367,18 @@ const ProjectManagement = () => {
   };
 
   const handleSaveJiraConfig = () => {
-    const updatedProjects = projects.map(p => 
-      p.id === selectedProject.id 
+    const updatedProjects = projects.map(p =>
+      p.id === selectedProject.id
         ? {
-            ...p,
-            jiraIntegration: {
-              enabled: true,
-              url: jiraConfig.url,
-              projectKey: jiraConfig.projectKey,
-              boardId: jiraConfig.boardId,
-              lastSync: new Date().toISOString()
-            }
+          ...p,
+          jiraIntegration: {
+            enabled: true,
+            url: jiraConfig.url,
+            projectKey: jiraConfig.projectKey,
+            boardId: jiraConfig.boardId,
+            lastSync: new Date().toISOString()
           }
+        }
         : p
     );
     setProjects(updatedProjects);
@@ -465,18 +463,18 @@ const ProjectManagement = () => {
 
   const handleDisconnectJira = (projectId) => {
     if (window.confirm(t('projectManagement.jira.disconnectConfirm'))) {
-      const updatedProjects = projects.map(p => 
-        p.id === projectId 
+      const updatedProjects = projects.map(p =>
+        p.id === projectId
           ? {
-              ...p,
-              jiraIntegration: {
-                enabled: false,
-                url: '',
-                projectKey: '',
-                boardId: '',
-                lastSync: null
-              }
+            ...p,
+            jiraIntegration: {
+              enabled: false,
+              url: '',
+              projectKey: '',
+              boardId: '',
+              lastSync: null
             }
+          }
           : p
       );
       setProjects(updatedProjects);
@@ -673,7 +671,7 @@ const ProjectManagement = () => {
                     <td className="px-6 py-4">
                       <div className="flex items-center">
                         <div className="w-16 bg-gray-700 rounded-full h-2 mr-2">
-                          <div 
+                          <div
                             className="bg-primary-500 h-2 rounded-full transition-all duration-300"
                             style={{ width: `${project.progress}%` }}
                           ></div>
@@ -712,7 +710,7 @@ const ProjectManagement = () => {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                           </svg>
                         </button>
-                        
+
                         {project.jiraIntegration?.enabled ? (
                           <>
                             <button
@@ -739,7 +737,7 @@ const ProjectManagement = () => {
                             <CogIcon className="w-5 h-5" />
                           </button>
                         )}
-                        
+
                         <button
                           onClick={() => handleDeleteProject(project.id)}
                           className="text-red-400 hover:text-red-300 transition-colors duration-200"
@@ -766,7 +764,7 @@ const ProjectManagement = () => {
             <h2 className="text-2xl font-bold text-white mb-6">
               {modalType === 'add' ? t('projectManagement.modal.newProject') : t('projectManagement.modal.editProject')}
             </h2>
-            
+
             <form className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
@@ -780,7 +778,7 @@ const ProjectManagement = () => {
                     required
                   />
                 </div>
-                
+
                 <div>
                   <label className="block text-sm font-medium text-gray-200 mb-2">{t('projectManagement.modal.client')}</label>
                   <Listbox value={formData.clientName} onChange={val => setFormData(prev => ({ ...prev, clientName: val }))}>
@@ -794,8 +792,7 @@ const ProjectManagement = () => {
                             key={client.id}
                             value={client.name}
                             className={({ active, selected }) =>
-                              `cursor-pointer select-none relative py-2 pl-4 pr-4 ${
-                                active ? 'bg-gray-100 text-gray-800' : 'text-gray-800'
+                              `cursor-pointer select-none relative py-2 pl-4 pr-4 ${active ? 'bg-gray-100 text-gray-800' : 'text-gray-800'
                               } ${selected ? 'font-semibold' : ''}`
                             }
                           >
@@ -806,7 +803,7 @@ const ProjectManagement = () => {
                     </div>
                   </Listbox>
                 </div>
-                
+
                 <div>
                   <label className="block text-sm font-medium text-gray-200 mb-2">{t('projectManagement.modal.status')}</label>
                   <Listbox value={formData.status} onChange={val => setFormData(prev => ({ ...prev, status: val }))}>
@@ -820,8 +817,7 @@ const ProjectManagement = () => {
                             key={option.value}
                             value={option.value}
                             className={({ active, selected }) =>
-                              `cursor-pointer select-none relative py-2 pl-4 pr-4 ${
-                                active ? 'bg-gray-100 text-gray-800' : 'text-gray-800'
+                              `cursor-pointer select-none relative py-2 pl-4 pr-4 ${active ? 'bg-gray-100 text-gray-800' : 'text-gray-800'
                               } ${selected ? 'font-semibold' : ''}`
                             }
                           >
@@ -832,7 +828,7 @@ const ProjectManagement = () => {
                     </div>
                   </Listbox>
                 </div>
-                
+
                 <div>
                   <label className="block text-sm font-medium text-gray-200 mb-2">{t('projectManagement.modal.priority')}</label>
                   <Listbox value={formData.priority} onChange={val => setFormData(prev => ({ ...prev, priority: val }))}>
@@ -846,8 +842,7 @@ const ProjectManagement = () => {
                             key={option.value}
                             value={option.value}
                             className={({ active, selected }) =>
-                              `cursor-pointer select-none relative py-2 pl-4 pr-4 ${
-                                active ? 'bg-gray-100 text-gray-800' : 'text-gray-800'
+                              `cursor-pointer select-none relative py-2 pl-4 pr-4 ${active ? 'bg-gray-100 text-gray-800' : 'text-gray-800'
                               } ${selected ? 'font-semibold' : ''}`
                             }
                           >
@@ -858,7 +853,7 @@ const ProjectManagement = () => {
                     </div>
                   </Listbox>
                 </div>
-                
+
                 <div>
                   <label className="block text-sm font-medium text-gray-200 mb-2">{t('projectManagement.modal.startDate')}</label>
                   <input
@@ -870,7 +865,7 @@ const ProjectManagement = () => {
                     required
                   />
                 </div>
-                
+
                 <div>
                   <label className="block text-sm font-medium text-gray-200 mb-2">{t('projectManagement.modal.endDate')}</label>
                   <input
@@ -882,7 +877,7 @@ const ProjectManagement = () => {
                     required
                   />
                 </div>
-                
+
                 <div>
                   <label className="block text-sm font-medium text-gray-200 mb-2">{t('projectManagement.modal.budget')}</label>
                   <input
@@ -895,7 +890,7 @@ const ProjectManagement = () => {
                   />
                 </div>
               </div>
-              
+
               <div>
                 <label className="block text-sm font-medium text-gray-200 mb-2">{t('projectManagement.modal.description')}</label>
                 <textarea
@@ -908,7 +903,7 @@ const ProjectManagement = () => {
                 />
               </div>
             </form>
-            
+
             <div className="flex justify-end space-x-4 mt-8">
               <button
                 onClick={() => setShowModal(false)}
@@ -932,7 +927,7 @@ const ProjectManagement = () => {
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="bg-white/10 backdrop-blur-lg rounded-2xl border border-white/20 p-8 max-w-2xl w-full">
             <h2 className="text-2xl font-bold text-white mb-6">{t('projectManagement.jira.configModal.title')}</h2>
-            
+
             <form className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
@@ -946,7 +941,7 @@ const ProjectManagement = () => {
                     required
                   />
                 </div>
-                
+
                 <div>
                   <label className="block text-sm font-medium text-gray-200 mb-2">{t('projectManagement.jira.configModal.email')}</label>
                   <input
@@ -958,7 +953,7 @@ const ProjectManagement = () => {
                     required
                   />
                 </div>
-                
+
                 <div>
                   <label className="block text-sm font-medium text-gray-200 mb-2">{t('projectManagement.jira.configModal.apiToken')}</label>
                   <input
@@ -970,7 +965,7 @@ const ProjectManagement = () => {
                     required
                   />
                 </div>
-                
+
                 <div>
                   <label className="block text-sm font-medium text-gray-200 mb-2">{t('projectManagement.jira.configModal.projectKey')}</label>
                   <input
@@ -982,7 +977,7 @@ const ProjectManagement = () => {
                     required
                   />
                 </div>
-                
+
                 <div>
                   <label className="block text-sm font-medium text-gray-200 mb-2">{t('projectManagement.jira.configModal.boardId')}</label>
                   <input
@@ -995,7 +990,7 @@ const ProjectManagement = () => {
                   />
                 </div>
               </div>
-              
+
               <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-4">
                 <div className="flex items-start">
                   <div className="flex-shrink-0">
@@ -1017,7 +1012,7 @@ const ProjectManagement = () => {
                 </div>
               </div>
             </form>
-            
+
             <div className="flex justify-end space-x-4 mt-8">
               <button
                 onClick={() => setShowJiraConfigModal(false)}
@@ -1138,9 +1133,9 @@ const ProjectManagement = () => {
                     {jiraData.issues.map((issue) => (
                       <tr key={issue.id} className="hover:bg-white/5 transition-colors duration-200">
                         <td className="px-6 py-4">
-                          <a 
-                            href={`${selectedProject?.jiraIntegration?.url}/browse/${issue.key}`} 
-                            target="_blank" 
+                          <a
+                            href={`${selectedProject?.jiraIntegration?.url}/browse/${issue.key}`}
+                            target="_blank"
                             rel="noopener noreferrer"
                             className="text-blue-400 hover:text-blue-300 font-medium"
                           >
@@ -1149,30 +1144,27 @@ const ProjectManagement = () => {
                         </td>
                         <td className="px-6 py-4 text-sm text-gray-300">{issue.summary}</td>
                         <td className="px-6 py-4">
-                          <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                            issue.status === 'Done' ? 'bg-green-500 text-white' :
-                            issue.status === 'In Progress' ? 'bg-yellow-500 text-white' :
-                            'bg-gray-500 text-white'
-                          }`}>
+                          <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${issue.status === 'Done' ? 'bg-green-500 text-white' :
+                              issue.status === 'In Progress' ? 'bg-yellow-500 text-white' :
+                                'bg-gray-500 text-white'
+                            }`}>
                             {issue.status}
                           </span>
                         </td>
                         <td className="px-6 py-4 text-sm text-gray-300">{issue.assignee}</td>
                         <td className="px-6 py-4">
-                          <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                            issue.priority === 'High' ? 'bg-red-500 text-white' :
-                            issue.priority === 'Medium' ? 'bg-orange-500 text-white' :
-                            'bg-gray-500 text-white'
-                          }`}>
+                          <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${issue.priority === 'High' ? 'bg-red-500 text-white' :
+                              issue.priority === 'Medium' ? 'bg-orange-500 text-white' :
+                                'bg-gray-500 text-white'
+                            }`}>
                             {issue.priority}
                           </span>
                         </td>
                         <td className="px-6 py-4">
-                          <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                            issue.type === 'Story' ? 'bg-blue-500 text-white' :
-                            issue.type === 'Bug' ? 'bg-red-500 text-white' :
-                            'bg-gray-500 text-white'
-                          }`}>
+                          <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${issue.type === 'Story' ? 'bg-blue-500 text-white' :
+                              issue.type === 'Bug' ? 'bg-red-500 text-white' :
+                                'bg-gray-500 text-white'
+                            }`}>
                             {issue.type}
                           </span>
                         </td>
@@ -1197,14 +1189,13 @@ const ProjectManagement = () => {
                           <h4 className="text-white font-medium">{sprint.name}</h4>
                           <p className="text-gray-300 text-sm">{sprint.goal}</p>
                         </div>
-                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                          sprint.state === 'active' ? 'bg-green-500 text-white' :
-                          sprint.state === 'future' ? 'bg-blue-500 text-white' :
-                          'bg-gray-500 text-white'
-                        }`}>
-                          {sprint.state === 'active' ? t('projectManagement.jira.viewModal.sprints.states.active') : 
-                           sprint.state === 'future' ? t('projectManagement.jira.viewModal.sprints.states.future') : 
-                           t('projectManagement.jira.viewModal.sprints.states.completed')}
+                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${sprint.state === 'active' ? 'bg-green-500 text-white' :
+                            sprint.state === 'future' ? 'bg-blue-500 text-white' :
+                              'bg-gray-500 text-white'
+                          }`}>
+                          {sprint.state === 'active' ? t('projectManagement.jira.viewModal.sprints.states.active') :
+                            sprint.state === 'future' ? t('projectManagement.jira.viewModal.sprints.states.future') :
+                              t('projectManagement.jira.viewModal.sprints.states.completed')}
                         </span>
                       </div>
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
@@ -1224,7 +1215,7 @@ const ProjectManagement = () => {
                           <p className="text-gray-300">{t('projectManagement.jira.viewModal.sprints.progress')}</p>
                           <div className="flex items-center">
                             <div className="w-16 bg-gray-700 rounded-full h-2 mr-2">
-                              <div 
+                              <div
                                 className="bg-green-500 h-2 rounded-full transition-all duration-300"
                                 style={{ width: `${(sprint.completedIssues / sprint.totalIssues) * 100}%` }}
                               ></div>

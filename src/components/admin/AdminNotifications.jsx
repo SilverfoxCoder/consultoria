@@ -34,7 +34,7 @@ const AdminNotifications = () => {
   const [priorityFilter, setPriorityFilter] = useState('all');
 
   // Cargar notificaciones
-  const loadNotifications = async (pageNum = 0) => {
+  const loadNotifications = React.useCallback(async (pageNum = 0) => {
     try {
       setIsLoading(true);
       setError('');
@@ -56,12 +56,12 @@ const AdminNotifications = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [size, sortBy, sortDir]);
 
   // Efecto para cargar notificaciones
   useEffect(() => {
     loadNotifications();
-  }, [sortBy, sortDir]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [loadNotifications]);
 
   // Efecto para actualizar notificaciones en tiempo real
   useEffect(() => {
