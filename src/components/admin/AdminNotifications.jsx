@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslations } from '../../hooks/useTranslations';
 import { adminService } from '../../services/adminService';
-import { useNotifications } from '../../contexts/NotificationContext';
-import { 
-  BellIcon, 
+
+import {
+  BellIcon,
   CheckCircleIcon,
   ExclamationTriangleIcon,
   InformationCircleIcon,
@@ -13,20 +13,20 @@ import {
 
 const AdminNotifications = () => {
   const { lang } = useTranslations();
-  const { loadNotifications: loadUserNotifications } = useNotifications();
-  
+
+
   // Estados principales
   const [notifications, setNotifications] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
   const [expandedNotification, setExpandedNotification] = useState(null);
-  
+
   // Estados de paginación
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [totalElements, setTotalElements] = useState(0);
   const [size] = useState(20);
-  
+
   // Estados de filtros
   const [sortBy, setSortBy] = useState('createdAt');
   const [sortDir, setSortDir] = useState('desc');
@@ -38,14 +38,14 @@ const AdminNotifications = () => {
     try {
       setIsLoading(true);
       setError('');
-      
+
       const response = await adminService.getAdminNotifications({
         page: pageNum,
         size,
         sortBy,
         sortDir
       });
-      
+
       setNotifications(response.content || []);
       setTotalPages(response.totalPages || 0);
       setTotalElements(response.totalElements || 0);
@@ -89,13 +89,13 @@ const AdminNotifications = () => {
   const getNotificationIcon = (type) => {
     const notificationTypes = adminService.getNotificationTypes();
     const typeInfo = notificationTypes[type];
-    
+
     if (!typeInfo) {
       return <BellIcon className="h-5 w-5 text-gray-500" />;
     }
 
     const iconClasses = `h-5 w-5 text-${typeInfo.color}-500`;
-    
+
     switch (type) {
       case 'SYSTEM_ERROR':
         return <ExclamationTriangleIcon className={iconClasses} />;
@@ -134,7 +134,7 @@ const AdminNotifications = () => {
             </p>
           </div>
         </div>
-        
+
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex items-center justify-center py-12">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500"></div>
@@ -276,7 +276,7 @@ const AdminNotifications = () => {
               const priorityStyles = getPriorityStyles(notification.priority);
               const notificationTypes = adminService.getNotificationTypes();
               const typeInfo = notificationTypes[notification.type];
-              
+
               return (
                 <div
                   key={notification.id}
@@ -289,24 +289,24 @@ const AdminNotifications = () => {
                         <div className="flex-shrink-0">
                           {getNotificationIcon(notification.type)}
                         </div>
-                        
+
                         {/* Contenido */}
                         <div className="flex-1">
                           <div className="flex items-center gap-3 mb-2">
                             <h3 className="text-lg font-semibold text-white">
                               {typeInfo?.name || notification.type}
                             </h3>
-                            
+
                             {/* Badge de Prioridad */}
                             <span className={`px-2 py-1 rounded-full text-xs font-medium ${priorityStyles.bgColor} ${priorityStyles.textColor} ${priorityStyles.borderColor} border`}>
                               {priorityStyles.name}
                             </span>
                           </div>
-                          
+
                           <p className="text-gray-300 mb-3">
                             {notification.message}
                           </p>
-                          
+
                           <div className="flex items-center gap-4 text-sm text-gray-400">
                             <span>
                               {adminService.formatRelativeDate(notification.createdAt)}
@@ -320,7 +320,7 @@ const AdminNotifications = () => {
                           </div>
                         </div>
                       </div>
-                      
+
                       {/* Botón expandir */}
                       <button
                         onClick={() => setExpandedNotification(
@@ -335,7 +335,7 @@ const AdminNotifications = () => {
                         )}
                       </button>
                     </div>
-                    
+
                     {/* Detalles Expandidos */}
                     {expandedNotification === notification.id && (
                       <div className="mt-4 pt-4 border-t border-white/10">
@@ -376,12 +376,12 @@ const AdminNotifications = () => {
         {totalPages > 1 && (
           <div className="mt-8 flex items-center justify-between">
             <div className="text-sm text-gray-400">
-              {lang === 'es' 
+              {lang === 'es'
                 ? `Mostrando ${page * size + 1}-${Math.min((page + 1) * size, totalElements)} de ${totalElements}`
                 : `Showing ${page * size + 1}-${Math.min((page + 1) * size, totalElements)} of ${totalElements}`
               }
             </div>
-            
+
             <div className="flex items-center gap-2">
               <button
                 onClick={() => handlePageChange(page - 1)}
@@ -390,11 +390,11 @@ const AdminNotifications = () => {
               >
                 {lang === 'es' ? 'Anterior' : 'Previous'}
               </button>
-              
+
               <span className="px-3 py-2 text-gray-400">
                 {page + 1} / {totalPages}
               </span>
-              
+
               <button
                 onClick={() => handlePageChange(page + 1)}
                 disabled={page >= totalPages - 1}

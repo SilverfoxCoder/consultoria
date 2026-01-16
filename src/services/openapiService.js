@@ -2,7 +2,7 @@
 // Servicio que integra el cliente OpenAPI con los servicios existentes
 
 import { createDefaultClient, loadOpenAPISpec } from '../utils/openapiClient.js';
-import { api } from '../config/api.js';
+
 
 class OpenAPIService {
   constructor() {

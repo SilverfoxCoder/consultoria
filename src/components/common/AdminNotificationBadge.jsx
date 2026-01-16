@@ -7,29 +7,28 @@ const AdminNotificationBadge = ({ onNavigateToNotifications }) => {
   const [unreadCount, setUnreadCount] = useState(0);
   const [showDropdown, setShowDropdown] = useState(false);
   const [buttonPosition, setButtonPosition] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
   const buttonRef = React.useRef(null);
 
   // Cargar notificaciones de admin
   const loadAdminNotifications = async () => {
     try {
-      setIsLoading(true);
+
       const response = await adminService.getAdminNotifications({
         page: 0,
         size: 50,
         sortBy: 'createdAt',
         sortDir: 'desc'
       });
-      
+
       // Contar notificaciones no leídas
       const unread = response.content?.filter(n => !n.read).length || 0;
       setUnreadCount(unread);
-      
+
       console.log('🔔 AdminNotificationBadge: Notificaciones cargadas:', response.content?.length || 0, 'No leídas:', unread);
     } catch (error) {
       console.error('❌ AdminNotificationBadge: Error al cargar notificaciones:', error);
     } finally {
-      setIsLoading(false);
+
     }
   };
 
@@ -84,8 +83,8 @@ const AdminNotificationBadge = ({ onNavigateToNotifications }) => {
       </button>
 
       {showDropdown && (
-        <NotificationOverlay 
-          onClose={handleClose} 
+        <NotificationOverlay
+          onClose={handleClose}
           buttonPosition={buttonPosition}
           isAdmin={true}
           onRefresh={loadAdminNotifications}

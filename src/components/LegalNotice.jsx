@@ -1,8 +1,8 @@
 import React from 'react';
-import { useTranslations } from '../hooks/useTranslations';
+
 
 const LegalNotice = () => {
-  const { t } = useTranslations();
+
 
   return (
     <div className="min-h-screen bg-gray-900 pt-16">

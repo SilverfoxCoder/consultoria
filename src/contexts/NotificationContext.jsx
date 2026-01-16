@@ -64,9 +64,9 @@ export const NotificationProvider = ({ children }) => {
   const markAsRead = useCallback(async (notificationId) => {
     try {
       await notificationService.markAsRead(notificationId);
-      setNotifications(prev => 
-        prev.map(notification => 
-          notification.id === notificationId 
+      setNotifications(prev =>
+        prev.map(notification =>
+          notification.id === notificationId
             ? { ...notification, read: true }
             : notification
         )
@@ -83,17 +83,17 @@ export const NotificationProvider = ({ children }) => {
 
     try {
       console.log('🔄 NotificationContext: Marcando todas las notificaciones como leídas para usuario:', user.id);
-      
+
       const response = await notificationService.markAllAsRead(user.id);
-      
+
       if (response?.success) {
         console.log('✅ NotificationContext: Respuesta exitosa del backend:', response.message);
-        
-        setNotifications(prev => 
+
+        setNotifications(prev =>
           prev.map(notification => ({ ...notification, read: true }))
         );
         setUnreadCount(0);
-        
+
         // Opcional: Mostrar mensaje de éxito al usuario
         if (window.showToast) {
           window.showToast({
@@ -106,7 +106,7 @@ export const NotificationProvider = ({ children }) => {
       }
     } catch (error) {
       console.error('❌ NotificationContext: Error al marcar todas las notificaciones como leídas:', error);
-      
+
       // Mostrar error al usuario
       if (window.showToast) {
         window.showToast({
@@ -121,7 +121,7 @@ export const NotificationProvider = ({ children }) => {
   const deleteNotification = useCallback(async (notificationId) => {
     try {
       await notificationService.deleteNotification(notificationId);
-      setNotifications(prev => 
+      setNotifications(prev =>
         prev.filter(notification => notification.id !== notificationId)
       );
       // Actualizar contador si la notificación no estaba leída
@@ -160,7 +160,7 @@ export const NotificationProvider = ({ children }) => {
     if (isAuthenticated && user?.id) {
       console.log('🚀 NotificationContext: Inicializando sistema de notificaciones para usuario:', user.id, 'Tipo:', user.role || 'unknown');
       notificationService.initializeWebSocket(user.id);
-      
+
       // Cargar notificaciones y estadísticas
       loadNotifications();
       loadStats();
@@ -172,7 +172,7 @@ export const NotificationProvider = ({ children }) => {
     } else {
       console.log('⏸️ NotificationContext: Usuario no autenticado o sin ID, saltando inicialización');
     }
-  }, [isAuthenticated, user?.id, loadNotifications, loadStats]);
+  }, [isAuthenticated, user?.id, user?.role, loadNotifications, loadStats]);
 
   // Recargar notificaciones cuando cambia el usuario
   useEffect(() => {
