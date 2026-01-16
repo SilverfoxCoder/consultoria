@@ -1203,9 +1203,9 @@ export const translations = {
       
       // Support
       supportSubtitle: "Gestiona incidencias y solicita soporte técnico",
-      createTicket: "Crear Ticket",
-      openTickets: "Tickets Abiertos",
-      inProgress: "En Progreso",
+      createTicketSupport: "Crear Ticket",
+      openTicketsSupport: "Tickets Abiertos",
+      inProgressSupport: "En Progreso",
       resolved: "Resuelto",
       closed: "Cerrado",
       allPriorities: "Todas las prioridades",
@@ -1256,13 +1256,13 @@ export const translations = {
       lastYear: "Último Año",
       exportReport: "Exportar Reporte",
       totalSpent: "Total Gastado",
-      activeProjects: "Proyectos Activos",
+      activeProjectsAnalytics: "Proyectos Activos",
       avgResponseTime: "Tiempo Respuesta Promedio",
-      openTickets: "Tickets Abiertos",
+      openTicketsAnalytics: "Tickets Abiertos",
       fromLastPeriod: "vs período anterior",
       monthlySpending: "Gasto Mensual",
       serviceBreakdown: "Desglose de Servicios",
-      webDevelopment: "Desarrollo Web",
+      webDevelopmentAnalytics: "Desarrollo Web",
       mobileDevelopment: "Desarrollo Móvil",
       consulting: "Consultoría",
       security: "Seguridad",
@@ -1299,7 +1299,7 @@ export const translations = {
       language: "Idioma",
       timezone: "Zona Horaria",
       currency: "Moneda",
-      security: "Seguridad",
+      securityProfile: "Seguridad",
       twoFactorAuth: "Autenticación de Dos Factores",
       twoFactorAuthDesc: "Añade una capa extra de seguridad a tu cuenta",
       enabled: "Habilitado",
@@ -1310,7 +1310,7 @@ export const translations = {
       lastLogin: "Último Acceso",
       loginHistory: "Historial de Accesos",
       notifications: "Notificaciones",
-      email: "Email",
+      emailAddress: "Email",
       sms: "SMS",
       push: "Push",
       projectUpdates: "Actualizaciones de Proyectos",
@@ -2408,9 +2408,6 @@ export const translations = {
       requestService: "Solicitar Servicio",
       viewInvoices: "Ver Facturas",
       
-      
     }
-  }
-};
   }
 }; 
