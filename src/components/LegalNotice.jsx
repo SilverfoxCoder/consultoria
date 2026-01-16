@@ -27,11 +27,10 @@ const LegalNotice = () => {
               <h2 className="text-2xl font-bold text-primary-600 mb-4">1. Información de la Empresa</h2>
               <div className="bg-gray-50 p-6 rounded-lg">
                 <p className="mb-2"><strong>Razón Social:</strong> XperiencIA Consulting </p>
-                <p className="mb-2"><strong>NIF:</strong> B49054881</p>
-                <p className="mb-2"><strong>Domicilio Social:</strong> Calle Tecnología, 123, 28001 Madrid, España</p>
+                <p className="mb-2"><strong>NIF:</strong> B-49054881</p>
+                <p className="mb-2"><strong>Domicilio Social:</strong> Madre Teresa de Calcuta 11, Horcajo de Santiago, Cuenca</p>
                 <p className="mb-2"><strong>Email:</strong> experienciaitservices@gmail.com</p>
                 <p className="mb-2"><strong>Teléfono:</strong> +34 670 83 58 22</p>
-                <p className="mb-2"><strong>Inscrita en:</strong> Registro Mercantil de Madrid, Tomo 12345, Folio 123, Hoja M-123456</p>
               </div>
             </section>
 
@@ -78,7 +77,7 @@ const LegalNotice = () => {
             <section>
               <h2 className="text-2xl font-bold text-primary-600 mb-4">5. Responsabilidad</h2>
               <p>
-                XperiencIA Consulting S.L. no se hace responsable de los daños y perjuicios que se pudieran derivar de interferencias, omisiones, interrupciones, informáticos, averías telefónicas o desconexiones en el funcionamiento operativo del sistema electrónico, motivadas por causas ajenas a la empresa.
+                XperiencIA Consulting no se hace responsable de los daños y perjuicios que se pudieran derivar de interferencias, omisiones, interrupciones, informáticos, averías telefónicas o desconexiones en el funcionamiento operativo del sistema electrónico, motivadas por causas ajenas a la empresa.
               </p>
               <p className="mt-4">
                 Asimismo, la empresa no garantiza la ausencia de virus u otros elementos que puedan causar alteraciones en los sistemas informáticos, documentos electrónicos o ficheros de los usuarios de este sitio web.
@@ -121,7 +120,7 @@ const LegalNotice = () => {
             <section>
               <h2 className="text-2xl font-bold text-primary-600 mb-4">9. Modificaciones</h2>
               <p>
-                XperiencIA Consulting S.L. se reserva el derecho de efectuar sin previo aviso las modificaciones que considere oportunas en su sitio web, pudiendo cambiar, suprimir o añadir tanto los contenidos y servicios que se prestan a través de la misma como la forma en la que éstos aparezcan presentados o localizados en su sitio web.
+                XperiencIA Consulting se reserva el derecho de efectuar sin previo aviso las modificaciones que considere oportunas en su sitio web, pudiendo cambiar, suprimir o añadir tanto los contenidos y servicios que se prestan a través de la misma como la forma en la que éstos aparezcan presentados o localizados en su sitio web.
               </p>
             </section>
 
@@ -133,8 +132,8 @@ const LegalNotice = () => {
               </p>
               <div className="bg-gray-50 p-6 rounded-lg mt-4">
                 <p className="mb-2"><strong>Email:</strong> experienciaitservices@gmail.com</p>
-                <p className="mb-2"><strong>Teléfono:</strong> +34 91 123 45 67</p>
-                <p className="mb-2"><strong>Dirección:</strong> Calle Tecnología, 123, 28001 Madrid, España</p>
+                <p className="mb-2"><strong>Teléfono:</strong> +34 670 83 58 22</p>
+                <p className="mb-2"><strong>Dirección:</strong> Madre Teresa de Calcuta 11, Horcajo de Santiago, Cuenca</p>
               </div>
             </section>
 
@@ -143,7 +142,7 @@ const LegalNotice = () => {
           {/* Footer */}
           <div className="mt-12 pt-8 border-t border-gray-200 text-center">
             <p className="text-gray-500 text-sm">
-              © {new Date().getFullYear()} XperiencIA Consulting S.L. Todos los derechos reservados.
+              © {new Date().getFullYear()} XperiencIA Consulting. Todos los derechos reservados.
             </p>
           </div>
 
