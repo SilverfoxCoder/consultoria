@@ -33,9 +33,8 @@ class OpenAPIClient {
   createMethod(path, method, operation) {
     return async (params = {}, data = null) => {
       const url = this.buildUrl(path, params);
-      const config = this.buildConfig(method, data, operation);
       
-      try {
+      try { // Fixed redeclaration
         console.log(`🌐 OpenAPI Client: ${method.toUpperCase()} ${url}`);
         
         switch (method.toLowerCase()) {
