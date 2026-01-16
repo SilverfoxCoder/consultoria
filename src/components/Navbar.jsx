@@ -209,7 +209,7 @@ const Navbar = ({ onNavClick, currentPage, onShowLogin, onShowRegister, onShowDa
                   : 'text-gray-700 hover:text-primary-600 hover:bg-primary-50'
                   }`}
               >
-                {t('services.mobileDevelopment.title')}
+                {t('services.mobileApps.title')}
               </button>
 
               <button
@@ -219,7 +219,7 @@ const Navbar = ({ onNavClick, currentPage, onShowLogin, onShowRegister, onShowDa
                   : 'text-gray-700 hover:text-primary-600 hover:bg-primary-50'
                   }`}
               >
-                {t('services.cloudSolutions.title')}
+                {t('services.cloudDevOps.title')}
               </button>
 
               <button
@@ -229,7 +229,7 @@ const Navbar = ({ onNavClick, currentPage, onShowLogin, onShowRegister, onShowDa
                   : 'text-gray-700 hover:text-primary-600 hover:bg-primary-50'
                   }`}
               >
-                {t('services.consulting.title')}
+                {t('services.itConsulting.title')}
               </button>
 
               <button
@@ -239,7 +239,7 @@ const Navbar = ({ onNavClick, currentPage, onShowLogin, onShowRegister, onShowDa
                   : 'text-gray-700 hover:text-primary-600 hover:bg-primary-50'
                   }`}
               >
-                {t('services.aiMl.title')}
+                {t('services.artificialIntelligence.title')}
               </button>
 
               <button
