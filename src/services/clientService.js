@@ -94,6 +94,7 @@ class ClientService {
   sanitizeClientData(data) {
     return {
       name: data.name?.trim(),
+      contactPerson: data.contactPerson?.trim() || '',
       email: data.email?.trim(),
       phone: data.phone?.trim() || '',
       company: data.company?.trim() || '',
@@ -104,7 +105,8 @@ class ClientService {
       country: data.country?.trim() || '',
       notes: data.notes?.trim() || '',
       totalRevenue: parseFloat(data.totalRevenue) || 0,
-      totalProjects: parseInt(data.totalProjects) || 0
+      totalProjects: parseInt(data.totalProjects) || 0,
+      lastContact: data.lastContact || null
     };
   }
 }

@@ -29,7 +29,7 @@ const LegalNotice = () => {
                 <p className="mb-2"><strong>Razón Social:</strong> XperiencIA Consulting </p>
                 <p className="mb-2"><strong>NIF:</strong> B49054881</p>
                 <p className="mb-2"><strong>Domicilio Social:</strong> Calle Tecnología, 123, 28001 Madrid, España</p>
-                <p className="mb-2"><strong>Email:</strong> info@xperienciaia.com</p>
+                <p className="mb-2"><strong>Email:</strong> experienciaitservices@gmail.com</p>
                 <p className="mb-2"><strong>Teléfono:</strong> +34 670 83 58 22</p>
                 <p className="mb-2"><strong>Inscrita en:</strong> Registro Mercantil de Madrid, Tomo 12345, Folio 123, Hoja M-123456</p>
               </div>
@@ -132,7 +132,7 @@ const LegalNotice = () => {
                 Para cualquier consulta relacionada con este Aviso Legal, puede contactar con nosotros a través de:
               </p>
               <div className="bg-gray-50 p-6 rounded-lg mt-4">
-                <p className="mb-2"><strong>Email:</strong> legal@XperiencIA.com</p>
+                <p className="mb-2"><strong>Email:</strong> experienciaitservices@gmail.com</p>
                 <p className="mb-2"><strong>Teléfono:</strong> +34 91 123 45 67</p>
                 <p className="mb-2"><strong>Dirección:</strong> Calle Tecnología, 123, 28001 Madrid, España</p>
               </div>

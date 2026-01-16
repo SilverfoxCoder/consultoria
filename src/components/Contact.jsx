@@ -27,7 +27,7 @@ const Contact = () => {
   };
 
   const handleEmailClick = () => {
-    window.location.href = 'mailto:contacto@XperiencIA.com';
+    window.location.href = 'mailto:experienciaitservices@gmail.com';
   };
 
   return (
@@ -92,7 +92,7 @@ const Contact = () => {
                     onClick={handleEmailClick}
                     className="btn-secondary"
                   >
-                    contacto@XperiencIA.com
+                    experienciaitservices@gmail.com
                   </button>
                 </div>
               </div>

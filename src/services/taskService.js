@@ -97,12 +97,14 @@ class TaskService {
       description: data.description?.trim() || '',
       projectId: parseInt(data.projectId),
       assignedToId: data.assignedToId ? parseInt(data.assignedToId) : null,
-      status: data.status || 'Pendiente',
-      priority: data.priority || 'Media',
+      assignee: data.assignee || data.assignedTo || '', // Handle text input from current form
+      status: data.status || 'PENDIENTE', // Default to Enum value
+      priority: data.priority || 'MEDIA',
       estimatedHours: data.estimatedHours ? parseFloat(data.estimatedHours) : null,
       actualHours: data.actualHours ? parseFloat(data.actualHours) : null,
       startDate: data.startDate || null,
-      dueDate: data.dueDate || null
+      dueDate: data.dueDate || null,
+      completedDate: data.completedDate || null
     };
   }
 }

@@ -55,7 +55,7 @@ const AppContent = () => {
       // Cerrar todos los modales y mostrar dashboard apropiado
       setShowLogin(false);
       setShowRegister(false);
-      
+
       if (userType === 'admin') {
         setShowDashboard(true);
         setShowClientPortal(false);
@@ -73,12 +73,12 @@ const AppContent = () => {
       setShowLogin(false);
       setShowDashboard(false);
       setShowClientPortal(false);
-      
+
       // Hacer scroll a la sección de contacto después de que se renderice
       setTimeout(() => {
         const contactSection = document.getElementById('contacto');
         if (contactSection) {
-          contactSection.scrollIntoView({ 
+          contactSection.scrollIntoView({
             behavior: 'smooth',
             block: 'start'
           });
@@ -116,11 +116,11 @@ const AppContent = () => {
 
 
   const handleLoginSuccess = (authData) => {
-    login(authData);
+    const type = login(authData);
     setShowLogin(false);
     setShowRegister(false);
     // Redirigir según el tipo de usuario
-    if (userType === 'admin') {
+    if (type === 'admin') {
       setShowDashboard(true);
     } else {
       setShowClientPortal(true);
@@ -131,7 +131,7 @@ const AppContent = () => {
     // Opcional: Auto-login después del registro
     // Por ahora, solo cerramos el modal y mostramos mensaje de éxito
     setShowRegister(false);
-    
+
     // Mostrar el modal de login para que el usuario inicie sesión
     setTimeout(() => {
       setShowLogin(true);
@@ -171,14 +171,14 @@ const AppContent = () => {
       <div className="min-h-screen bg-gray-900">
         <TechBackground />
         <div className="relative">
-          <Navbar 
-            onNavClick={handleNavClick} 
+          <Navbar
+            onNavClick={handleNavClick}
             currentPage={currentPage}
             onShowLogin={handleShowLogin}
             onShowRegister={handleShowRegister}
             onShowDashboard={handleShowDashboard}
           />
-          <RegisterModal 
+          <RegisterModal
             onClose={() => setShowRegister(false)}
             onLoginClick={handleShowLogin}
             onRegisterSuccess={handleRegisterSuccess}
@@ -223,18 +223,18 @@ const AppContent = () => {
   return (
     <div className="min-h-screen bg-gray-900">
       <TechBackground />
-      <Navbar 
-        onNavClick={handleNavClick} 
+      <Navbar
+        onNavClick={handleNavClick}
         currentPage={currentPage}
         onShowLogin={handleShowLogin}
         onShowRegister={handleShowRegister}
         onShowDashboard={handleShowDashboard}
       />
-      
+
       <main className="pt-16">
         {currentPage === 'home' && (
           <>
-            <Home 
+            <Home
               onShowRegister={handleShowRegister}
               onShowDashboard={handleShowDashboard}
               onShowServices={() => handleNavClick('services')}
@@ -243,7 +243,7 @@ const AppContent = () => {
             <Contact />
           </>
         )}
-        
+
         {/* Service Pages */}
         {currentPage === 'desarrollo-web' && <DesarrolloWeb />}
         {currentPage === 'aplicaciones-moviles' && <AplicacionesMoviles />}
@@ -262,17 +262,17 @@ const AppContent = () => {
         {currentPage === 'digitalizacion-pymes' && <DigitalizacionPYMES />}
         {currentPage === 'openapi-tester' && <OpenAPITester />}
       </main>
-      
-             <Footer onNavClick={handleNavClick} />
-       <WhatsAppButton currentService={currentPage} />
-       <ToastContainer />
+
+      <Footer onNavClick={handleNavClick} />
+      <WhatsAppButton currentService={currentPage} />
+      <ToastContainer />
     </div>
   );
 };
 
 const App = () => {
   const googleClientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
-  
+
   if (!googleClientId) {
     console.warn('⚠️ Google Client ID no está configurado. La autenticación con Google no estará disponible.');
   }

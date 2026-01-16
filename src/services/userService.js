@@ -7,6 +7,7 @@ class UserService {
 
   async request(endpoint, options = {}) {
     const url = `${this.baseURL}${endpoint}`;
+    console.log(`📡 UserService: Request to ${url}`);
     const config = {
       headers: API_CONFIG.HEADERS,
       ...options

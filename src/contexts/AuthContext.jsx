@@ -15,7 +15,7 @@ export const useAuth = () => {
 const getUserType = (email) => {
   if (!email) return 'client';
   // Cambia el dominio según tu empresa
-  return email.endsWith('@xperiecia-consulting.com') ? 'admin' : 'client';
+  return email.endsWith('@xperiecia.com') ? 'admin' : 'client';
 };
 
 export const AuthProvider = ({ children }) => {
@@ -88,7 +88,7 @@ export const AuthProvider = ({ children }) => {
     setUser(userData);
     setIsAuthenticated(true);
     setUserType(type);
-    return true;
+    return type;
   };
 
   const logout = async () => {

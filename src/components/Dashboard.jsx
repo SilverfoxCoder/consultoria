@@ -19,7 +19,7 @@ const Dashboard = ({ onBack }) => {
   const [settingsTab, setSettingsTab] = useState('profile');
   const { t } = useTranslations();
   const { user, logout } = useAuth();
-  
+
   // Estados para datos del dashboard
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
@@ -66,26 +66,26 @@ const Dashboard = ({ onBack }) => {
     const loadDashboardStats = async () => {
       try {
         setIsLoading(true);
-        
+
         // Cargar proyectos activos
         const projects = await projectService.getAllProjects();
-        const activeProjects = projects.filter(p => 
-          p.status === 'EN_PROGRESO' || 
-          p.status === 'PLANIFICACION' || 
-          p.status === 'En Progreso' || 
+        const activeProjects = projects.filter(p =>
+          p.status === 'EN_PROGRESO' ||
+          p.status === 'PLANIFICACION' ||
+          p.status === 'En Progreso' ||
           p.status === 'Planificación' ||
-          p.status === 'active' || 
+          p.status === 'active' ||
           p.status === 'in_progress'
         ).length;
-        
+
         // Cargar total de clientes
         const clients = await clientService.getAllClients();
         const totalClients = clients.length;
-        
+
         // Cargar ingresos mensuales
         const analytics = await analyticsService.getDashboardKPIs();
         const monthlyRevenue = analytics.monthlyRevenue || 0;
-        
+
         setStats({
           activeProjects,
           totalClients,
@@ -193,7 +193,7 @@ const Dashboard = ({ onBack }) => {
                   <span className="font-medium">Volver al Dashboard</span>
                 </button>
               </div>
-              
+
               <div className="flex items-center space-x-4">
                 <AdminNotificationBadge onNavigateToNotifications={handleNavigateToNotifications} />
                 <LanguageSelector />
@@ -221,9 +221,9 @@ const Dashboard = ({ onBack }) => {
 
   if (currentView === 'clients') {
     return (
-      <div className="min-h-screen relative z-10">
+      <div className="h-screen flex flex-col overflow-hidden relative z-10">
         {/* Header para ClientManagement */}
-        <div className="bg-black/40 backdrop-blur-sm border-b border-white/20">
+        <div className="bg-black/40 backdrop-blur-sm border-b border-white/20 flex-none">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
@@ -237,7 +237,7 @@ const Dashboard = ({ onBack }) => {
                   <span className="font-medium">Volver al Dashboard</span>
                 </button>
               </div>
-              
+
               <div className="flex items-center space-x-4">
                 <AdminNotificationBadge onNavigateToNotifications={handleNavigateToNotifications} />
                 <LanguageSelector />
@@ -258,7 +258,9 @@ const Dashboard = ({ onBack }) => {
             </div>
           </div>
         </div>
-        <ClientManagement />
+        <div className="flex-1 overflow-hidden">
+          <ClientManagement />
+        </div>
       </div>
     );
   }
@@ -281,7 +283,7 @@ const Dashboard = ({ onBack }) => {
                   <span className="font-medium">Volver al Dashboard</span>
                 </button>
               </div>
-              
+
               <div className="flex items-center space-x-4">
                 <AdminNotificationBadge onNavigateToNotifications={handleNavigateToNotifications} />
                 <LanguageSelector />
@@ -447,24 +449,24 @@ const Dashboard = ({ onBack }) => {
   return (
     <div className="min-h-screen relative z-10">
       {/* Header */}
-              <div className="bg-black/40 backdrop-blur-sm border-b border-white/20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-4">
-                <button
-                  onClick={onBack}
-                  className="flex items-center space-x-2 text-gray-300 hover:text-white transition-colors duration-200"
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                  </svg>
-                  <span className="font-medium">{t('dashboard.backToHome')}</span>
-                </button>
-              </div>
-              
-              <div className="flex items-center space-x-4">
-                <AdminNotificationBadge onNavigateToNotifications={handleNavigateToNotifications} />
-                <LanguageSelector />
+      <div className="bg-black/40 backdrop-blur-sm border-b border-white/20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <button
+                onClick={onBack}
+                className="flex items-center space-x-2 text-gray-300 hover:text-white transition-colors duration-200"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                <span className="font-medium">{t('dashboard.backToHome')}</span>
+              </button>
+            </div>
+
+            <div className="flex items-center space-x-4">
+              <AdminNotificationBadge onNavigateToNotifications={handleNavigateToNotifications} />
+              <LanguageSelector />
               <div className="text-right">
                 <p className="text-sm text-gray-300">{t('dashboard.welcome')}</p>
                 <p className="text-white font-medium">{user?.name}</p>
