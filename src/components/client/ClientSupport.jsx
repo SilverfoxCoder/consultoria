@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslations } from '../../hooks/useTranslations';
-import { 
-  ExclamationTriangleIcon, 
+import {
+  ExclamationTriangleIcon,
   MagnifyingGlassIcon,
   PlusIcon,
   EyeIcon,
   ChatBubbleLeftRightIcon,
   ClockIcon,
-  CheckCircleIcon,
-  XCircleIcon,
-  PaperAirplaneIcon
+  CheckCircleIcon
 } from '@heroicons/react/24/outline';
 import { Listbox } from '@headlessui/react';
 import { ChevronUpDownIcon, CheckIcon as CheckIconSolid } from '@heroicons/react/20/solid';
@@ -19,7 +17,7 @@ import { useAuth } from '../../contexts/AuthContext';
 const ClientSupport = () => {
   const { t } = useTranslations();
   const { user, clientId } = useAuth();
-  
+
   // Estados para datos
   const [tickets, setTickets] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -28,18 +26,8 @@ const ClientSupport = () => {
   const [statusFilter, setStatusFilter] = useState('all');
   const [priorityFilter, setPriorityFilter] = useState('all');
   const [showNewTicket, setShowNewTicket] = useState(false);
-  const [selectedTicket, setSelectedTicket] = useState(null);
-  const [showTicketModal, setShowTicketModal] = useState(false);
-  const [modalType, setModalType] = useState('add'); // 'add' o 'edit'
-  
-  // Estados para el formulario
-  const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    priority: 'medium',
-    category: 'technical',
-    attachments: []
-  });
+
+
 
   // Cargar datos al montar el componente
   useEffect(() => {
@@ -58,7 +46,7 @@ const ClientSupport = () => {
     };
 
     loadTickets();
-  }, [user]);
+  }, [user, clientId]);
 
   const statusOptions = [
     { value: 'all', label: t('client.allStatuses') },
@@ -139,8 +127,8 @@ const ClientSupport = () => {
   const filteredTickets = tickets
     .filter(ticket => {
       const matchesSearch = ticket.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           ticket.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           ticket.id.toLowerCase().includes(searchTerm.toLowerCase());
+        ticket.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        ticket.id.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesStatus = statusFilter === 'all' || ticket.status === statusFilter;
       const matchesPriority = priorityFilter === 'all' || ticket.priority === priorityFilter;
       return matchesSearch && matchesStatus && matchesPriority;
@@ -149,93 +137,10 @@ const ClientSupport = () => {
 
   // Funciones CRUD
   const handleCreateTicket = () => {
-    setModalType('add');
-    setFormData({
-      title: '',
-      description: '',
-      priority: 'medium',
-      category: 'technical',
-      attachments: []
-    });
-    setShowTicketModal(true);
+    setShowNewTicket(true);
   };
 
-  const handleEditTicket = (ticket) => {
-    setModalType('edit');
-    setSelectedTicket(ticket);
-    setFormData({
-      title: ticket.title,
-      description: ticket.description,
-      priority: ticket.priority,
-      category: ticket.category,
-      attachments: ticket.attachments || []
-    });
-    setShowTicketModal(true);
-  };
 
-  const handleSaveTicket = async () => {
-    try {
-      setIsLoading(true);
-      
-      const finalClientId = clientId || user?.id || 1;
-      const ticketData = {
-        ...formData,
-        clientId: finalClientId,
-        status: 'open'
-      };
-      
-      if (modalType === 'add') {
-        // Crear nuevo ticket
-        const newTicket = await supportService.createTicket(ticketData);
-        setTickets([newTicket, ...tickets]);
-      } else {
-        // Actualizar ticket existente
-        const updatedTicket = await supportService.updateTicket(selectedTicket.id, ticketData);
-        const updatedTickets = tickets.map(t => 
-          t.id === selectedTicket.id ? updatedTicket : t
-        );
-        setTickets(updatedTickets);
-      }
-      
-      setShowTicketModal(false);
-      setSelectedTicket(null);
-      setFormData({
-        title: '',
-        description: '',
-        priority: 'medium',
-        category: 'technical',
-        attachments: []
-      });
-    } catch (err) {
-      setError('Error al guardar el ticket');
-      console.error('Error saving ticket:', err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleDeleteTicket = async (ticketId) => {
-    if (window.confirm('¿Estás seguro de que quieres eliminar este ticket?')) {
-      try {
-        setIsLoading(true);
-        await supportService.deleteTicket(ticketId);
-        setTickets(tickets.filter(t => t.id !== ticketId));
-      } catch (err) {
-        setError('Error al eliminar el ticket');
-        console.error('Error deleting ticket:', err);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-  };
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
 
   // Mostrar loading
   if (isLoading) {
@@ -272,7 +177,7 @@ const ClientSupport = () => {
               {t('client.supportSubtitle')}
             </p>
           </div>
-          <button 
+          <button
             onClick={handleCreateTicket}
             className="mt-4 sm:mt-0 flex items-center px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-colors"
           >
@@ -367,8 +272,7 @@ const ClientSupport = () => {
                   <Listbox.Option
                     key={option.value}
                     className={({ active }) =>
-                      `relative cursor-default select-none py-2 pl-10 pr-4 ${
-                        active ? 'bg-primary-600 text-white' : 'text-gray-300'
+                      `relative cursor-default select-none py-2 pl-10 pr-4 ${active ? 'bg-primary-600 text-white' : 'text-gray-300'
                       }`
                     }
                     value={option.value}
@@ -407,8 +311,7 @@ const ClientSupport = () => {
                   <Listbox.Option
                     key={option.value}
                     className={({ active }) =>
-                      `relative cursor-default select-none py-2 pl-10 pr-4 ${
-                        active ? 'bg-primary-600 text-white' : 'text-gray-300'
+                      `relative cursor-default select-none py-2 pl-10 pr-4 ${active ? 'bg-primary-600 text-white' : 'text-gray-300'
                       }`
                     }
                     value={option.value}
@@ -479,7 +382,7 @@ const ClientSupport = () => {
                         </div>
                       </div>
                     </div>
-                    
+
                     {/* Latest Message Preview */}
                     {ticket.messages.length > 0 && (
                       <div className="mt-4 p-3 bg-gray-600/30 rounded-lg">
@@ -498,7 +401,7 @@ const ClientSupport = () => {
                       </div>
                     )}
                   </div>
-                  
+
                   {/* Actions */}
                   <div className="flex flex-col sm:flex-row gap-2 mt-4 lg:mt-0 lg:ml-6">
                     <button className="flex items-center justify-center px-3 py-2 bg-gray-600 hover:bg-gray-500 text-white rounded-lg transition-colors">
@@ -520,7 +423,7 @@ const ClientSupport = () => {
               </div>
             ))}
           </div>
-          
+
           {filteredTickets.length === 0 && (
             <div className="text-center py-12">
               <ExclamationTriangleIcon className="mx-auto h-12 w-12 text-gray-400" />

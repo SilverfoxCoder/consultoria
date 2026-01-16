@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslations } from '../../hooks/useTranslations';
-import { 
-  DocumentTextIcon, 
+import {
+  DocumentTextIcon,
   MagnifyingGlassIcon,
   EyeIcon,
   ArrowDownTrayIcon,
@@ -17,7 +17,7 @@ import { useAuth } from '../../contexts/AuthContext';
 const ClientBudgets = () => {
   const { t } = useTranslations();
   const { user, clientId } = useAuth();
-  
+
   // Estados para datos
   const [budgets, setBudgets] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -43,10 +43,12 @@ const ClientBudgets = () => {
       } finally {
         setIsLoading(false);
       }
+
+
     };
 
     loadBudgets();
-  }, [user]);
+  }, [user, clientId, t]);
 
   const statusOptions = [
     { value: 'all', label: t('client.allStatuses') },
@@ -97,22 +99,22 @@ const ClientBudgets = () => {
     .filter(budget => {
       // Verificar que budget tenga las propiedades necesarias
       if (!budget || typeof budget !== 'object') return false;
-      
+
       const title = budget.title || '';
       const description = budget.description || '';
       const id = budget.id || '';
       const status = budget.status || '';
-      
+
       const matchesSearch = title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           id.toLowerCase().includes(searchTerm.toLowerCase());
+        description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        id.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesStatus = statusFilter === 'all' || status === statusFilter;
       return matchesSearch && matchesStatus;
     })
     .sort((a, b) => {
       // Verificar que a y b sean objetos válidos
       if (!a || !b || typeof a !== 'object' || typeof b !== 'object') return 0;
-      
+
       switch (sortBy) {
         case 'date':
           const dateA = new Date(a.date || 0);
@@ -208,8 +210,7 @@ const ClientBudgets = () => {
                   <Listbox.Option
                     key={option.value}
                     className={({ active }) =>
-                      `relative cursor-default select-none py-2 pl-10 pr-4 ${
-                        active ? 'bg-primary-600 text-white' : 'text-gray-300'
+                      `relative cursor-default select-none py-2 pl-10 pr-4 ${active ? 'bg-primary-600 text-white' : 'text-gray-300'
                       }`
                     }
                     value={option.value}
@@ -248,8 +249,7 @@ const ClientBudgets = () => {
                   <Listbox.Option
                     key={option.value}
                     className={({ active }) =>
-                      `relative cursor-default select-none py-2 pl-10 pr-4 ${
-                        active ? 'bg-primary-600 text-white' : 'text-gray-300'
+                      `relative cursor-default select-none py-2 pl-10 pr-4 ${active ? 'bg-primary-600 text-white' : 'text-gray-300'
                       }`
                     }
                     value={option.value}

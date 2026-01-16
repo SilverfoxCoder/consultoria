@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useTranslations } from '../../../hooks/useTranslations';
-import { ExclamationTriangleIcon, XMarkIcon, DocumentTextIcon, PaperClipIcon } from '@heroicons/react/24/outline';
+import { ExclamationTriangleIcon, XMarkIcon, PaperClipIcon } from '@heroicons/react/24/outline';
 
 const CreateTicketModal = ({ isOpen, onClose, onSubmit }) => {
   const { t } = useTranslations();
-  
+
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -66,17 +66,17 @@ const CreateTicketModal = ({ isOpen, onClose, onSubmit }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
+
     try {
       // Aquí se enviaría el ticket al backend
       console.log('Creando ticket:', formData);
-      
+
       // Simular envío
       await new Promise(resolve => setTimeout(resolve, 1000));
-      
+
       onSubmit && onSubmit(formData);
       onClose();
-      
+
       // Resetear formulario
       setFormData({
         title: '',
@@ -229,14 +229,14 @@ const CreateTicketModal = ({ isOpen, onClose, onSubmit }) => {
                 htmlFor="file-upload"
                 className="cursor-pointer text-orange-400 hover:text-orange-300 transition-colors duration-200"
               >
-                              <div className="space-y-2">
-                <PaperClipIcon className="h-8 w-8 mx-auto" />
-                <p className="text-sm">Haz clic para subir archivos</p>
-                <p className="text-xs text-gray-400">PNG, JPG, PDF, DOC hasta 10MB</p>
-              </div>
+                <div className="space-y-2">
+                  <PaperClipIcon className="h-8 w-8 mx-auto" />
+                  <p className="text-sm">Haz clic para subir archivos</p>
+                  <p className="text-xs text-gray-400">PNG, JPG, PDF, DOC hasta 10MB</p>
+                </div>
               </label>
             </div>
-            
+
             {/* Archivos seleccionados */}
             {formData.attachments.length > 0 && (
               <div className="mt-4 space-y-2">

@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslations } from '../../hooks/useTranslations';
-import { 
-  DocumentTextIcon, 
-  WrenchScrewdriverIcon, 
-  FolderIcon, 
+import {
+  DocumentTextIcon,
+  WrenchScrewdriverIcon,
+  FolderIcon,
   ExclamationTriangleIcon,
   CurrencyDollarIcon,
   ClockIcon,
-  CheckCircleIcon,
-  XCircleIcon
+
 } from '@heroicons/react/24/outline';
 import budgetService from '../../services/budgetService';
 import { serviceService } from '../../services/serviceService';
@@ -21,12 +20,12 @@ import RequestServiceModal from './modals/RequestServiceModal';
 import ViewInvoicesModal from './modals/ViewInvoicesModal';
 
 const ClientDashboard = () => {
-  const { t, currentLanguage, translations } = useTranslations();
+  const { t } = useTranslations();
   const { user, clientId } = useAuth();
-  
+
   // Estados para datos
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState('');
+
   const [stats, setStats] = useState([]);
   const [recentBudgets, setRecentBudgets] = useState([]);
   const [activeProjects, setActiveProjects] = useState([]);
@@ -40,11 +39,11 @@ const ClientDashboard = () => {
   // Cargar datos al montar el componente
   useEffect(() => {
     let isMounted = true;
-    
+
     const loadData = async () => {
       if (!isMounted) return;
       setIsLoading(true);
-      
+
       try {
         // Intentar cargar datos del backend primero
         const finalClientId = clientId || user?.id || 1;
@@ -56,14 +55,14 @@ const ClientDashboard = () => {
         ]);
 
         // Verificar si el backend respondió correctamente
-        const hasBackendData = budgets.status === 'fulfilled' && 
-                              services.status === 'fulfilled' && 
-                              projects.status === 'fulfilled' && 
-                              tickets.status === 'fulfilled';
+        const hasBackendData = budgets.status === 'fulfilled' &&
+          services.status === 'fulfilled' &&
+          projects.status === 'fulfilled' &&
+          tickets.status === 'fulfilled';
 
         if (hasBackendData) {
           console.log('✅ Backend disponible - usando datos reales');
-          
+
           // Usar datos del backend
           const budgetsData = Array.isArray(budgets.value) ? budgets.value : [];
           const servicesData = Array.isArray(services.value) ? services.value : [];
@@ -115,7 +114,7 @@ const ClientDashboard = () => {
           setActiveProjects(projectsData.filter(p => p.status === 'En Progreso').slice(0, 2));
         } else {
           console.log('⚠️ Backend no disponible - usando datos mockeados');
-          
+
           // Usar datos mockeados
           const statsData = [
             {
@@ -174,7 +173,7 @@ const ClientDashboard = () => {
       } catch (error) {
         console.log('❌ Error al cargar datos - usando datos mockeados');
         console.error('Error:', error);
-        
+
         // Usar datos mockeados por defecto
         const activeBudgets = 0;
         const activeServices = 0;
@@ -246,7 +245,7 @@ const ClientDashboard = () => {
     return () => {
       isMounted = false;
     };
-  }, []); // Solo ejecutar una vez al montar el componente
+  }, [clientId, user, t]); // Ejecutar cuando cambien user, clientId o t
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -289,17 +288,6 @@ const ClientDashboard = () => {
     );
   }
 
-  // Mostrar error
-  if (error) {
-    return (
-      <div className="space-y-6">
-        <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-4">
-          <p className="text-red-400">{error}</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -321,10 +309,9 @@ const ClientDashboard = () => {
                 <p className="text-sm font-medium text-gray-400">{stat.name}</p>
                 <p className="text-2xl font-bold text-white mt-1">{stat.value}</p>
                 <div className="flex items-center mt-2">
-                  <span className={`text-sm ${
-                    stat.changeType === 'positive' ? 'text-green-400' : 
+                  <span className={`text-sm ${stat.changeType === 'positive' ? 'text-green-400' :
                     stat.changeType === 'negative' ? 'text-red-400' : 'text-gray-400'
-                  }`}>
+                    }`}>
                     {stat.change}
                   </span>
                   <span className="text-sm text-gray-400 ml-1">
@@ -413,7 +400,7 @@ const ClientDashboard = () => {
                       <span className="text-white">{project.progress}%</span>
                     </div>
                     <div className="w-full bg-gray-700 rounded-full h-2">
-                      <div 
+                      <div
                         className="bg-primary-500 h-2 rounded-full transition-all duration-300"
                         style={{ width: `${project.progress}%` }}
                       />
@@ -430,75 +417,75 @@ const ClientDashboard = () => {
         </div>
       </div>
 
-             {/* Quick Actions */}
-       <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700">
-         <h3 className="text-lg font-semibold text-white mb-4">
-           {t('client.quickActions')}
-         </h3>
-         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-           <button 
-             onClick={() => setShowBudgetModal(true)}
-             className="flex items-center p-4 bg-gray-700/30 rounded-lg hover:bg-gray-700/50 transition-colors cursor-pointer"
-           >
-             <DocumentTextIcon className="h-6 w-6 text-blue-400 mr-3" />
-             <span className="text-white font-medium">{t('client.requestBudget')}</span>
-           </button>
-           <button 
-             onClick={() => setShowTicketModal(true)}
-             className="flex items-center p-4 bg-gray-700/30 rounded-lg hover:bg-gray-700/50 transition-colors cursor-pointer"
-           >
-             <ExclamationTriangleIcon className="h-6 w-6 text-orange-400 mr-3" />
-             <span className="text-white font-medium">{t('client.createTicket')}</span>
-           </button>
-           <button 
-             onClick={() => setShowServiceModal(true)}
-             className="flex items-center p-4 bg-gray-700/30 rounded-lg hover:bg-gray-700/50 transition-colors cursor-pointer"
-           >
-             <WrenchScrewdriverIcon className="h-6 w-6 text-green-400 mr-3" />
-             <span className="text-white font-medium">{t('client.requestService')}</span>
-           </button>
-           <button 
-             onClick={() => setShowInvoicesModal(true)}
-             className="flex items-center p-4 bg-gray-700/30 rounded-lg hover:bg-gray-700/50 transition-colors cursor-pointer"
-           >
-             <CurrencyDollarIcon className="h-6 w-6 text-purple-400 mr-3" />
-             <span className="text-white font-medium">{t('client.viewInvoices')}</span>
-           </button>
-         </div>
-       </div>
+      {/* Quick Actions */}
+      <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700">
+        <h3 className="text-lg font-semibold text-white mb-4">
+          {t('client.quickActions')}
+        </h3>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <button
+            onClick={() => setShowBudgetModal(true)}
+            className="flex items-center p-4 bg-gray-700/30 rounded-lg hover:bg-gray-700/50 transition-colors cursor-pointer"
+          >
+            <DocumentTextIcon className="h-6 w-6 text-blue-400 mr-3" />
+            <span className="text-white font-medium">{t('client.requestBudget')}</span>
+          </button>
+          <button
+            onClick={() => setShowTicketModal(true)}
+            className="flex items-center p-4 bg-gray-700/30 rounded-lg hover:bg-gray-700/50 transition-colors cursor-pointer"
+          >
+            <ExclamationTriangleIcon className="h-6 w-6 text-orange-400 mr-3" />
+            <span className="text-white font-medium">{t('client.createTicket')}</span>
+          </button>
+          <button
+            onClick={() => setShowServiceModal(true)}
+            className="flex items-center p-4 bg-gray-700/30 rounded-lg hover:bg-gray-700/50 transition-colors cursor-pointer"
+          >
+            <WrenchScrewdriverIcon className="h-6 w-6 text-green-400 mr-3" />
+            <span className="text-white font-medium">{t('client.requestService')}</span>
+          </button>
+          <button
+            onClick={() => setShowInvoicesModal(true)}
+            className="flex items-center p-4 bg-gray-700/30 rounded-lg hover:bg-gray-700/50 transition-colors cursor-pointer"
+          >
+            <CurrencyDollarIcon className="h-6 w-6 text-purple-400 mr-3" />
+            <span className="text-white font-medium">{t('client.viewInvoices')}</span>
+          </button>
+        </div>
+      </div>
 
-       {/* Modales */}
-       <RequestBudgetModal 
-         isOpen={showBudgetModal}
-         onClose={() => setShowBudgetModal(false)}
-         onSubmit={(data) => {
-           console.log('Solicitud de presupuesto enviada:', data);
-           // Aquí se manejaría la respuesta del backend
-         }}
-       />
-       
-       <CreateTicketModal 
-         isOpen={showTicketModal}
-         onClose={() => setShowTicketModal(false)}
-         onSubmit={(data) => {
-           console.log('Ticket creado:', data);
-           // Aquí se manejaría la respuesta del backend
-         }}
-       />
-       
-       <RequestServiceModal 
-         isOpen={showServiceModal}
-         onClose={() => setShowServiceModal(false)}
-         onSubmit={(data) => {
-           console.log('Solicitud de servicio enviada:', data);
-           // Aquí se manejaría la respuesta del backend
-         }}
-       />
-       
-       <ViewInvoicesModal 
-         isOpen={showInvoicesModal}
-         onClose={() => setShowInvoicesModal(false)}
-       />
+      {/* Modales */}
+      <RequestBudgetModal
+        isOpen={showBudgetModal}
+        onClose={() => setShowBudgetModal(false)}
+        onSubmit={(data) => {
+          console.log('Solicitud de presupuesto enviada:', data);
+          // Aquí se manejaría la respuesta del backend
+        }}
+      />
+
+      <CreateTicketModal
+        isOpen={showTicketModal}
+        onClose={() => setShowTicketModal(false)}
+        onSubmit={(data) => {
+          console.log('Ticket creado:', data);
+          // Aquí se manejaría la respuesta del backend
+        }}
+      />
+
+      <RequestServiceModal
+        isOpen={showServiceModal}
+        onClose={() => setShowServiceModal(false)}
+        onSubmit={(data) => {
+          console.log('Solicitud de servicio enviada:', data);
+          // Aquí se manejaría la respuesta del backend
+        }}
+      />
+
+      <ViewInvoicesModal
+        isOpen={showInvoicesModal}
+        onClose={() => setShowInvoicesModal(false)}
+      />
     </div>
   );
 };
