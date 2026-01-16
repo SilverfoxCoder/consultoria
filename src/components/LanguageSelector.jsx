@@ -1,11 +1,10 @@
 import React from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
-import { useTranslations } from '../hooks/useTranslations';
 import { GlobeAltIcon } from '@heroicons/react/24/outline';
 
 const LanguageSelector = ({ className = '' }) => {
   const { currentLanguage, changeLanguage } = useLanguage();
-  const { t } = useTranslations();
+
 
   const languages = [
     { code: 'es', name: 'Español', flag: '🇪🇸' },
