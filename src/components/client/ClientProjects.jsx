@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslations } from '../../hooks/useTranslations';
-import { 
-  FolderIcon, 
+import {
+  FolderIcon,
   MagnifyingGlassIcon,
   EyeIcon,
   ArrowDownTrayIcon,
   ClockIcon,
   CheckCircleIcon,
-  ExclamationTriangleIcon,
   UserGroupIcon,
   CalendarIcon
 } from '@heroicons/react/24/outline';
@@ -20,7 +19,7 @@ import ClientProjectDetails from './ClientProjectDetails';
 const ClientProjects = () => {
   const { t } = useTranslations();
   const { user, clientId } = useAuth();
-  
+
   // Estados para datos
   const [projects, setProjects] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -48,7 +47,7 @@ const ClientProjects = () => {
     };
 
     loadProjects();
-  }, [user]);
+  }, [user, clientId]);
 
   const statusOptions = [
     { value: 'all', label: t('client.allStatuses') },
@@ -124,10 +123,10 @@ const ClientProjects = () => {
       const title = project?.title || '';
       const description = project?.description || '';
       const id = project?.id ? String(project.id) : '';
-      
+
       const matchesSearch = title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           id.toLowerCase().includes(searchTerm.toLowerCase());
+        description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        id.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesStatus = statusFilter === 'all' || project?.status === statusFilter;
       return matchesSearch && matchesStatus;
     })
@@ -287,8 +286,7 @@ const ClientProjects = () => {
                   <Listbox.Option
                     key={option.value}
                     className={({ active }) =>
-                      `relative cursor-default select-none py-2 pl-10 pr-4 ${
-                        active ? 'bg-primary-600 text-white' : 'text-gray-300'
+                      `relative cursor-default select-none py-2 pl-10 pr-4 ${active ? 'bg-primary-600 text-white' : 'text-gray-300'
                       }`
                     }
                     value={option.value}
@@ -327,8 +325,7 @@ const ClientProjects = () => {
                   <Listbox.Option
                     key={option.value}
                     className={({ active }) =>
-                      `relative cursor-default select-none py-2 pl-10 pr-4 ${
-                        active ? 'bg-primary-600 text-white' : 'text-gray-300'
+                      `relative cursor-default select-none py-2 pl-10 pr-4 ${active ? 'bg-primary-600 text-white' : 'text-gray-300'
                       }`
                     }
                     value={option.value}
@@ -386,10 +383,10 @@ const ClientProjects = () => {
                       </div>
                     </div>
                   </div>
-                  
+
                   {/* Actions */}
                   <div className="flex flex-col sm:flex-row gap-2 mt-4 lg:mt-0 lg:ml-6">
-                    <button 
+                    <button
                       onClick={() => handleViewProjectDetails(project)}
                       className="flex items-center justify-center px-3 py-2 bg-gray-600 hover:bg-gray-500 text-white rounded-lg transition-colors"
                     >
@@ -407,10 +404,10 @@ const ClientProjects = () => {
                 <div className="mb-6">
                   <div className="flex justify-between items-center mb-2">
                     <span className="text-sm font-medium text-gray-300">{t('client.progress')}</span>
-                                            <span className="text-sm text-white">{project?.progress || 0}%</span>
+                    <span className="text-sm text-white">{project?.progress || 0}%</span>
                   </div>
                   <div className="w-full bg-gray-700 rounded-full h-3">
-                    <div 
+                    <div
                       className="bg-primary-500 h-3 rounded-full transition-all duration-300"
                       style={{ width: `${project?.progress || 0}%` }}
                     />
@@ -445,8 +442,8 @@ const ClientProjects = () => {
                         <div key={task?.id || index} className="flex items-center justify-between p-2 bg-gray-600/30 rounded">
                           <div className="flex items-center space-x-2">
                             <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getTaskStatusColor(task?.status)}`}>
-                              {task?.status === 'completed' ? t('client.completed') : 
-                               task?.status === 'in-progress' ? t('client.inProgress') : t('client.pending')}
+                              {task?.status === 'completed' ? t('client.completed') :
+                                task?.status === 'in-progress' ? t('client.inProgress') : t('client.pending')}
                             </span>
                             <span className="text-sm text-white">{task?.title || 'Tarea sin título'}</span>
                           </div>
@@ -464,9 +461,9 @@ const ClientProjects = () => {
                         <div key={index} className="flex items-center justify-between p-2 bg-gray-600/30 rounded">
                           <div className="flex items-center space-x-2">
                             <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getTaskStatusColor(deliverable.status)}`}>
-                              {deliverable.status === 'delivered' ? t('client.delivered') : 
-                               deliverable.status === 'ready' ? t('client.ready') : 
-                               deliverable.status === 'in-progress' ? t('client.inProgress') : t('client.pending')}
+                              {deliverable.status === 'delivered' ? t('client.delivered') :
+                                deliverable.status === 'ready' ? t('client.ready') :
+                                  deliverable.status === 'in-progress' ? t('client.inProgress') : t('client.pending')}
                             </span>
                             <span className="text-sm text-white">{deliverable.name}</span>
                           </div>
@@ -479,7 +476,7 @@ const ClientProjects = () => {
               </div>
             ))}
           </div>
-          
+
           {filteredProjects.length === 0 && (
             <div className="text-center py-12">
               <FolderIcon className="mx-auto h-12 w-12 text-gray-400" />

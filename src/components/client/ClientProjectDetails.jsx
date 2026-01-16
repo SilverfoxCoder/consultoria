@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { 
+import {
   ArrowLeftIcon,
   ClockIcon,
   CheckCircleIcon,
@@ -8,7 +8,6 @@ import {
   CalendarIcon,
   CurrencyEuroIcon,
   ChartBarIcon,
-  DocumentTextIcon,
   ChatBubbleLeftRightIcon,
   EyeIcon,
   PlusIcon
@@ -16,7 +15,7 @@ import {
 import { useAuth } from '../../contexts/AuthContext';
 
 const ClientProjectDetails = ({ project, onBack }) => {
-  const { user } = useAuth();
+  const { } = useAuth();
   const [activeTab, setActiveTab] = useState('overview');
 
   const getStatusColor = (status) => {
@@ -197,11 +196,10 @@ const ClientProjectDetails = ({ project, onBack }) => {
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
-                    className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 ${
-                      activeTab === tab.id
-                        ? 'bg-blue-600 text-white'
-                        : 'text-gray-400 hover:text-white hover:bg-gray-700/50'
-                    }`}
+                    className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 ${activeTab === tab.id
+                      ? 'bg-blue-600 text-white'
+                      : 'text-gray-400 hover:text-white hover:bg-gray-700/50'
+                      }`}
                   >
                     <tab.icon className="h-4 w-4" />
                     <span>{tab.name}</span>
@@ -232,7 +230,7 @@ const ClientProjectDetails = ({ project, onBack }) => {
                         </div>
                       </div>
                       <div className="mt-3 bg-gray-600 rounded-full h-2">
-                        <div 
+                        <div
                           className="bg-blue-500 h-2 rounded-full transition-all duration-300"
                           style={{ width: `${calculateProgress()}%` }}
                         ></div>
@@ -250,7 +248,7 @@ const ClientProjectDetails = ({ project, onBack }) => {
                         </div>
                       </div>
                       <div className="mt-3 bg-gray-600 rounded-full h-2">
-                        <div 
+                        <div
                           className="bg-green-500 h-2 rounded-full transition-all duration-300"
                           style={{ width: `${calculateTimeProgress()}%` }}
                         ></div>
@@ -265,14 +263,14 @@ const ClientProjectDetails = ({ project, onBack }) => {
                         <div>
                           <p className="text-sm text-gray-400">Presupuesto</p>
                           <p className="text-2xl font-bold text-white">
-                            {project.budget && project.spent 
+                            {project.budget && project.spent
                               ? ((project.spent / project.budget) * 100).toFixed(1)
                               : 0}%
                           </p>
                         </div>
                       </div>
                       <div className="mt-3 bg-gray-600 rounded-full h-2">
-                        <div 
+                        <div
                           className="bg-purple-500 h-2 rounded-full transition-all duration-300"
                           style={{ width: `${project.budget && project.spent ? (project.spent / project.budget) * 100 : 0}%` }}
                         ></div>
@@ -363,7 +361,7 @@ const ClientProjectDetails = ({ project, onBack }) => {
                         <div className="flex justify-between">
                           <span className="text-gray-400">Porcentaje Usado:</span>
                           <span className="text-white font-semibold">
-                            {project.budget && project.spent 
+                            {project.budget && project.spent
                               ? ((project.spent / project.budget) * 100).toFixed(1)
                               : 0}%
                           </span>
@@ -377,13 +375,13 @@ const ClientProjectDetails = ({ project, onBack }) => {
                           <div className="flex justify-between text-sm mb-2">
                             <span className="text-gray-400">Presupuesto Usado</span>
                             <span className="text-white">
-                              {project.budget && project.spent 
+                              {project.budget && project.spent
                                 ? ((project.spent / project.budget) * 100).toFixed(1)
                                 : 0}%
                             </span>
                           </div>
                           <div className="bg-gray-600 rounded-full h-3">
-                            <div 
+                            <div
                               className="bg-blue-500 h-3 rounded-full transition-all duration-300"
                               style={{ width: `${project.budget && project.spent ? (project.spent / project.budget) * 100 : 0}%` }}
                             ></div>
@@ -416,7 +414,7 @@ const ClientProjectDetails = ({ project, onBack }) => {
                         </div>
                       </div>
                     </div>
-                    
+
                     <div className="bg-gray-700/30 rounded-lg p-6">
                       <h4 className="text-lg font-semibold text-white mb-4">Acciones Rápidas</h4>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

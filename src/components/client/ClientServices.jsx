@@ -7,8 +7,7 @@ import {
   ArrowDownTrayIcon,
   CurrencyDollarIcon,
   ClockIcon,
-  CheckCircleIcon,
-  ExclamationTriangleIcon
+  CheckCircleIcon
 } from '@heroicons/react/24/outline';
 import { Listbox } from '@headlessui/react';
 import { ChevronUpDownIcon, CheckIcon as CheckIconSolid } from '@heroicons/react/20/solid';

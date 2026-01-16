@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslations } from '../../hooks/useTranslations';
-import { 
-  UserIcon, 
+import {
+  UserIcon,
   EnvelopeIcon,
   PhoneIcon,
   BuildingOfficeIcon,
@@ -22,7 +22,7 @@ import { useAuth } from '../../contexts/AuthContext';
 const ClientProfile = () => {
   const { t } = useTranslations();
   const { user, clientId } = useAuth();
-  
+
   // Estados para datos
   const [activeTab, setActiveTab] = useState('profile');
   const [isEditing, setIsEditing] = useState(false);
@@ -39,7 +39,7 @@ const ClientProfile = () => {
         setIsLoading(true);
         const finalClientId = clientId || user?.id || 1;
         const userData = await userService.getUserById(finalClientId);
-        
+
         setProfileData({
           name: userData.name || '',
           email: userData.email || '',
@@ -52,7 +52,7 @@ const ClientProfile = () => {
           companySize: userData.companySize || '',
           joinDate: userData.createdAt || ''
         });
-        
+
         setPreferences(userData.preferences || {
           language: 'es',
           timezone: 'Europe/Madrid',
@@ -66,7 +66,7 @@ const ClientProfile = () => {
             supportUpdates: true
           }
         });
-        
+
         setSecuritySettings(userData.securitySettings || {
           twoFactorEnabled: false,
           lastPasswordChange: '',
@@ -82,7 +82,7 @@ const ClientProfile = () => {
     };
 
     loadProfile();
-  }, [user]);
+  }, [user, clientId]);
 
   const languageOptions = [
     { value: 'es', label: 'Español' },
@@ -195,11 +195,10 @@ const ClientProfile = () => {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
-                  activeTab === tab.id
+                className={`flex items-center py-4 px-1 border-b-2 font-medium text-sm transition-colors ${activeTab === tab.id
                     ? 'border-primary-500 text-primary-400'
                     : 'border-transparent text-gray-400 hover:text-gray-300 hover:border-gray-300'
-                }`}
+                  }`}
               >
                 <tab.icon className="h-5 w-5 mr-2" />
                 {tab.name}
@@ -361,7 +360,7 @@ const ClientProfile = () => {
                   <label className="block text-sm font-medium text-gray-300 mb-2">
                     {t('client.language')}
                   </label>
-                  <Listbox value={preferences.language} onChange={() => {}}>
+                  <Listbox value={preferences.language} onChange={() => { }}>
                     <div className="relative">
                       <Listbox.Button className="relative w-full cursor-default rounded-lg bg-gray-700 py-2 pl-3 pr-10 text-left border border-gray-600 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent">
                         <span className="block truncate text-white">
@@ -376,8 +375,7 @@ const ClientProfile = () => {
                           <Listbox.Option
                             key={option.value}
                             className={({ active }) =>
-                              `relative cursor-default select-none py-2 pl-10 pr-4 ${
-                                active ? 'bg-primary-600 text-white' : 'text-gray-300'
+                              `relative cursor-default select-none py-2 pl-10 pr-4 ${active ? 'bg-primary-600 text-white' : 'text-gray-300'
                               }`
                             }
                             value={option.value}
@@ -405,7 +403,7 @@ const ClientProfile = () => {
                   <label className="block text-sm font-medium text-gray-300 mb-2">
                     {t('client.timezone')}
                   </label>
-                  <Listbox value={preferences.timezone} onChange={() => {}}>
+                  <Listbox value={preferences.timezone} onChange={() => { }}>
                     <div className="relative">
                       <Listbox.Button className="relative w-full cursor-default rounded-lg bg-gray-700 py-2 pl-3 pr-10 text-left border border-gray-600 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent">
                         <span className="block truncate text-white">
@@ -420,8 +418,7 @@ const ClientProfile = () => {
                           <Listbox.Option
                             key={option.value}
                             className={({ active }) =>
-                              `relative cursor-default select-none py-2 pl-10 pr-4 ${
-                                active ? 'bg-primary-600 text-white' : 'text-gray-300'
+                              `relative cursor-default select-none py-2 pl-10 pr-4 ${active ? 'bg-primary-600 text-white' : 'text-gray-300'
                               }`
                             }
                             value={option.value}
@@ -449,7 +446,7 @@ const ClientProfile = () => {
                   <label className="block text-sm font-medium text-gray-300 mb-2">
                     {t('client.currency')}
                   </label>
-                  <Listbox value={preferences.currency} onChange={() => {}}>
+                  <Listbox value={preferences.currency} onChange={() => { }}>
                     <div className="relative">
                       <Listbox.Button className="relative w-full cursor-default rounded-lg bg-gray-700 py-2 pl-3 pr-10 text-left border border-gray-600 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent">
                         <span className="block truncate text-white">
@@ -464,8 +461,7 @@ const ClientProfile = () => {
                           <Listbox.Option
                             key={option.value}
                             className={({ active }) =>
-                              `relative cursor-default select-none py-2 pl-10 pr-4 ${
-                                active ? 'bg-primary-600 text-white' : 'text-gray-300'
+                              `relative cursor-default select-none py-2 pl-10 pr-4 ${active ? 'bg-primary-600 text-white' : 'text-gray-300'
                               }`
                             }
                             value={option.value}
@@ -502,11 +498,10 @@ const ClientProfile = () => {
                     <p className="text-sm text-gray-400">{t('client.twoFactorAuthDesc')}</p>
                   </div>
                   <div className="flex items-center space-x-3">
-                    <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                      securitySettings.twoFactorEnabled 
-                        ? 'text-green-400 bg-green-400/10' 
+                    <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${securitySettings.twoFactorEnabled
+                        ? 'text-green-400 bg-green-400/10'
                         : 'text-red-400 bg-red-400/10'
-                    }`}>
+                      }`}>
                       {securitySettings.twoFactorEnabled ? t('client.enabled') : t('client.disabled')}
                     </span>
                     <button className="px-3 py-1 bg-primary-600 hover:bg-primary-700 text-white rounded text-sm transition-colors">
@@ -566,12 +561,10 @@ const ClientProfile = () => {
                         {t(`client.${key}Desc`)}
                       </p>
                     </div>
-                    <button className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                      value ? 'bg-primary-600' : 'bg-gray-600'
-                    }`}>
-                      <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                        value ? 'translate-x-6' : 'translate-x-1'
-                      }`} />
+                    <button className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${value ? 'bg-primary-600' : 'bg-gray-600'
+                      }`}>
+                      <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${value ? 'translate-x-6' : 'translate-x-1'
+                        }`} />
                     </button>
                   </div>
                 ))}
