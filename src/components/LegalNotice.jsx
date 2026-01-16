@@ -91,7 +91,7 @@ const LegalNotice = () => {
                 En cumplimiento de lo dispuesto en el Reglamento (UE) 2016/679 del Parlamento Europeo y del Consejo, de 27 de abril de 2016, relativo a la protección de las personas físicas en lo que respecta al tratamiento de datos personales y a la libre circulación de estos datos, se informa que:
               </p>
               <ul className="list-disc pl-6 mt-4 space-y-2">
-                <li><strong>Responsable del tratamiento:</strong> XperiencIA Consulting S.L.</li>
+                <li><strong>Responsable del tratamiento:</strong> XperiecIA Consulting</li>
                 <li><strong>Finalidad:</strong> Gestión de consultas, prestación de servicios y envío de comunicaciones comerciales</li>
                 <li><strong>Legitimación:</strong> Consentimiento del interesado y ejecución de contratos</li>
                 <li><strong>Destinatarios:</strong> No se ceden datos a terceros, salvo obligación legal</li>

@@ -78,14 +78,14 @@ const Home = ({ onShowRegister, onShowDashboard, onShowServices }) => {
             </button>
           </div>
 
-          {/* Trust Indicators */}
+          {/* Branding Banner */}
           <div className="mt-16 pt-8 border-t border-gray-200/50">
-            <p className="text-primary-500 mb-6 font-medium">{t('home.trust.title')}</p>
-            <div className="flex flex-wrap justify-center items-center gap-8">
-              <div className="bg-white/60 backdrop-blur-sm px-4 py-2 rounded-lg text-primary-500 font-semibold text-lg border border-white/20">TechCorp</div>
-              <div className="bg-white/60 backdrop-blur-sm px-4 py-2 rounded-lg text-primary-500 font-semibold text-lg border border-white/20">InnovateLab</div>
-              <div className="bg-white/60 backdrop-blur-sm px-4 py-2 rounded-lg text-primary-500 font-semibold text-lg border border-white/20">DigitalFlow</div>
-              <div className="bg-white/60 backdrop-blur-sm px-4 py-2 rounded-lg text-primary-500 font-semibold text-lg border border-white/20">FutureTech</div>
+            <div className="flex justify-center items-center">
+              <img
+                src="/assets/images/branding/home-banner.jpg"
+                alt="Automatización Inteligente"
+                className="max-w-full h-auto rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300"
+              />
             </div>
           </div>
         </div>
