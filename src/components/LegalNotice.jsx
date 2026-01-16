@@ -26,7 +26,7 @@ const LegalNotice = () => {
             <section>
               <h2 className="text-2xl font-bold text-primary-600 mb-4">1. Información de la Empresa</h2>
               <div className="bg-gray-50 p-6 rounded-lg">
-                <p className="mb-2"><strong>Razón Social:</strong> XperiencIA Consulting </p>
+                <p className="mb-2"><strong>Razón Social:</strong> XperiecIA Consulting </p>
                 <p className="mb-2"><strong>NIF:</strong> B-49054881</p>
                 <p className="mb-2"><strong>Domicilio Social:</strong> Madre Teresa de Calcuta 11, Horcajo de Santiago, Cuenca</p>
                 <p className="mb-2"><strong>Email:</strong> experienciaitservices@gmail.com</p>
@@ -38,7 +38,7 @@ const LegalNotice = () => {
             <section>
               <h2 className="text-2xl font-bold text-primary-600 mb-4">2. Objeto de la Empresa</h2>
               <p>
-                XperiencIA Consulting es una empresa de consultoría tecnológica especializada en:
+                XperiecIA Consulting es una empresa de consultoría tecnológica especializada en:
               </p>
               <ul className="list-disc pl-6 mt-4 space-y-2">
                 <li>Desarrollo de software y aplicaciones web</li>
@@ -77,7 +77,7 @@ const LegalNotice = () => {
             <section>
               <h2 className="text-2xl font-bold text-primary-600 mb-4">5. Responsabilidad</h2>
               <p>
-                XperiencIA Consulting no se hace responsable de los daños y perjuicios que se pudieran derivar de interferencias, omisiones, interrupciones, informáticos, averías telefónicas o desconexiones en el funcionamiento operativo del sistema electrónico, motivadas por causas ajenas a la empresa.
+                XperiecIA Consulting no se hace responsable de los daños y perjuicios que se pudieran derivar de interferencias, omisiones, interrupciones, informáticos, averías telefónicas o desconexiones en el funcionamiento operativo del sistema electrónico, motivadas por causas ajenas a la empresa.
               </p>
               <p className="mt-4">
                 Asimismo, la empresa no garantiza la ausencia de virus u otros elementos que puedan causar alteraciones en los sistemas informáticos, documentos electrónicos o ficheros de los usuarios de este sitio web.
@@ -120,7 +120,7 @@ const LegalNotice = () => {
             <section>
               <h2 className="text-2xl font-bold text-primary-600 mb-4">9. Modificaciones</h2>
               <p>
-                XperiencIA Consulting se reserva el derecho de efectuar sin previo aviso las modificaciones que considere oportunas en su sitio web, pudiendo cambiar, suprimir o añadir tanto los contenidos y servicios que se prestan a través de la misma como la forma en la que éstos aparezcan presentados o localizados en su sitio web.
+                XperiecIA Consulting se reserva el derecho de efectuar sin previo aviso las modificaciones que considere oportunas en su sitio web, pudiendo cambiar, suprimir o añadir tanto los contenidos y servicios que se prestan a través de la misma como la forma en la que éstos aparezcan presentados o localizados en su sitio web.
               </p>
             </section>
 
@@ -142,7 +142,7 @@ const LegalNotice = () => {
           {/* Footer */}
           <div className="mt-12 pt-8 border-t border-gray-200 text-center">
             <p className="text-gray-500 text-sm">
-              © {new Date().getFullYear()} XperiencIA Consulting. Todos los derechos reservados.
+              © {new Date().getFullYear()} XperiecIA Consulting. Todos los derechos reservados.
             </p>
           </div>
 
