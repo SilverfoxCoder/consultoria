@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslations } from '../../hooks/useTranslations';
-import { 
-  WrenchScrewdriverIcon, 
+import {
+  WrenchScrewdriverIcon,
   MagnifyingGlassIcon,
   EyeIcon,
   ArrowDownTrayIcon,
@@ -17,7 +17,7 @@ import { useAuth } from '../../contexts/AuthContext';
 const ClientServices = () => {
   const { t } = useTranslations();
   const { user, clientId } = useAuth();
-  
+
   // Estados para datos
   const [services, setServices] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -43,7 +43,7 @@ const ClientServices = () => {
     };
 
     loadServices();
-  }, [user]);
+  }, [user, clientId]);
 
   const statusOptions = [
     { value: 'all', label: t('client.allStatuses') },
@@ -106,8 +106,8 @@ const ClientServices = () => {
   const filteredServices = services
     .filter(service => {
       const matchesSearch = service.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           service.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           service.id.toLowerCase().includes(searchTerm.toLowerCase());
+        service.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        service.id.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesStatus = statusFilter === 'all' || service.status === statusFilter;
       return matchesSearch && matchesStatus;
     })
@@ -259,8 +259,7 @@ const ClientServices = () => {
                   <Listbox.Option
                     key={option.value}
                     className={({ active }) =>
-                      `relative cursor-default select-none py-2 pl-10 pr-4 ${
-                        active ? 'bg-primary-600 text-white' : 'text-gray-300'
+                      `relative cursor-default select-none py-2 pl-10 pr-4 ${active ? 'bg-primary-600 text-white' : 'text-gray-300'
                       }`
                     }
                     value={option.value}
@@ -299,8 +298,7 @@ const ClientServices = () => {
                   <Listbox.Option
                     key={option.value}
                     className={({ active }) =>
-                      `relative cursor-default select-none py-2 pl-10 pr-4 ${
-                        active ? 'bg-primary-600 text-white' : 'text-gray-300'
+                      `relative cursor-default select-none py-2 pl-10 pr-4 ${active ? 'bg-primary-600 text-white' : 'text-gray-300'
                       }`
                     }
                     value={option.value}
@@ -358,7 +356,7 @@ const ClientServices = () => {
                         </div>
                       </div>
                     </div>
-                    
+
                     {/* Deliverables */}
                     <div className="mt-4">
                       <h5 className="text-sm font-medium text-gray-300 mb-2">{t('client.deliverables')}</h5>
@@ -376,14 +374,14 @@ const ClientServices = () => {
                       <div className="mt-4 flex items-center space-x-4">
                         <span className="text-sm text-gray-400">{t('client.invoice')}: {service.invoice}</span>
                         <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getInvoiceStatusColor(service.invoiceStatus)}`}>
-                          {service.invoiceStatus === 'paid' ? t('client.paid') : 
-                           service.invoiceStatus === 'pending' ? t('client.pending') : 
-                           service.invoiceStatus === 'overdue' ? t('client.overdue') : service.invoiceStatus}
+                          {service.invoiceStatus === 'paid' ? t('client.paid') :
+                            service.invoiceStatus === 'pending' ? t('client.pending') :
+                              service.invoiceStatus === 'overdue' ? t('client.overdue') : service.invoiceStatus}
                         </span>
                       </div>
                     )}
                   </div>
-                  
+
                   {/* Actions */}
                   <div className="flex flex-col sm:flex-row gap-2 mt-4 lg:mt-0 lg:ml-6">
                     <button className="flex items-center justify-center px-3 py-2 bg-gray-600 hover:bg-gray-500 text-white rounded-lg transition-colors">
@@ -407,7 +405,7 @@ const ClientServices = () => {
               </div>
             ))}
           </div>
-          
+
           {filteredServices.length === 0 && (
             <div className="text-center py-12">
               <WrenchScrewdriverIcon className="mx-auto h-12 w-12 text-gray-400" />
