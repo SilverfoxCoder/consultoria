@@ -2,13 +2,12 @@ import { API_CONFIG } from '../config/api';
 
 class AuthService {
   constructor() {
-    this.baseURL = API_CONFIG.BASE_URL;
-    this.headers = API_CONFIG.HEADERS;
+    // Usar configuración directamente
   }
 
   // Método auxiliar para realizar peticiones
   async request(endpoint, options = {}) {
-    const url = `${this.baseURL}${endpoint}`;
+    const url = `${API_CONFIG.BASE_URL}${endpoint}`;
     
     try {
       console.log('🔍 AuthService: Realizando petición');
@@ -18,7 +17,7 @@ class AuthService {
 
       const response = await fetch(url, {
         headers: {
-          ...this.headers,
+          ...API_CONFIG.HEADERS,
           ...options.headers,
         },
         credentials: 'include',
