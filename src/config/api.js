@@ -1,7 +1,7 @@
 // Configuración de la API para comunicación REST con Spring Boot
 export const API_CONFIG = {
   // BASE_URL: process.env.REACT_APP_API_BASE_URL || 'http://localhost:8080/api',
-  BASE_URL: 'https://back-fkxeqe64.b4a.run/api',
+  BASE_URL: 'https://back-42ulc873.b4a.run/api',
   TIMEOUT: 10000,
   RETRY_ATTEMPTS: 3,
   RETRY_DELAY: 1000,
@@ -16,12 +16,12 @@ export const API_CONFIG = {
 export const handleCorsError = (error) => {
   if (error.message.includes('CORS')) {
     console.error('Error de CORS. Verifica que el backend esté configurado correctamente.');
-    return 'Error de conexión con el servidor. Verifica que el backend esté ejecutándose en http://localhost:8080.';
+    return 'Error de conexión con el servidor. Verifica que el backend esté accesible.';
   }
   
   if (error.message.includes('Failed to fetch')) {
     console.error('Error de conexión. Verifica que el backend esté ejecutándose.');
-    return 'No se pudo conectar con el servidor. Verifica que el backend esté ejecutándose en http://localhost:8080.';
+    return 'No se pudo conectar con el servidor. Verifica tu conexión a internet o el estado del backend.';
   }
   
   return error.message;
