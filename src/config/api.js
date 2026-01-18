@@ -1,13 +1,14 @@
 // Configuración de la API para comunicación REST con Spring Boot
 export const API_CONFIG = {
   // BASE_URL: process.env.REACT_APP_API_BASE_URL || 'http://localhost:8080/api',
-  BASE_URL: 'http://localhost:8080/api', // Forzando local para debug
+  BASE_URL: 'https://back-fkxeqe64.b4a.run/api',
   TIMEOUT: 10000,
   RETRY_ATTEMPTS: 3,
   RETRY_DELAY: 1000,
   HEADERS: {
     'Content-Type': 'application/json',
-    'Accept': 'application/json'
+    'Accept': 'application/json',
+    'X-User-Id': '1' // Simulating Admin user for testing
   }
 };
 

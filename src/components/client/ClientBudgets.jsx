@@ -43,8 +43,6 @@ const ClientBudgets = () => {
       } finally {
         setIsLoading(false);
       }
-
-
     };
 
     loadBudgets();
