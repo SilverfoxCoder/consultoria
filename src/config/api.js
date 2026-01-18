@@ -14,14 +14,20 @@ export const API_CONFIG = {
 
 // Función para manejar errores de CORS y conexión
 export const handleCorsError = (error) => {
+  console.error('🔍 API Error Details:', {
+    message: error.message,
+    name: error.name,
+    stack: error.stack
+  });
+
   if (error.message.includes('CORS')) {
-    console.error('Error de CORS. Verifica que el backend esté configurado correctamente.');
-    return 'Error de conexión con el servidor. Verifica que el backend esté accesible.';
+    console.error('❌ Error de CORS detectado. Verifica que el backend (localhost:8080) permita el origen actual.');
+    return 'Error de conexión (CORS). El backend rechazó la conexión.';
   }
   
   if (error.message.includes('Failed to fetch')) {
-    console.error('Error de conexión. Verifica que el backend esté ejecutándose.');
-    return 'No se pudo conectar con el servidor. Verifica tu conexión a internet o el estado del backend.';
+    console.error('❌ Error de conexión (Failed to fetch). Posibles causas: Backend apagado, puerto incorrecto, o red bloqueada.');
+    return 'No se pudo conectar con el servidor. Verifica que el backend esté ejecutándose en el puerto 8080.';
   }
   
   return error.message;

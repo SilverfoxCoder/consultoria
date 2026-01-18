@@ -1,12 +1,8 @@
 import { API_CONFIG, handleCorsError } from '../config/api';
 
 class UserService {
-  constructor() {
-    this.baseURL = API_CONFIG.BASE_URL;
-  }
-
   async request(endpoint, options = {}) {
-    const url = `${this.baseURL}${endpoint}`;
+    const url = `${API_CONFIG.BASE_URL}${endpoint}`;
     console.log(`📡 UserService: Request to ${url}`);
     const config = {
       headers: API_CONFIG.HEADERS,
@@ -132,7 +128,7 @@ class UserService {
   // Autenticación con backend Spring Boot
   async authenticate(email, password) {
     try {
-      const response = await fetch(`${this.baseURL}/auth/login`, {
+      const response = await fetch(`${API_CONFIG.BASE_URL}/auth/login`, {
         method: 'POST',
         headers: API_CONFIG.HEADERS,
         body: JSON.stringify({
