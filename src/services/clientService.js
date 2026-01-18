@@ -103,6 +103,7 @@ class ClientService {
       address: data.address?.trim() || '',
       city: data.city?.trim() || '',
       country: data.country?.trim() || '',
+      website: data.website?.trim() || '',
       notes: data.notes?.trim() || '',
       totalRevenue: parseFloat(data.totalRevenue) || 0,
       totalProjects: parseInt(data.totalProjects) || 0,
