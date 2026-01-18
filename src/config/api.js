@@ -7,8 +7,7 @@ export const API_CONFIG = {
   RETRY_DELAY: 1000,
   HEADERS: {
     'Content-Type': 'application/json',
-    'Accept': 'application/json',
-    'X-User-Id': '1' // Simulating Admin user for testing
+    'Accept': 'application/json'
   }
 };
 
