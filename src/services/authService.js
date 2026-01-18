@@ -1,9 +1,7 @@
 import { API_CONFIG } from '../config/api';
 
 class AuthService {
-  constructor() {
-    // Usar configuración directamente
-  }
+
 
   // Método auxiliar para realizar peticiones
   async request(endpoint, options = {}) {
