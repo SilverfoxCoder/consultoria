@@ -23,14 +23,13 @@ const ClientServices = () => {
   // Estados para datos
   const [services, setServices] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [sortBy, setSortBy] = useState('date');
   const [isRequestModalOpen, setIsRequestModalOpen] = useState(false);
 
   // Cargar datos
-  const loadServices = async () => {
+  const loadServices = React.useCallback(async () => {
     try {
       setIsLoading(true);
       // Ensure we have a valid ID. If not logged in, fallback to 1 for demo purposes if needed
@@ -38,22 +37,20 @@ const ClientServices = () => {
       const finalClientId = clientId || user?.id || 1;
       const data = await serviceService.getServicesByClient(finalClientId);
       setServices(data || []);
-      setError('');
     } catch (err) {
       console.error('Error loading services:', err);
       // Don't show critical error to user if it's just a fetch issue, 
       // maybe show empty state or toast. But for now, keeping error state 
       // but making it less aggressive if needed.
-      setError('No se pudieron cargar los servicios. Mostrando datos locales si existen.');
       setServices([]); // Clear or keep previous
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [clientId, user]);
 
   useEffect(() => {
     loadServices();
-  }, [user, clientId]);
+  }, [loadServices]);
 
   const statusOptions = [
     { value: 'all', label: t('client.allStatuses') },
