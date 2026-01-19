@@ -14,6 +14,8 @@ import { ChevronUpDownIcon, CheckIcon as CheckIconSolid } from '@heroicons/react
 import { serviceService } from '../../services/serviceService';
 import { useAuth } from '../../contexts/AuthContext';
 
+import RequestServiceModal from './RequestServiceModal';
+
 const ClientServices = () => {
   const { t } = useTranslations();
   const { user, clientId } = useAuth();
@@ -25,23 +27,31 @@ const ClientServices = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [sortBy, setSortBy] = useState('date');
+  const [isRequestModalOpen, setIsRequestModalOpen] = useState(false);
 
-  // Cargar datos al montar el componente
+  // Cargar datos
+  const loadServices = async () => {
+    try {
+      setIsLoading(true);
+      // Ensure we have a valid ID. If not logged in, fallback to 1 for demo purposes if needed
+      // or handle auth check strictly.
+      const finalClientId = clientId || user?.id || 1;
+      const data = await serviceService.getServicesByClient(finalClientId);
+      setServices(data || []);
+      setError('');
+    } catch (err) {
+      console.error('Error loading services:', err);
+      // Don't show critical error to user if it's just a fetch issue, 
+      // maybe show empty state or toast. But for now, keeping error state 
+      // but making it less aggressive if needed.
+      setError('No se pudieron cargar los servicios. Mostrando datos locales si existen.');
+      setServices([]); // Clear or keep previous
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const loadServices = async () => {
-      try {
-        setIsLoading(true);
-        const finalClientId = clientId || user?.id || 1;
-        const data = await serviceService.getServicesByClient(finalClientId);
-        setServices(data);
-      } catch (err) {
-        setError('Error al cargar los servicios');
-        console.error('Error loading services:', err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
     loadServices();
   }, [user, clientId]);
 
@@ -105,9 +115,10 @@ const ClientServices = () => {
 
   const filteredServices = services
     .filter(service => {
-      const matchesSearch = service.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        service.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        service.id.toLowerCase().includes(searchTerm.toLowerCase());
+      if (!service) return false;
+      const matchesSearch = (service.title || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (service.description || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (service.id || '').toString().toLowerCase().includes(searchTerm.toLowerCase());
       const matchesStatus = statusFilter === 'all' || service.status === statusFilter;
       return matchesSearch && matchesStatus;
     })
@@ -116,11 +127,11 @@ const ClientServices = () => {
         case 'date':
           return new Date(b.startDate) - new Date(a.startDate);
         case 'amount':
-          return b.amount - a.amount;
+          return (b.amount || 0) - (a.amount || 0);
         case 'status':
-          return a.status.localeCompare(b.status);
+          return (a.status || '').localeCompare(b.status || '');
         case 'title':
-          return a.title.localeCompare(b.title);
+          return (a.title || '').localeCompare(b.title || '');
         default:
           return 0;
       }
@@ -137,19 +148,17 @@ const ClientServices = () => {
     );
   }
 
-  // Mostrar error
-  if (error) {
-    return (
-      <div className="space-y-6">
-        <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-4">
-          <p className="text-red-400">{error}</p>
-        </div>
-      </div>
-    );
-  }
+  // Error state is handled within the main view now to show partial data or empty state instead of full block
+  // if (error) { ... }
 
   return (
     <div className="space-y-6">
+      <RequestServiceModal
+        isOpen={isRequestModalOpen}
+        onClose={() => setIsRequestModalOpen(false)}
+        onServiceCreated={loadServices}
+      />
+
       {/* Header */}
       <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
@@ -166,7 +175,10 @@ const ClientServices = () => {
               <CurrencyDollarIcon className="h-5 w-5 mr-2" />
               {t('client.viewInvoices')}
             </button>
-            <button className="flex items-center px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-colors">
+            <button
+              onClick={() => setIsRequestModalOpen(true)}
+              className="flex items-center px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-colors"
+            >
               <WrenchScrewdriverIcon className="h-5 w-5 mr-2" />
               {t('client.requestService')}
             </button>

@@ -6,6 +6,7 @@ import ClientManagement from './admin/ClientManagement';
 import ReportsAnalytics from './admin/ReportsAnalytics';
 import Settings from './admin/Settings';
 import BudgetManagement from './admin/BudgetManagement';
+import Prospects from './admin/Prospects';
 import TestConnection from './TestConnection';
 import SystemStatus from './SystemStatus';
 import LanguageSelector from './LanguageSelector';
@@ -47,6 +48,8 @@ const Dashboard = ({ onBack }) => {
       setCurrentView('reports');
     } else if (actionId === 'settings') {
       setCurrentView('settings');
+    } else if (actionId === 'prospects') {
+      setCurrentView('prospects');
     }
   };
 
@@ -159,6 +162,17 @@ const Dashboard = ({ onBack }) => {
         </svg>
       ),
       color: 'from-purple-500 to-purple-600'
+    },
+    {
+      id: 'prospects',
+      title: 'Prospectos (Bot)',
+      description: 'Buscar leads automáticamente',
+      icon: (
+        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+        </svg>
+      ),
+      color: 'from-pink-500 to-pink-600'
     },
     {
       id: 'settings',
@@ -441,6 +455,52 @@ const Dashboard = ({ onBack }) => {
         </div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <Settings defaultTab={settingsTab} />
+        </div>
+      </div>
+    );
+  }
+
+  if (currentView === 'prospects') {
+    return (
+      <div className="h-screen flex flex-col overflow-hidden relative z-10">
+        {/* Header para Prospects */}
+        <div className="bg-black/40 backdrop-blur-sm border-b border-white/20 flex-none">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-4">
+                <button
+                  onClick={handleBackToDashboard}
+                  className="flex items-center space-x-2 text-gray-300 hover:text-white transition-colors duration-200"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                  </svg>
+                  <span className="font-medium">Volver al Dashboard</span>
+                </button>
+              </div>
+
+              <div className="flex items-center space-x-4">
+                <AdminNotificationBadge onNavigateToNotifications={handleNavigateToNotifications} />
+                <LanguageSelector />
+                <div className="text-right">
+                  <p className="text-sm text-gray-300">{t('dashboard.welcome')}</p>
+                  <p className="text-white font-medium">{user?.name}</p>
+                </div>
+                <button
+                  onClick={handleLogout}
+                  className="flex items-center space-x-2 text-gray-300 hover:text-red-400 transition-colors duration-200"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                  </svg>
+                  <span>{t('dashboard.logout')}</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="flex-1 overflow-hidden">
+          <Prospects />
         </div>
       </div>
     );

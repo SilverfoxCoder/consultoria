@@ -1,10 +1,11 @@
+import { useCallback } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { translations } from '../translations/translations';
 
 export const useTranslations = () => {
   const { currentLanguage } = useLanguage();
   
-  const t = (key) => {
+  const t = useCallback((key) => {
     const keys = key.split('.');
     let value = translations[currentLanguage];
     
@@ -18,7 +19,7 @@ export const useTranslations = () => {
     }
     
     return value;
-  };
+  }, [currentLanguage]);
 
   return {
     t,

@@ -1,9 +1,15 @@
 import { api } from '../config/api';
+import { mockDataService } from './mockDataService';
 
 export const serviceService = {
   // Obtener todos los servicios
   getAllServices: async () => {
-    return await api.get('/services');
+    try {
+      return await api.get('/services');
+    } catch (error) {
+      console.warn('API error, using mock data:', error);
+      return mockDataService.getMockServices();
+    }
   },
 
   // Obtener servicio por ID
@@ -23,12 +29,28 @@ export const serviceService = {
 
   // Obtener servicios por cliente
   getServicesByClient: async (clientId) => {
-    return await api.get(`/services/client/${clientId}`);
+    try {
+      const response = await api.get(`/services/client/${clientId}`);
+      // If response is empty or null, return mock data for demonstration
+      if (!response || (Array.isArray(response) && response.length === 0)) {
+         console.log('No services found from API, using mock data for demo');
+         return mockDataService.getMockServices();
+      }
+      return response;
+    } catch (error) {
+      console.warn('Error fetching services, using fallback mock data:', error);
+      return mockDataService.getMockServices();
+    }
   },
 
   // Crear nuevo servicio
   createService: async (serviceData) => {
-    return await api.post('/services', serviceData);
+    try {
+      return await api.post('/services', serviceData);
+    } catch (error) {
+      console.warn('API error creating service, using mock:', error);
+      return mockDataService.createMockService(serviceData);
+    }
   },
 
   // Actualizar servicio
