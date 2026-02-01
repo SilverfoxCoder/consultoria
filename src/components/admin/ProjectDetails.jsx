@@ -19,7 +19,9 @@ import {
   CheckIcon
 } from '@heroicons/react/24/outline';
 import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../contexts/AuthContext';
 import { taskService } from '../../services/taskService';
+import { projectService } from '../../services/projectService';
 
 const ProjectDetails = ({ project, onBack, onUpdate }) => {
   const { user } = useAuth();
@@ -33,17 +35,22 @@ const ProjectDetails = ({ project, onBack, onUpdate }) => {
   const [showCommentsModal, setShowCommentsModal] = useState(false);
 
   const [tasks, setTasks] = useState([]);
+  const [teamMembers, setTeamMembers] = useState([]);
   const [error, setError] = useState(null);
 
   const loadTasks = React.useCallback(async () => {
     if (!project?.id) return;
     try {
       setError(null);
-      const data = await taskService.getTasksByProject(project.id);
-      setTasks(data);
+      const [tasksData, teamData] = await Promise.all([
+        taskService.getTasksByProject(project.id),
+        projectService.getProjectTeam(project.id)
+      ]);
+      setTasks(tasksData);
+      setTeamMembers(teamData);
     } catch (error) {
-      console.error('Error loading tasks:', error);
-      setError('Error cargando tareas. Es posible que existan datos incompatibles en la base de datos (ej: "Media" vs "MEDIA").');
+      console.error('Error loading tasks or team:', error);
+      setError('Error cargando datos del proyecto.');
     }
   }, [project?.id]);
 
@@ -333,6 +340,24 @@ const ProjectDetails = ({ project, onBack, onUpdate }) => {
                     <p>Inicio: {new Date(project.startDate).toLocaleDateString()}</p>
                     <p>Fin: {new Date(project.endDate).toLocaleDateString()}</p>
                   </div>
+                </div>
+
+                <div>
+                  <p className="text-sm text-gray-400 mb-1">Equipo</p>
+                  {teamMembers.length > 0 ? (
+                    <div className="flex -space-x-2 overflow-hidden">
+                      {teamMembers.map((member) => (
+                        <div key={member.id} className="relative inline-block h-8 w-8 rounded-full bg-gray-700 border-2 border-gray-800 flex items-center justify-center" title={`${member.name} (${member.role})`}>
+                          <span className="text-xs font-medium text-white">{member.name.charAt(0)}</span>
+                        </div>
+                      ))}
+                      <div className="ml-4 flex items-center">
+                        <span className="text-xs text-gray-400">{teamMembers.length} miembro(s)</span>
+                      </div>
+                    </div>
+                  ) : (
+                    <p className="text-sm text-gray-500">Sin equipo asignado</p>
+                  )}
                 </div>
               </div>
             </div>

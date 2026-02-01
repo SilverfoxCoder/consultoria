@@ -29,6 +29,7 @@ const ClientDashboard = () => {
   const [stats, setStats] = useState([]);
   const [recentBudgets, setRecentBudgets] = useState([]);
   const [activeProjects, setActiveProjects] = useState([]);
+  const [recentTickets, setRecentTickets] = useState([]);
 
   // Estados para modales
   const [showBudgetModal, setShowBudgetModal] = useState(false);
@@ -111,6 +112,7 @@ const ClientDashboard = () => {
         setStats(statsData);
         setRecentBudgets(budgetsData.slice(0, 3));
         setActiveProjects(projectsData.filter(p => p.status === 'En Progreso').slice(0, 2));
+        setRecentTickets(ticketsData.slice(0, 3));
       } catch (error) {
         console.log('❌ Error al cargar datos - usando datos mockeados');
         console.error('Error:', error);
@@ -338,25 +340,98 @@ const ClientDashboard = () => {
                     </span>
                   </div>
                   <div className="space-y-2">
-                    <div className="flex justify-between text-sm">
+                    <div className="text-sm text-gray-300 mt-2 line-clamp-2">
+                      {project.description || t('client.noDescription')}
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4 mt-3 p-3 bg-gray-800 rounded-lg">
+                      <div>
+                        <p className="text-xs text-gray-400">Inversión Total</p>
+                        <p className="text-sm font-medium text-white">€{project.budget?.toLocaleString()}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-400">Ejecutado</p>
+                        <p className="text-sm font-medium text-white">€{project.spent?.toLocaleString()}</p>
+                      </div>
+                    </div>
+
+                    <div className="flex justify-between text-sm mt-3">
                       <span className="text-gray-400">{t('client.progress')}</span>
                       <span className="text-white">{project.progress}%</span>
                     </div>
-                    <div className="w-full bg-gray-700 rounded-full h-2">
+                    <div className="w-full bg-gray-700 rounded-full h-2 mt-1">
                       <div
                         className="bg-primary-500 h-2 rounded-full transition-all duration-300"
                         style={{ width: `${project.progress}%` }}
                       />
                     </div>
-                    <div className="flex items-center text-xs text-gray-400">
+                    <div className="flex items-center text-xs text-gray-400 mt-2">
                       <ClockIcon className="h-4 w-4 mr-1" />
-                      {t('client.dueDate')}: {project.dueDate}
+                      {t('client.dueDate')}: {new Date(project.endDate).toLocaleDateString()}
                     </div>
                   </div>
                 </div>
               ))}
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Tickets Section */}
+      <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700">
+        <div className="p-6 border-b border-gray-700">
+          <div className="flex items-center justify-between">
+            <h3 className="text-lg font-semibold text-white">
+              {t('client.openTickets') || 'Incidencias y Soporte'}
+            </h3>
+            <button onClick={() => setShowTicketModal(true)} className="text-primary-400 hover:text-primary-300 text-sm font-medium">
+              + Nuevo Ticket
+            </button>
+          </div>
+        </div>
+        <div className="p-6">
+          {recentTickets.length > 0 ? (
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-700">
+                <thead>
+                  <tr>
+                    <th className="px-3 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">ID</th>
+                    <th className="px-3 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Asunto</th>
+                    <th className="px-3 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Estado</th>
+                    <th className="px-3 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Prioridad</th>
+                    <th className="px-3 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Fecha</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-700">
+                  {recentTickets.map((ticket) => (
+                    <tr key={ticket.id}>
+                      <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-400">#{ticket.id}</td>
+                      <td className="px-3 py-4 text-sm text-white">{ticket.subject}</td>
+                      <td className="px-3 py-4 whitespace-nowrap">
+                        <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium 
+                            ${ticket.status === 'open' ? 'bg-green-400/10 text-green-400' :
+                            ticket.status === 'in-progress' ? 'bg-blue-400/10 text-blue-400' : 'bg-gray-400/10 text-gray-400'}`}>
+                          {ticket.status === 'open' ? 'Abierto' : ticket.status === 'in-progress' ? 'En Proceso' : 'Cerrado'}
+                        </span>
+                      </td>
+                      <td className="px-3 py-4 whitespace-nowrap">
+                        <span className={`text-xs font-medium ${ticket.priority === 'high' ? 'text-red-400' :
+                          ticket.priority === 'medium' ? 'text-yellow-400' : 'text-green-400'
+                          }`}>
+                          {ticket.priority?.toUpperCase() || 'MEDIA'}
+                        </span>
+                      </td>
+                      <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-400">
+                        {new Date(ticket.createdAt || Date.now()).toLocaleDateString()}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <p className="text-gray-400 text-sm">No hay tickets recientes.</p>
+          )}
         </div>
       </div>
 
@@ -429,7 +504,7 @@ const ClientDashboard = () => {
         isOpen={showInvoicesModal}
         onClose={() => setShowInvoicesModal(false)}
       />
-    </div>
+    </div >
   );
 };
 

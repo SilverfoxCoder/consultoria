@@ -95,6 +95,11 @@ class ProjectService {
     return this.request('/projects/stats');
   }
 
+  // Obtener equipo del proyecto
+  async getProjectTeam(projectId) {
+    return this.request(`/project-teams/project/${projectId}`);
+  }
+
   // Sanitizar datos del proyecto para enviar al backend
   sanitizeProjectData(data) {
     return {
@@ -111,7 +116,10 @@ class ProjectService {
       jiraEnabled: Boolean(data.jiraEnabled),
       jiraUrl: data.jiraUrl?.trim() || null,
       jiraProjectKey: data.jiraProjectKey?.trim() || null,
-      jiraBoardId: data.jiraBoardId?.trim() || null
+      jiraUrl: data.jiraUrl?.trim() || null,
+      jiraProjectKey: data.jiraProjectKey?.trim() || null,
+      jiraBoardId: data.jiraBoardId?.trim() || null,
+      teamMemberIds: Array.isArray(data.teamMemberIds) ? data.teamMemberIds : []
     };
   }
 }

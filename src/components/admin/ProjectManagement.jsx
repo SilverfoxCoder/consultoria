@@ -11,7 +11,9 @@ import {
   EyeIcon
 } from '@heroicons/react/24/outline';
 import { projectService } from '../../services/projectService';
+import { projectService } from '../../services/projectService';
 import { clientService } from '../../services/clientService';
+import { userService } from '../../services/userService';
 import ProjectDetails from './ProjectDetails';
 
 const ProjectManagement = () => {
@@ -20,6 +22,7 @@ const ProjectManagement = () => {
   // Estados para gestión de proyectos
   const [projects, setProjects] = useState([]);
   const [clients, setClients] = useState([]);
+  const [users, setUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -36,12 +39,14 @@ const ProjectManagement = () => {
     const loadData = async () => {
       try {
         setIsLoading(true);
-        const [projectsData, clientsData] = await Promise.all([
+        const [projectsData, clientsData, usersData] = await Promise.all([
           projectService.getAllProjects(),
-          clientService.getAllClients()
+          clientService.getAllClients(),
+          userService.getAllUsers()
         ]);
         setProjects(projectsData);
         setClients(clientsData);
+        setUsers(usersData);
       } catch (err) {
         setError('Error al cargar los datos');
         console.error('Error loading data:', err);
@@ -80,7 +85,10 @@ const ProjectManagement = () => {
     budget: '',
     priority: 'Media',
     description: '',
+    priority: 'Media',
+    description: '',
     team: [],
+    teamMemberIds: [],
     jiraIntegration: {
       enabled: false,
       url: '',
@@ -160,7 +168,10 @@ const ProjectManagement = () => {
       budget: '',
       priority: 'Media',
       description: '',
+      priority: 'Media',
+      description: '',
       team: [],
+      teamMemberIds: [],
       jiraIntegration: {
         enabled: false,
         url: '',
@@ -189,7 +200,9 @@ const ProjectManagement = () => {
       budget: project.budget.toString(),
       priority: project.priority,
       description: project.description,
+      description: project.description,
       team: [...project.team],
+      teamMemberIds: [], // Edit mode logic complexity, keeping empty for now or populate if backend supported it
       jiraIntegration: project.jiraIntegration || {
         enabled: false,
         url: '',
@@ -284,7 +297,8 @@ const ProjectManagement = () => {
         budget: budgetValue,
         spent: 0, // ✅ Add default spent amount
         priority: priorityMapping[formData.priority] || 'MEDIA', // ✅ Convert to uppercase enum
-        description: formData.description || ''
+        description: formData.description || '',
+        teamMemberIds: formData.teamMemberIds
       };
 
       console.log('Sending project data:', projectData);
@@ -314,6 +328,7 @@ const ProjectManagement = () => {
         priority: 'Media',
         description: '',
         team: [],
+        teamMemberIds: [],
         jiraIntegration: {
           enabled: false,
           url: '',
@@ -889,6 +904,41 @@ const ProjectManagement = () => {
                     required
                   />
                 </div>
+
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-200 mb-2">Asignar Equipo</label>
+                  <Listbox
+                    value={formData.teamMemberIds}
+                    onChange={val => setFormData(prev => ({ ...prev, teamMemberIds: val }))}
+                    multiple
+                  >
+                    <div className="relative">
+                      <Listbox.Button className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary-500 text-left min-h-[42px]">
+                        {formData.teamMemberIds.length > 0
+                          ? `${formData.teamMemberIds.length} usuarios seleccionados`
+                          : 'Seleccionar miembros del equipo'}
+                      </Listbox.Button>
+                      <Listbox.Options className="absolute z-50 mt-1 w-full bg-white rounded-lg shadow-lg ring-1 ring-black/10 focus:outline-none max-h-60 overflow-auto">
+                        {users.map(user => (
+                          <Listbox.Option
+                            key={user.id}
+                            value={user.id}
+                            className={({ active, selected }) =>
+                              `cursor-pointer select-none relative py-2 pl-4 pr-4 ${active ? 'bg-gray-100 text-gray-800' : 'text-gray-800'
+                              } ${selected ? 'font-semibold bg-blue-50' : ''}`
+                            }
+                          >
+                            {({ selected }) => (
+                              <span className={`block truncate ${selected ? 'font-medium' : 'font-normal'}`}>
+                                {user.name} {selected ? '✓' : ''}
+                              </span>
+                            )}
+                          </Listbox.Option>
+                        ))}
+                      </Listbox.Options>
+                    </div>
+                  </Listbox>
+                </div>
               </div>
 
               <div>
@@ -1145,8 +1195,8 @@ const ProjectManagement = () => {
                         <td className="px-6 py-4 text-sm text-gray-300">{issue.summary}</td>
                         <td className="px-6 py-4">
                           <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${issue.status === 'Done' ? 'bg-green-500 text-white' :
-                              issue.status === 'In Progress' ? 'bg-yellow-500 text-white' :
-                                'bg-gray-500 text-white'
+                            issue.status === 'In Progress' ? 'bg-yellow-500 text-white' :
+                              'bg-gray-500 text-white'
                             }`}>
                             {issue.status}
                           </span>
@@ -1154,16 +1204,16 @@ const ProjectManagement = () => {
                         <td className="px-6 py-4 text-sm text-gray-300">{issue.assignee}</td>
                         <td className="px-6 py-4">
                           <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${issue.priority === 'High' ? 'bg-red-500 text-white' :
-                              issue.priority === 'Medium' ? 'bg-orange-500 text-white' :
-                                'bg-gray-500 text-white'
+                            issue.priority === 'Medium' ? 'bg-orange-500 text-white' :
+                              'bg-gray-500 text-white'
                             }`}>
                             {issue.priority}
                           </span>
                         </td>
                         <td className="px-6 py-4">
                           <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${issue.type === 'Story' ? 'bg-blue-500 text-white' :
-                              issue.type === 'Bug' ? 'bg-red-500 text-white' :
-                                'bg-gray-500 text-white'
+                            issue.type === 'Bug' ? 'bg-red-500 text-white' :
+                              'bg-gray-500 text-white'
                             }`}>
                             {issue.type}
                           </span>
@@ -1190,8 +1240,8 @@ const ProjectManagement = () => {
                           <p className="text-gray-300 text-sm">{sprint.goal}</p>
                         </div>
                         <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${sprint.state === 'active' ? 'bg-green-500 text-white' :
-                            sprint.state === 'future' ? 'bg-blue-500 text-white' :
-                              'bg-gray-500 text-white'
+                          sprint.state === 'future' ? 'bg-blue-500 text-white' :
+                            'bg-gray-500 text-white'
                           }`}>
                           {sprint.state === 'active' ? t('projectManagement.jira.viewModal.sprints.states.active') :
                             sprint.state === 'future' ? t('projectManagement.jira.viewModal.sprints.states.future') :
