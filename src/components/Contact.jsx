@@ -29,7 +29,7 @@ const Contact = () => {
   // Handler for email click
 
   const handleEmailClick = () => {
-    window.location.href = 'mailto:experienciaitservices@gmail.com';
+    window.location.href = 'mailto:info@xperiecia.com';
   };
 
   return (
@@ -94,7 +94,7 @@ const Contact = () => {
                     onClick={handleEmailClick}
                     className="btn-secondary"
                   >
-                    experienciaitservices@gmail.com
+                    info@xperiecia.com
                   </button>
                 </div>
               </div>

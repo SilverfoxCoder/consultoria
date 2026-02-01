@@ -54,122 +54,63 @@ const ClientDashboard = () => {
           supportService.getTicketsByClient(finalClientId)
         ]);
 
-        // Verificar si el backend respondió correctamente
-        const hasBackendData = budgets.status === 'fulfilled' &&
-          services.status === 'fulfilled' &&
-          projects.status === 'fulfilled' &&
-          tickets.status === 'fulfilled';
+        // Procesar resultados individualmente
+        const budgetsData = budgets.status === 'fulfilled' && Array.isArray(budgets.value) ? budgets.value : [];
+        const servicesData = services.status === 'fulfilled' && Array.isArray(services.value) ? services.value : [];
+        const projectsData = projects.status === 'fulfilled' && Array.isArray(projects.value) ? projects.value : [];
+        const ticketsData = tickets.status === 'fulfilled' && Array.isArray(tickets.value) ? tickets.value : [];
 
-        if (hasBackendData) {
-          console.log('✅ Backend disponible - usando datos reales');
+        // Loggear errores si los hay
+        if (budgets.status === 'rejected') console.error('Error loading budgets:', budgets.reason);
+        if (services.status === 'rejected') console.error('Error loading services:', services.reason);
+        if (projects.status === 'rejected') console.error('Error loading projects:', projects.reason);
+        if (tickets.status === 'rejected') console.error('Error loading tickets:', tickets.reason);
 
-          // Usar datos del backend
-          const budgetsData = Array.isArray(budgets.value) ? budgets.value : [];
-          const servicesData = Array.isArray(services.value) ? services.value : [];
-          const projectsData = Array.isArray(projects.value) ? projects.value : [];
-          const ticketsData = Array.isArray(tickets.value) ? tickets.value : [];
+        console.log('✅ Datos cargados (parcial o totalmente)');
 
-          // Calcular estadísticas reales
-          const statsData = [
-            {
-              name: t('client.activeBudgets'),
-              value: budgetsData.filter(b => b.status === 'pending' || b.status === 'approved').length.toString(),
-              icon: DocumentTextIcon,
-              color: 'text-blue-400',
-              bgColor: 'bg-blue-400/10',
-              change: '+2',
-              changeType: 'positive'
-            },
-            {
-              name: t('client.activeServices'),
-              value: servicesData.filter(s => s.status === 'in-progress' || s.status === 'completed').length.toString(),
-              icon: WrenchScrewdriverIcon,
-              color: 'text-green-400',
-              bgColor: 'bg-green-400/10',
-              change: '+1',
-              changeType: 'positive'
-            },
-            {
-              name: t('client.activeProjects'),
-              value: projectsData.filter(p => p.status === 'En Progreso').length.toString(),
-              icon: FolderIcon,
-              color: 'text-purple-400',
-              bgColor: 'bg-purple-400/10',
-              change: '0',
-              changeType: 'neutral'
-            },
-            {
-              name: t('client.openTickets'),
-              value: ticketsData.filter(t => t.status === 'open').length.toString(),
-              icon: ExclamationTriangleIcon,
-              color: 'text-orange-400',
-              bgColor: 'bg-orange-400/10',
-              change: '-2',
-              changeType: 'negative'
-            }
-          ];
+        // Calcular estadísticas con los datos disponibles (reales o vacíos)
+        const statsData = [
+          {
+            name: t('client.activeBudgets'),
+            value: budgetsData.filter(b => b.status === 'pending' || b.status === 'approved').length.toString(),
+            icon: DocumentTextIcon,
+            color: 'text-blue-400',
+            bgColor: 'bg-blue-400/10',
+            change: '+0', // Dato real no disponible para comparación histórica por ahora
+            changeType: 'neutral'
+          },
+          {
+            name: t('client.activeServices'),
+            value: servicesData.filter(s => s.status === 'in-progress' || s.status === 'completed').length.toString(),
+            icon: WrenchScrewdriverIcon,
+            color: 'text-green-400',
+            bgColor: 'bg-green-400/10',
+            change: '+0',
+            changeType: 'neutral'
+          },
+          {
+            name: t('client.activeProjects'),
+            value: projectsData.filter(p => p.status === 'En Progreso').length.toString(),
+            icon: FolderIcon,
+            color: 'text-purple-400',
+            bgColor: 'bg-purple-400/10',
+            change: '0',
+            changeType: 'neutral'
+          },
+          {
+            name: t('client.openTickets'),
+            value: ticketsData.filter(t => t.status === 'open').length.toString(),
+            icon: ExclamationTriangleIcon,
+            color: 'text-orange-400',
+            bgColor: 'bg-orange-400/10',
+            change: '0',
+            changeType: 'neutral'
+          }
+        ];
 
-          setStats(statsData);
-          setRecentBudgets(budgetsData.slice(0, 3));
-          setActiveProjects(projectsData.filter(p => p.status === 'En Progreso').slice(0, 2));
-        } else {
-          console.log('⚠️ Backend no disponible - usando datos mockeados');
-
-          // Usar datos mockeados
-          const statsData = [
-            {
-              name: t('client.activeBudgets'),
-              value: '2',
-              icon: DocumentTextIcon,
-              color: 'text-blue-400',
-              bgColor: 'bg-blue-400/10',
-              change: '+2',
-              changeType: 'positive'
-            },
-            {
-              name: t('client.activeServices'),
-              value: '2',
-              icon: WrenchScrewdriverIcon,
-              color: 'text-green-400',
-              bgColor: 'bg-green-400/10',
-              change: '+1',
-              changeType: 'positive'
-            },
-            {
-              name: t('client.activeProjects'),
-              value: '2',
-              icon: FolderIcon,
-              color: 'text-purple-400',
-              bgColor: 'bg-purple-400/10',
-              change: '0',
-              changeType: 'neutral'
-            },
-            {
-              name: t('client.openTickets'),
-              value: '1',
-              icon: ExclamationTriangleIcon,
-              color: 'text-orange-400',
-              bgColor: 'bg-orange-400/10',
-              change: '-2',
-              changeType: 'negative'
-            }
-          ];
-
-          const budgetsData = [
-            { id: 'B001', title: 'Presupuesto Web', amount: '€5,000', status: 'approved' },
-            { id: 'B002', title: 'Desarrollo App', amount: '€8,000', status: 'pending' },
-            { id: 'B003', title: 'Consultoría IT', amount: '€3,000', status: 'approved' }
-          ];
-
-          const projectsData = [
-            { id: 'P001', title: 'E-commerce Platform', status: 'En Progreso', progress: 65, dueDate: '2024-02-15' },
-            { id: 'P002', title: 'Mobile App', status: 'En Progreso', progress: 30, dueDate: '2024-03-01' }
-          ];
-
-          setStats(statsData);
-          setRecentBudgets(budgetsData);
-          setActiveProjects(projectsData);
-        }
+        setStats(statsData);
+        setRecentBudgets(budgetsData.slice(0, 3));
+        setActiveProjects(projectsData.filter(p => p.status === 'En Progreso').slice(0, 2));
       } catch (error) {
         console.log('❌ Error al cargar datos - usando datos mockeados');
         console.error('Error:', error);

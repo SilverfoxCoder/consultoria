@@ -29,7 +29,7 @@ const LegalNotice = () => {
                 <p className="mb-2"><strong>Razón Social:</strong> XperiecIA Consulting </p>
                 <p className="mb-2"><strong>NIF:</strong> B-49054881</p>
                 <p className="mb-2"><strong>Domicilio Social:</strong> Madre Teresa de Calcuta 11, Horcajo de Santiago, Cuenca</p>
-                <p className="mb-2"><strong>Email:</strong> experienciaitservices@gmail.com</p>
+                <p className="mb-2"><strong>Email:</strong> info@xperiecia.com</p>
                 <p className="mb-2"><strong>Teléfono:</strong> +34 670 83 58 22</p>
               </div>
             </section>
@@ -131,7 +131,7 @@ const LegalNotice = () => {
                 Para cualquier consulta relacionada con este Aviso Legal, puede contactar con nosotros a través de:
               </p>
               <div className="bg-gray-50 p-6 rounded-lg mt-4">
-                <p className="mb-2"><strong>Email:</strong> experienciaitservices@gmail.com</p>
+                <p className="mb-2"><strong>Email:</strong> info@xperiecia.com</p>
                 <p className="mb-2"><strong>Teléfono:</strong> +34 670 83 58 22</p>
                 <p className="mb-2"><strong>Dirección:</strong> Madre Teresa de Calcuta 11, Horcajo de Santiago, Cuenca</p>
               </div>

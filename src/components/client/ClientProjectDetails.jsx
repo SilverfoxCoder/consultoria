@@ -401,7 +401,7 @@ const ClientProjectDetails = ({ project, onBack }) => {
                       <div className="space-y-3">
                         <div>
                           <p className="text-sm text-gray-400">Email de Soporte</p>
-                          <p className="text-white">soporte@empresa.com</p>
+                          <p className="text-white">info@xperiecia.com</p>
                         </div>
                         <div>
                           <p className="text-sm text-gray-400">Teléfono</p>

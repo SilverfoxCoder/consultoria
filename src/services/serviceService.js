@@ -31,15 +31,16 @@ export const serviceService = {
   getServicesByClient: async (clientId) => {
     try {
       const response = await api.get(`/services/client/${clientId}`);
-      // If response is empty or null, return mock data for demonstration
-      if (!response || (Array.isArray(response) && response.length === 0)) {
-         console.log('No services found from API, using mock data for demo');
-         return mockDataService.getMockServices();
-      }
-      return response;
+      return response || [];
     } catch (error) {
       console.warn('Error fetching services, using fallback mock data:', error);
-      return mockDataService.getMockServices();
+      console.log('Debug: mockDataService:', mockDataService);
+      if (mockDataService && typeof mockDataService.getMockServices === 'function') {
+        return mockDataService.getMockServices();
+      } else {
+        console.error('mockDataService.getMockServices is not a function');
+        return [];
+      }
     }
   },
 

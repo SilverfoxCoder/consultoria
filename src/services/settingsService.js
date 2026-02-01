@@ -12,11 +12,11 @@ const defaultSettings = {
     webhook: 'zdSWGIVBKiTG5QxfdkB5s4iL_MyusCMf4ymHOUlWvDA '
   },
   company: {
-    name: 'XperiencIA Consulting',
-    address: 'Calle Gran Vía 123, Madrid',
+    name: 'XperiecIA Consulting',
+    address: 'C/ Madre Teresa de Calcuta, 11, 16410, Horcajo de Santiago, Cuenca',
     phone: '+34 670 83 58 22',
-    email: 'contacto@xperienciaconsulting.com',
-    website: 'https://xperiecia-consulting.vercel.app'
+    email: 'info@xperiecia.com',
+    website: 'https://www.xperiecia.com'
   }
 };
 

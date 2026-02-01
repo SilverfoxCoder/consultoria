@@ -108,5 +108,34 @@ export const mockDataService = {
   // Mock project deletion
   deleteMockProject: (id) => {
     return Promise.resolve({ success: true, message: "Project deleted successfully" });
+  },
+
+  // Mock services data
+  getMockServices: () => [
+    {
+       id: 1,
+       name: "Consultoría IT",
+       type: "Consultoría",
+       status: "active",
+       clientId: 1,
+       amount: 1500
+    },
+    {
+       id: 2,
+       name: "Desarrollo Web",
+       type: "Desarrollo",
+       status: "pending",
+       clientId: 1,
+       amount: 2500
+    }
+  ],
+
+  // Mock service creation
+  createMockService: (serviceData) => {
+    return Promise.resolve({
+        id: Date.now(),
+        ...serviceData,
+        status: serviceData.status || 'pending'
+    });
   }
 }; 
