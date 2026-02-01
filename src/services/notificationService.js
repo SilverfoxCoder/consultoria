@@ -51,7 +51,14 @@ class NotificationService {
     }
 
     try {
-      this.ws = new WebSocket(`ws://localhost:8080/ws/notifications`);
+      // Construir URL del WebSocket basada en la URL de la API
+      const apiBase = API_CONFIG.BASE_URL;
+      const wsProtocol = apiBase.startsWith('https') ? 'wss' : 'ws';
+      const wsHost = apiBase.replace(/^https?:\/\//, '').replace(/\/api$/, '');
+      const wsUrl = `${wsProtocol}://${wsHost}/ws/notifications`;
+      
+      console.log('🔌 Conectando a WebSocket:', wsUrl);
+      this.ws = new WebSocket(wsUrl);
       
       this.ws.onopen = () => {
         console.log('🔔 WebSocket conectado para notificaciones');
