@@ -47,8 +47,7 @@ export const mockDataService = {
   getMockClients: () => [
     {
       id: 1,
-      name: "TechRetail Solutions",
-      contactPerson: "María García",
+      name: "María García",
       email: "maria.garcia@techretail.com",
       phone: "+34 600 123 456",
       company: "TechRetail Solutions",
@@ -59,8 +58,7 @@ export const mockDataService = {
     },
     {
       id: 2,
-      name: "FinTech Solutions",
-      contactPerson: "Carlos López",
+      name: "Carlos López",
       email: "carlos.lopez@fintech.com",
       phone: "+34 600 789 012",
       company: "FinTech Solutions",
@@ -71,8 +69,7 @@ export const mockDataService = {
     },
     {
       id: 3,
-      name: "DataCorp",
-      contactPerson: "Ana Martínez",
+      name: "Ana Martínez",
       email: "ana.martinez@datacorp.com",
       phone: "+34 600 345 678",
       company: "DataCorp",

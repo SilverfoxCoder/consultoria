@@ -48,7 +48,6 @@ const ClientManagement = () => {
   // Estados para el formulario
   const [formData, setFormData] = useState({
     name: '',
-    contactPerson: '',
     email: '',
     phone: '',
     company: '',
@@ -102,7 +101,6 @@ const ClientManagement = () => {
     const matchesStatus = filterStatus === 'todos' || client.status?.toLowerCase() === filterStatus?.toLowerCase();
     const matchesIndustry = filterIndustry === 'todos' || client.industry?.toLowerCase() === filterIndustry?.toLowerCase();
     const matchesSearch = (client.name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (client.contactPerson || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
       (client.company || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
       (client.email || '').toLowerCase().includes(searchTerm.toLowerCase());
     return matchesStatus && matchesIndustry && matchesSearch;
@@ -131,7 +129,6 @@ const ClientManagement = () => {
     setModalType('add');
     setFormData({
       name: '',
-      contactPerson: '',
       email: '',
       phone: '',
       company: '',
@@ -155,7 +152,6 @@ const ClientManagement = () => {
 
     setFormData({
       name: client.name || '',
-      contactPerson: client.contactPerson || '',
       email: client.email || '',
       phone: client.phone || '',
       company: client.company || '',
@@ -191,7 +187,6 @@ const ClientManagement = () => {
       setSelectedClient(null);
       setFormData({
         name: '',
-        contactPerson: '',
         email: '',
         phone: '',
         company: '',
@@ -468,13 +463,12 @@ const ClientManagement = () => {
                     <tr key={client.id} className="hover:bg-white/5 transition-colors duration-200">
                       <td className="px-6 py-4">
                         <div>
-                          <div className="text-sm font-medium text-white">{client.name || 'Sin nombre'}</div>
-                          <div className="text-sm text-gray-300">{client.company || 'Sin empresa'}</div>
+                          <div className="text-sm font-medium text-white">{client.company || 'Sin empresa'}</div>
                         </div>
                       </td>
                       <td className="px-6 py-4">
                         <div>
-                          <div className="text-sm text-white">{client.contactPerson || 'Sin contacto'}</div>
+                          <div className="text-sm text-white">{client.name || 'Sin contacto'}</div>
                           <div className="text-sm text-gray-300">{client.email || 'Sin email'}</div>
                           <div className="text-sm text-gray-300">{client.phone || 'Sin teléfono'}</div>
                         </div>
@@ -550,23 +544,11 @@ const ClientManagement = () => {
             <form className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-200 mb-2">{t('clientManagement.modal.clientName')}</label>
+                  <label className="block text-sm font-medium text-gray-200 mb-2">{t('clientManagement.modal.contactName') || 'Nombre de Contacto'}</label>
                   <input
                     type="text"
                     name="name"
                     value={formData.name || ''}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-200 mb-2">{t('clientManagement.modal.contactPerson')}</label>
-                  <input
-                    type="text"
-                    name="contactPerson"
-                    value={formData.contactPerson || ''}
                     onChange={handleInputChange}
                     className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
                     required

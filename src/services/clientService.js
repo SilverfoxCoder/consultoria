@@ -94,7 +94,10 @@ class ClientService {
   sanitizeClientData(data) {
     return {
       name: data.name?.trim(),
-      contactPerson: data.contactPerson?.trim() || '',
+      // contactPerson is redundant with name in the new backend structure, 
+      // but we send it mainly for backwards compatibility if needed, 
+      // though the backend ignores it on write.
+      contactPerson: data.name?.trim(), 
       email: data.email?.trim(),
       phone: data.phone?.trim() || '',
       company: data.company?.trim() || '',
