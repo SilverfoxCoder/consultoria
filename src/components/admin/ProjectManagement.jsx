@@ -11,7 +11,6 @@ import {
   EyeIcon
 } from '@heroicons/react/24/outline';
 import { projectService } from '../../services/projectService';
-import { projectService } from '../../services/projectService';
 import { clientService } from '../../services/clientService';
 import { userService } from '../../services/userService';
 import ProjectDetails from './ProjectDetails';

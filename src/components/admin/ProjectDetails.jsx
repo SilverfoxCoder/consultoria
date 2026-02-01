@@ -19,7 +19,6 @@ import {
   CheckIcon
 } from '@heroicons/react/24/outline';
 import { useAuth } from '../../contexts/AuthContext';
-import { useAuth } from '../../contexts/AuthContext';
 import { taskService } from '../../services/taskService';
 import { projectService } from '../../services/projectService';
 
