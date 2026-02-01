@@ -93,14 +93,12 @@ class ClientService {
   // Sanitizar datos del cliente para enviar al backend
   sanitizeClientData(data) {
     return {
-      name: data.name?.trim(),
-      // contactPerson is redundant with name in the new backend structure, 
-      // but we send it mainly for backwards compatibility if needed, 
-      // though the backend ignores it on write.
-      contactPerson: data.name?.trim(), 
+      // User entity: name = Contact Person/User Name
+      name: data.name?.trim(), 
+      // User entity: company = Client/Company Name
+      company: data.company?.trim() || '',
       email: data.email?.trim(),
       phone: data.phone?.trim() || '',
-      company: data.company?.trim() || '',
       industry: data.industry?.trim() || '',
       status: data.status || 'ACTIVO',
       address: data.address?.trim() || '',
@@ -110,9 +108,10 @@ class ClientService {
       notes: data.notes?.trim() || '',
       totalRevenue: parseFloat(data.totalRevenue) || 0,
       totalProjects: parseInt(data.totalProjects) || 0,
-      lastContact: data.lastContact || null
+      lastContact: data.lastContact || null,
+      // contactPerson removed as it's now 'name'
     };
   }
 }
 
-export const clientService = new ClientService(); 
+export const clientService = new ClientService();

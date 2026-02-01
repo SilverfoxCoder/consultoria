@@ -47,10 +47,10 @@ const ClientManagement = () => {
 
   // Estados para el formulario
   const [formData, setFormData] = useState({
-    name: '',
+    name: '', // Contact Name / User Name
+    company: '', // Client Name
     email: '',
     phone: '',
-    company: '',
     industry: 'Tecnología',
     status: 'Prospecto',
     address: '',
@@ -129,9 +129,9 @@ const ClientManagement = () => {
     setModalType('add');
     setFormData({
       name: '',
+      company: '',
       email: '',
       phone: '',
-      company: '',
       industry: 'Tecnología',
       status: 'Prospecto',
       address: '',
@@ -152,9 +152,9 @@ const ClientManagement = () => {
 
     setFormData({
       name: client.name || '',
+      company: client.company || '',
       email: client.email || '',
       phone: client.phone || '',
-      company: client.company || '',
       industry: client.industry || 'Tecnología',
       status: client.status || 'Prospecto',
       address: client.address || '',
@@ -187,9 +187,9 @@ const ClientManagement = () => {
       setSelectedClient(null);
       setFormData({
         name: '',
+        company: '',
         email: '',
         phone: '',
-        company: '',
         industry: 'Tecnología',
         status: 'Prospecto',
         address: '',
@@ -464,6 +464,7 @@ const ClientManagement = () => {
                       <td className="px-6 py-4">
                         <div>
                           <div className="text-sm font-medium text-white">{client.company || 'Sin empresa'}</div>
+                          <div className="text-sm text-gray-300">ID: {client.id}</div>
                         </div>
                       </td>
                       <td className="px-6 py-4">
@@ -544,11 +545,23 @@ const ClientManagement = () => {
             <form className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-200 mb-2">{t('clientManagement.modal.contactName') || 'Nombre de Contacto'}</label>
+                  <label className="block text-sm font-medium text-gray-200 mb-2">{t('clientManagement.modal.contactPerson')}</label>
                   <input
                     type="text"
                     name="name"
                     value={formData.name || ''}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-200 mb-2">{t('clientManagement.modal.company')}</label>
+                  <input
+                    type="text"
+                    name="company"
+                    value={formData.company || ''}
                     onChange={handleInputChange}
                     className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
                     required
@@ -573,18 +586,6 @@ const ClientManagement = () => {
                     type="tel"
                     name="phone"
                     value={formData.phone || ''}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-200 mb-2">{t('clientManagement.modal.company')}</label>
-                  <input
-                    type="text"
-                    name="company"
-                    value={formData.company || ''}
                     onChange={handleInputChange}
                     className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
                     required
