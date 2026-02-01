@@ -55,151 +55,15 @@ class BudgetService {
       console.error(`🔍 Error type:`, error.name);
       console.error(`📚 Error stack:`, error.stack);
       
-      // Manejo específico de errores de red
-      if (error.name === 'TypeError' && error.message.includes('fetch')) {
-        console.log('🔄 Error de conexión, usando datos mock...');
-        this.useMockData = true;
-        return this.handleMockResponse(endpoint, options);
-      }
-      
       if (error.name === 'AbortError') {
         throw new Error('Request timeout. El servidor tardó demasiado en responder.');
       }
       
-      // Para otros errores, intentar usar datos mock
-      console.log('🔄 Error general, usando datos mock...');
-      this.useMockData = true;
-      return this.handleMockResponse(endpoint, options);
+      throw error;
     }
   }
 
-  // Manejar respuestas mock cuando el backend no está disponible
-  handleMockResponse(endpoint, options) {
-    console.log('🎭 Usando datos mock para:', endpoint);
-    
-    if (endpoint === '/budgets' && options.method === 'POST') {
-      const requestData = JSON.parse(options.body);
-      const mockBudget = {
-        id: Date.now(),
-        ...requestData,
-        status: 'PENDIENTE',
-        statusDisplay: 'Pendiente',
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-        responseDate: null,
-        responseNotes: null,
-        approvedBudget: null,
-        approvedTimeline: null
-      };
-      
-      console.log('✅ Presupuesto mock creado:', mockBudget);
-      return mockBudget;
-    }
-    
-    if (endpoint === '/budgets/statistics') {
-      return {
-        total: 3,
-        pending: 1,
-        inReview: 2,
-        approved: 0,
-        rejected: 0
-      };
-    }
-    
-    if (endpoint.startsWith('/budgets/status/')) {
-      const status = endpoint.split('/').pop();
-      const mockBudgets = [
-        {
-          id: 1,
-          title: "Desarrollo de aplicación móvil",
-          description: "App para gestión de citas médicas con integración de calendario",
-          serviceType: "Desarrollo Móvil",
-          budget: 15000,
-          timeline: "3-4 meses",
-          additionalInfo: "Requiere integración con Google Calendar y sistema de pagos",
-          clientId: 2,
-          clientName: "Clínica Médica ABC",
-          status: "EN_REVISION",
-          statusDisplay: "En Revisión",
-          createdAt: "2024-01-15T10:30:00Z",
-          updatedAt: "2024-01-16T14:20:00Z",
-          responseDate: null,
-          responseNotes: null,
-          approvedBudget: null,
-          approvedTimeline: null
-        },
-        {
-          id: 2,
-          title: "Sitio web corporativo",
-          description: "Rediseño completo del sitio web con nueva identidad visual",
-          serviceType: "Desarrollo Web",
-          budget: 8000,
-          timeline: "2-3 meses",
-          additionalInfo: "Necesita ser responsive y optimizado para SEO",
-          clientId: 3,
-          clientName: "Empresa XYZ",
-          status: "EN_REVISION",
-          statusDisplay: "En Revisión",
-          createdAt: "2024-01-14T09:15:00Z",
-          updatedAt: "2024-01-15T16:45:00Z",
-          responseDate: null,
-          responseNotes: null,
-          approvedBudget: null,
-          approvedTimeline: null
-        },
-        {
-          id: 3,
-          title: "Sistema de gestión empresarial",
-          description: "Plataforma completa para gestión de inventario y ventas",
-          serviceType: "Consultoría IT",
-          budget: 25000,
-          timeline: "6-8 meses",
-          additionalInfo: "Incluye capacitación del personal y soporte técnico",
-          clientId: 4,
-          clientName: "Distribuidora Industrial",
-          status: "EN_REVISION",
-          statusDisplay: "En Revisión",
-          createdAt: "2024-01-13T11:00:00Z",
-          updatedAt: "2024-01-14T13:30:00Z",
-          responseDate: null,
-          responseNotes: null,
-          approvedBudget: null,
-          approvedTimeline: null
-        }
-      ];
-      
-      return mockBudgets.filter(budget => budget.status === status);
-    }
-    
-    if (endpoint.startsWith('/budgets/client/')) {
-      const clientId = endpoint.split('/').pop();
-      const mockBudgets = [
-        {
-          id: 1,
-          title: "Desarrollo de aplicación móvil",
-          description: "App para gestión de citas médicas con integración de calendario",
-          serviceType: "Desarrollo Móvil",
-          budget: 15000,
-          timeline: "3-4 meses",
-          additionalInfo: "Requiere integración con Google Calendar y sistema de pagos",
-          clientId: parseInt(clientId),
-          clientName: "Tu Empresa",
-          status: "EN_REVISION",
-          statusDisplay: "En Revisión",
-          createdAt: "2024-01-15T10:30:00Z",
-          updatedAt: "2024-01-16T14:20:00Z",
-          responseDate: null,
-          responseNotes: null,
-          approvedBudget: null,
-          approvedTimeline: null
-        }
-      ];
-      
-      return mockBudgets;
-    }
-    
-    return [];
-  }
+
 
   // Crear un nuevo presupuesto
   async createBudget(budgetData) {

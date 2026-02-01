@@ -114,19 +114,11 @@ export const mockDataService = {
   getMockServices: () => [
     {
        id: 1,
-       name: "Consultoría IT",
-       type: "Consultoría",
-       status: "active",
-       clientId: 1,
-       amount: 1500
-    },
-    {
-       id: 2,
-       name: "Desarrollo Web",
+       name: "Desarrollo Web + SEO",
        type: "Desarrollo",
        status: "pending",
        clientId: 1,
-       amount: 2500
+       amount: 250
     }
   ],
 

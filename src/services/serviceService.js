@@ -32,15 +32,10 @@ export const serviceService = {
     try {
       const response = await api.get(`/services/client/${clientId}`);
       return response || [];
+      return response || [];
     } catch (error) {
-      console.warn('Error fetching services, using fallback mock data:', error);
-      console.log('Debug: mockDataService:', mockDataService);
-      if (mockDataService && typeof mockDataService.getMockServices === 'function') {
-        return mockDataService.getMockServices();
-      } else {
-        console.error('mockDataService.getMockServices is not a function');
-        return [];
-      }
+      console.error('Error fetching services:', error);
+      return [];
     }
   },
 
