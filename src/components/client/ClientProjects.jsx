@@ -67,12 +67,20 @@ const ClientProjects = () => {
   const getStatusColor = (status) => {
     switch (status) {
       case 'planning':
+      case 'planificacion':
+      case 'PLANIFICACION':
         return 'text-blue-400 bg-blue-400/10 border-blue-400/20';
       case 'in-progress':
+      case 'en progreso':
+      case 'EN PROGRESO':
         return 'text-yellow-400 bg-yellow-400/10 border-yellow-400/20';
       case 'completed':
+      case 'completado':
+      case 'COMPLETADO':
         return 'text-green-400 bg-green-400/10 border-green-400/20';
       case 'on-hold':
+      case 'en espera':
+      case 'EN ESPERA':
         return 'text-red-400 bg-red-400/10 border-red-400/20';
       default:
         return 'text-gray-400 bg-gray-400/10 border-gray-400/20';
@@ -82,12 +90,20 @@ const ClientProjects = () => {
   const getStatusText = (status) => {
     switch (status) {
       case 'planning':
+      case 'planificacion':
+      case 'PLANIFICACION':
         return t('client.planning');
       case 'in-progress':
+      case 'en progreso':
+      case 'EN PROGRESO':
         return t('client.inProgress');
       case 'completed':
+      case 'completado':
+      case 'COMPLETADO':
         return t('client.completed');
       case 'on-hold':
+      case 'en espera':
+      case 'EN ESPERA':
         return t('client.onHold');
       default:
         return status;
@@ -127,7 +143,20 @@ const ClientProjects = () => {
       const matchesSearch = title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         description.toLowerCase().includes(searchTerm.toLowerCase()) ||
         id.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesStatus = statusFilter === 'all' || project?.status === statusFilter;
+      const normalizeStatus = (s) => {
+        if (!s) return '';
+        const lower = s.toLowerCase();
+        if (lower === 'planificacion' || lower === 'planning') return 'planning';
+        if (lower === 'en progreso' || lower === 'in-progress' || lower === 'in_progress') return 'in-progress';
+        if (lower === 'completado' || lower === 'completed') return 'completed';
+        if (lower === 'en espera' || lower === 'on-hold' || lower === 'on_hold') return 'on-hold';
+        return lower;
+      };
+
+
+
+      const projectStatus = normalizeStatus(project?.status);
+      const matchesStatus = statusFilter === 'all' || projectStatus === statusFilter;
       return matchesSearch && matchesStatus;
     })
     .sort((a, b) => {
@@ -457,7 +486,7 @@ const ClientProjects = () => {
                   <div>
                     <h5 className="text-sm font-medium text-gray-300 mb-3">{t('client.deliverables')}</h5>
                     <div className="space-y-2">
-                      {project.deliverables.map((deliverable, index) => (
+                      {(project?.deliverables || []).map((deliverable, index) => (
                         <div key={index} className="flex items-center justify-between p-2 bg-gray-600/30 rounded">
                           <div className="flex items-center space-x-2">
                             <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getTaskStatusColor(deliverable.status)}`}>

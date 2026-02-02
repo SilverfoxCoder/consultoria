@@ -66,12 +66,20 @@ const ClientBudgets = () => {
   const getStatusColor = (status) => {
     switch (status) {
       case 'pending':
+      case 'pendiente':
+      case 'PENDIENTE':
         return 'text-yellow-400 bg-yellow-400/10 border-yellow-400/20';
       case 'approved':
+      case 'aprobado':
+      case 'APROBADO':
         return 'text-green-400 bg-green-400/10 border-green-400/20';
       case 'rejected':
+      case 'rechazado':
+      case 'RECHAZADO':
         return 'text-red-400 bg-red-400/10 border-red-400/20';
       case 'expired':
+      case 'expirado':
+      case 'EXPIRADO':
         return 'text-gray-400 bg-gray-400/10 border-gray-400/20';
       default:
         return 'text-gray-400 bg-gray-400/10 border-gray-400/20';
@@ -81,12 +89,20 @@ const ClientBudgets = () => {
   const getStatusText = (status) => {
     switch (status) {
       case 'pending':
+      case 'pendiente':
+      case 'PENDIENTE':
         return t('client.pending');
       case 'approved':
+      case 'aprobado':
+      case 'APROBADO':
         return t('client.approved');
       case 'rejected':
+      case 'rechazado':
+      case 'RECHAZADO':
         return t('client.rejected');
       case 'expired':
+      case 'expirado':
+      case 'EXPIRADO':
         return t('client.expired');
       default:
         return status;
@@ -103,10 +119,22 @@ const ClientBudgets = () => {
       const id = budget.id || '';
       const status = budget.status || '';
 
+      const normalizeStatus = (s) => {
+        if (!s) return '';
+        const lower = s.toLowerCase();
+        if (lower === 'pendiente' || lower === 'pending') return 'pending';
+        if (lower === 'aprobado' || lower === 'approved') return 'approved';
+        if (lower === 'rechazado' || lower === 'rejected') return 'rejected';
+        if (lower === 'expirado' || lower === 'expired') return 'expired';
+        return lower;
+      };
+
       const matchesSearch = title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         description.toLowerCase().includes(searchTerm.toLowerCase()) ||
         id.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesStatus = statusFilter === 'all' || status === statusFilter;
+
+      const budgetStatus = normalizeStatus(status);
+      const matchesStatus = statusFilter === 'all' || budgetStatus === statusFilter;
       return matchesSearch && matchesStatus;
     })
     .sort((a, b) => {

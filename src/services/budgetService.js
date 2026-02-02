@@ -37,11 +37,9 @@ class BudgetService {
         const errorText = await response.text();
         console.log(`❌ Error response:`, errorText);
         
-        // Si es un error 400, intentar usar datos mock
+        // Si es un error 400, lanzar el error
         if (response.status === 400) {
-          console.log('🔄 Backend devolvió error 400, usando datos mock...');
-          this.useMockData = true;
-          return this.handleMockResponse(endpoint, options);
+          throw new Error(errorText || 'Error en la petición (400)');
         }
         
         throw new Error(`HTTP error! status: ${response.status}`);

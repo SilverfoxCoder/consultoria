@@ -70,6 +70,11 @@ const ClientDashboard = () => {
         console.log('✅ Datos cargados (parcial o totalmente)');
 
         // Calcular estadísticas con los datos disponibles (reales o vacíos)
+        const isActiveProject = (p) => {
+          const status = p.status?.toUpperCase() || '';
+          return status === 'EN PROGRESO' || status === 'PLANIFICACION' || status === 'IN-PROGRESS' || status === 'PLANNING';
+        };
+
         const statsData = [
           {
             name: t('client.activeBudgets'),
@@ -91,7 +96,7 @@ const ClientDashboard = () => {
           },
           {
             name: t('client.activeProjects'),
-            value: projectsData.filter(p => p.status === 'En Progreso').length.toString(),
+            value: projectsData.filter(isActiveProject).length.toString(),
             icon: FolderIcon,
             color: 'text-purple-400',
             bgColor: 'bg-purple-400/10',
@@ -111,71 +116,15 @@ const ClientDashboard = () => {
 
         setStats(statsData);
         setRecentBudgets(budgetsData.slice(0, 3));
-        setActiveProjects(projectsData.filter(p => p.status === 'En Progreso').slice(0, 2));
+        setActiveProjects(projectsData.filter(isActiveProject).slice(0, 2));
         setRecentTickets(ticketsData.slice(0, 3));
       } catch (error) {
-        console.log('❌ Error al cargar datos - usando datos mockeados');
-        console.error('Error:', error);
-
-        // Usar datos mockeados por defecto
-        const activeBudgets = 0;
-        const activeServices = 0;
-        const activeProjects = 0;
-        const openTickets = 0;
-
-        const statsData = [
-          {
-            name: t('client.activeBudgets'),
-            value: activeBudgets.toString(),
-            icon: DocumentTextIcon,
-            color: 'text-blue-400',
-            bgColor: 'bg-blue-400/10',
-            change: activeBudgets > 0 ? `+${activeBudgets}` : '0',
-            changeType: activeBudgets > 0 ? 'positive' : 'neutral'
-          },
-          {
-            name: t('client.activeServices'),
-            value: activeServices.toString(),
-            icon: WrenchScrewdriverIcon,
-            color: 'text-green-400',
-            bgColor: 'bg-green-400/10',
-            change: activeServices > 0 ? `+${activeServices}` : '0',
-            changeType: activeServices > 0 ? 'positive' : 'neutral'
-          },
-          {
-            name: t('client.activeProjects'),
-            value: activeProjects.toString(),
-            icon: FolderIcon,
-            color: 'text-purple-400',
-            bgColor: 'bg-purple-400/10',
-            change: activeProjects > 0 ? `+${activeProjects}` : '0',
-            changeType: activeProjects > 0 ? 'positive' : 'neutral'
-          },
-          {
-            name: t('client.openTickets'),
-            value: openTickets.toString(),
-            icon: ExclamationTriangleIcon,
-            color: 'text-orange-400',
-            bgColor: 'bg-orange-400/10',
-            change: openTickets > 0 ? `+${openTickets}` : '0',
-            changeType: openTickets > 0 ? 'positive' : 'neutral'
-          }
-        ];
-
-        const budgetsData = [
-          { id: 'B001', title: 'Presupuesto Web', amount: '€5,000', status: 'approved' },
-          { id: 'B002', title: 'Desarrollo App', amount: '€8,000', status: 'pending' },
-          { id: 'B003', title: 'Consultoría IT', amount: '€3,000', status: 'approved' }
-        ];
-
-        const projectsData = [
-          { id: 'P001', title: 'E-commerce Platform', status: 'En Progreso', progress: 65, dueDate: '2024-02-15' },
-          { id: 'P002', title: 'Mobile App', status: 'En Progreso', progress: 30, dueDate: '2024-03-01' }
-        ];
-
-        setStats(statsData);
-        setRecentBudgets(budgetsData);
-        setActiveProjects(projectsData);
+        console.error('❌ Error al cargar datos del dashboard:', error);
+        // En caso de error, inicializar con arrays vacíos para evitar fallos de renderizado
+        setStats([]);
+        setRecentBudgets([]);
+        setActiveProjects([]);
+        setRecentTickets([]);
       } finally {
         if (isMounted) {
           setIsLoading(false);
@@ -199,7 +148,13 @@ const ClientDashboard = () => {
       case 'rejected':
         return 'text-red-400 bg-red-400/10';
       case 'in-progress':
+      case 'en progreso':
+      case 'EN PROGRESO':
         return 'text-blue-400 bg-blue-400/10';
+      case 'planning':
+      case 'planificacion':
+      case 'PLANIFICACION':
+        return 'text-indigo-400 bg-indigo-400/10';
       default:
         return 'text-gray-400 bg-gray-400/10';
     }
@@ -214,7 +169,13 @@ const ClientDashboard = () => {
       case 'rejected':
         return t('client.rejected');
       case 'in-progress':
+      case 'en progreso':
+      case 'EN PROGRESO':
         return t('client.inProgress');
+      case 'planning':
+      case 'planificacion':
+      case 'PLANIFICACION':
+        return t('client.planning');
       default:
         return status;
     }
