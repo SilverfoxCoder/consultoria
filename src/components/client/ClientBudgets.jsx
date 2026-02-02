@@ -14,6 +14,8 @@ import { ChevronUpDownIcon, CheckIcon as CheckIconSolid } from '@heroicons/react
 import budgetService from '../../services/budgetService';
 import { useAuth } from '../../contexts/AuthContext';
 
+import RequestBudgetModal from './modals/RequestBudgetModal';
+
 const ClientBudgets = () => {
   const { t } = useTranslations();
   const { user, clientId } = useAuth();
@@ -26,27 +28,63 @@ const ClientBudgets = () => {
   const [statusFilter, setStatusFilter] = useState('all');
   const [sortBy, setSortBy] = useState('date');
 
+  const [isRequestModalOpen, setIsRequestModalOpen] = useState(false);
+
+  const loadBudgets = React.useCallback(async () => {
+    try {
+      setIsLoading(true);
+      setError('');
+      const finalClientId = clientId || user?.id || 1;
+      const data = await budgetService.getBudgetsByClient(finalClientId);
+      // Asegurar que data es un array
+      setBudgets(Array.isArray(data) ? data : []);
+    } catch (err) {
+      setError('Error al cargar los presupuestos');
+      console.error('Error loading budgets:', err);
+      setBudgets([]); // Asegurar que budgets es un array incluso en caso de error
+    } finally {
+      setIsLoading(false);
+    }
+  }, [clientId, user]);
+
   // Cargar datos al montar el componente
   useEffect(() => {
-    const loadBudgets = async () => {
-      try {
-        setIsLoading(true);
-        setError('');
-        const finalClientId = clientId || user?.id || 1;
-        const data = await budgetService.getBudgetsByClient(finalClientId);
-        // Asegurar que data es un array
-        setBudgets(Array.isArray(data) ? data : []);
-      } catch (err) {
-        setError('Error al cargar los presupuestos');
-        console.error('Error loading budgets:', err);
-        setBudgets([]); // Asegurar que budgets es un array incluso en caso de error
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
     loadBudgets();
-  }, [user, clientId, t]);
+  }, [loadBudgets]);
+
+  const handleDownloadBudget = (budget) => {
+    alert(`${t('client.downloadingBudget')} ${budget.title}...`);
+  };
+
+  const handleApproveBudget = async (budget) => {
+    if (window.confirm(t('client.confirmApproveBudget'))) {
+      try {
+        await budgetService.updateBudgetStatus(budget.id, { status: 'approved' });
+        alert(t('client.budgetApproved'));
+        loadBudgets();
+      } catch (error) {
+        console.error('Error approving budget:', error);
+        alert(t('client.errorApprovingBudget'));
+      }
+    }
+  };
+
+  const handleRejectBudget = async (budget) => {
+    if (window.confirm(t('client.confirmRejectBudget'))) {
+      try {
+        await budgetService.updateBudgetStatus(budget.id, { status: 'rejected' });
+        alert(t('client.budgetRejected'));
+        loadBudgets();
+      } catch (error) {
+        console.error('Error rejecting budget:', error);
+        alert(t('client.errorRejectingBudget'));
+      }
+    }
+  };
+
+  const handleViewBudget = (budget) => {
+    alert(`${t('client.viewBudgetDetails')}: ${budget.title}`);
+  };
 
   const statusOptions = [
     { value: 'all', label: t('client.allStatuses') },
@@ -187,6 +225,12 @@ const ClientBudgets = () => {
 
   return (
     <div className="space-y-6">
+      <RequestBudgetModal
+        isOpen={isRequestModalOpen}
+        onClose={() => setIsRequestModalOpen(false)}
+        onBudgetRequested={loadBudgets}
+      />
+
       {/* Header */}
       <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
@@ -198,7 +242,10 @@ const ClientBudgets = () => {
               {t('client.budgetsSubtitle')}
             </p>
           </div>
-          <button className="mt-4 sm:mt-0 flex items-center px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-colors">
+          <button
+            onClick={() => setIsRequestModalOpen(true)}
+            className="mt-4 sm:mt-0 flex items-center px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-colors"
+          >
             <PlusIcon className="h-5 w-5 mr-2" />
             {t('client.requestBudget')}
           </button>
@@ -208,6 +255,7 @@ const ClientBudgets = () => {
       {/* Filters */}
       <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {/* ... filters content unchanged ... */}
           {/* Search */}
           <div className="relative">
             <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
@@ -222,6 +270,7 @@ const ClientBudgets = () => {
 
           {/* Status Filter */}
           <Listbox value={statusFilter} onChange={setStatusFilter}>
+            {/* ... Listbox implementation unchanged ... */}
             <div className="relative">
               <Listbox.Button className="relative w-full cursor-default rounded-lg bg-gray-700 py-2 pl-3 pr-10 text-left border border-gray-600 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent">
                 <span className="block truncate text-white">
@@ -261,6 +310,7 @@ const ClientBudgets = () => {
 
           {/* Sort */}
           <Listbox value={sortBy} onChange={setSortBy}>
+            {/* ... Listbox implementation unchanged ... */}
             <div className="relative">
               <Listbox.Button className="relative w-full cursor-default rounded-lg bg-gray-700 py-2 pl-3 pr-10 text-left border border-gray-600 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent">
                 <span className="block truncate text-white">
@@ -357,21 +407,29 @@ const ClientBudgets = () => {
                         </div>
                       </div>
                       <div className="flex flex-col sm:flex-row gap-2 mt-4 lg:mt-0 lg:ml-6">
-                        <button className="flex items-center justify-center px-3 py-2 bg-gray-600 hover:bg-gray-500 text-white rounded-lg transition-colors">
+                        <button
+                          onClick={() => handleViewBudget(budget)}
+                          className="flex items-center justify-center px-3 py-2 bg-gray-600 hover:bg-gray-500 text-white rounded-lg transition-colors">
                           <EyeIcon className="h-4 w-4 mr-2" />
                           {t('client.view')}
                         </button>
-                        <button className="flex items-center justify-center px-3 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg transition-colors">
+                        <button
+                          onClick={() => handleDownloadBudget(budget)}
+                          className="flex items-center justify-center px-3 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg transition-colors">
                           <ArrowDownTrayIcon className="h-4 w-4 mr-2" />
                           {t('client.download')}
                         </button>
                         {budgetStatus === 'pending' && (
                           <>
-                            <button className="flex items-center justify-center px-3 py-2 bg-green-600 hover:bg-green-500 text-white rounded-lg transition-colors">
+                            <button
+                              onClick={() => handleApproveBudget(budget)}
+                              className="flex items-center justify-center px-3 py-2 bg-green-600 hover:bg-green-500 text-white rounded-lg transition-colors">
                               <CheckIcon className="h-4 w-4 mr-2" />
                               {t('client.approve')}
                             </button>
-                            <button className="flex items-center justify-center px-3 py-2 bg-red-600 hover:bg-red-500 text-white rounded-lg transition-colors">
+                            <button
+                              onClick={() => handleRejectBudget(budget)}
+                              className="flex items-center justify-center px-3 py-2 bg-red-600 hover:bg-red-500 text-white rounded-lg transition-colors">
                               <XMarkIcon className="h-4 w-4 mr-2" />
                               {t('client.reject')}
                             </button>

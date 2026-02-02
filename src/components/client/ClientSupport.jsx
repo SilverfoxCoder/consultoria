@@ -14,6 +14,8 @@ import { ChevronUpDownIcon, CheckIcon as CheckIconSolid } from '@heroicons/react
 import { supportService } from '../../services/supportService';
 import { useAuth } from '../../contexts/AuthContext';
 
+import CreateTicketModal from './modals/CreateTicketModal';
+
 const ClientSupport = () => {
   const { t } = useTranslations();
   const { user, clientId } = useAuth();
@@ -26,8 +28,6 @@ const ClientSupport = () => {
   const [statusFilter, setStatusFilter] = useState('all');
   const [priorityFilter, setPriorityFilter] = useState('all');
   const [showNewTicket, setShowNewTicket] = useState(false);
-
-
 
   // Cargar datos al montar el componente
   useEffect(() => {
@@ -60,7 +60,7 @@ const ClientSupport = () => {
     { value: 'all', label: t('client.allPriorities') },
     { value: 'low', label: t('client.low') },
     { value: 'medium', label: t('client.medium') },
-    { value: 'high', label: t('client.high') },
+    { value: 'high', label: 'high' },
     { value: 'urgent', label: t('client.urgent') }
   ];
 
@@ -135,9 +135,42 @@ const ClientSupport = () => {
     })
     .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
 
-  // Funciones CRUD
   const handleCreateTicket = () => {
     setShowNewTicket(true);
+  };
+
+  const handleTicketCreated = () => {
+    // Recargar tickets
+    const loadTickets = async () => {
+      try {
+        const finalClientId = clientId || user?.id || 1;
+        const data = await supportService.getTicketsByClient(finalClientId);
+        setTickets(data);
+      } catch (err) {
+        console.error('Error reloading tickets:', err);
+      }
+    };
+    loadTickets();
+  };
+
+  const handleViewTicket = (ticket) => {
+    alert(`${t('client.viewTicketDetails')} #${ticket.id}`);
+  };
+
+  const handleReplyTicket = (ticket) => {
+    alert(`${t('client.replyToTicket')} #${ticket.id}`);
+  };
+
+  const handleReopenTicket = async (ticket) => {
+    if (window.confirm(t('client.confirmReopenTicket'))) {
+      try {
+        // await supportService.updateTicketStatus(ticket.id, 'open');
+        alert(t('client.ticketReopened'));
+        // logic to update state locally or reload
+      } catch (error) {
+        console.error('Error reopening ticket:', error);
+      }
+    }
   };
 
 
@@ -404,16 +437,22 @@ const ClientSupport = () => {
 
                   {/* Actions */}
                   <div className="flex flex-col sm:flex-row gap-2 mt-4 lg:mt-0 lg:ml-6">
-                    <button className="flex items-center justify-center px-3 py-2 bg-gray-600 hover:bg-gray-500 text-white rounded-lg transition-colors">
+                    <button
+                      onClick={() => handleViewTicket(ticket)}
+                      className="flex items-center justify-center px-3 py-2 bg-gray-600 hover:bg-gray-500 text-white rounded-lg transition-colors">
                       <EyeIcon className="h-4 w-4 mr-2" />
                       {t('client.viewDetails')}
                     </button>
-                    <button className="flex items-center justify-center px-3 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg transition-colors">
+                    <button
+                      onClick={() => handleReplyTicket(ticket)}
+                      className="flex items-center justify-center px-3 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg transition-colors">
                       <ChatBubbleLeftRightIcon className="h-4 w-4 mr-2" />
                       {t('client.reply')}
                     </button>
                     {ticket.status === 'resolved' && (
-                      <button className="flex items-center justify-center px-3 py-2 bg-green-600 hover:bg-green-500 text-white rounded-lg transition-colors">
+                      <button
+                        onClick={() => handleReopenTicket(ticket)}
+                        className="flex items-center justify-center px-3 py-2 bg-green-600 hover:bg-green-500 text-white rounded-lg transition-colors">
                         <CheckCircleIcon className="h-4 w-4 mr-2" />
                         {t('client.reopen')}
                       </button>
@@ -435,66 +474,14 @@ const ClientSupport = () => {
       </div>
 
       {/* New Ticket Modal */}
-      {showNewTicket && (
-        <div className="fixed inset-0 z-50 overflow-y-auto">
-          <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" onClick={() => setShowNewTicket(false)} />
-            <div className="inline-block align-bottom bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-              <div className="px-6 py-4 border-b border-gray-700">
-                <h3 className="text-lg font-semibold text-white">{t('client.createNewTicket')}</h3>
-              </div>
-              <div className="px-6 py-4">
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
-                      {t('client.subject')}
-                    </label>
-                    <input
-                      type="text"
-                      className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                      placeholder={t('client.ticketSubject')}
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
-                      {t('client.description')}
-                    </label>
-                    <textarea
-                      rows={4}
-                      className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                      placeholder={t('client.ticketDescription')}
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
-                      {t('client.priority')}
-                    </label>
-                    <select className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent">
-                      <option value="low">{t('client.low')}</option>
-                      <option value="medium">{t('client.medium')}</option>
-                      <option value="high">{t('client.high')}</option>
-                      <option value="urgent">{t('client.urgent')}</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-              <div className="px-6 py-4 bg-gray-700/30 flex justify-end space-x-3">
-                <button
-                  onClick={() => setShowNewTicket(false)}
-                  className="px-4 py-2 bg-gray-600 hover:bg-gray-500 text-white rounded-lg transition-colors"
-                >
-                  {t('client.cancel')}
-                </button>
-                <button className="px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-colors">
-                  {t('client.createTicket')}
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      <CreateTicketModal
+        isOpen={showNewTicket}
+        onClose={() => setShowNewTicket(false)}
+        onSubmit={handleTicketCreated}
+      />
     </div>
   );
+
 };
 
 export default ClientSupport; 

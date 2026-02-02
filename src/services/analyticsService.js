@@ -32,8 +32,8 @@ class AnalyticsService {
     try {
       return await this.request('/analytics');
     } catch (error) {
-      console.warn('Analytics endpoint not available, using mock data');
-      return this.getMockAnalytics();
+      console.warn('Error fetching analytics:', error);
+      return [];
     }
   }
 
@@ -96,8 +96,13 @@ class AnalyticsService {
           last6Months.reduce((sum, a) => sum + (a.avgResponseTime?.seconds || 0), 0) / last6Months.length : 0
       };
     } catch (error) {
-      console.warn('Using mock KPIs data');
-      return this.getMockKPIs();
+      console.warn('Error fetching KPIs:', error);
+      return {
+        totalSpent: 0,
+        activeProjects: 0,
+        openTickets: 0,
+        avgResponseTime: 0
+      };
     }
   }
 
@@ -118,56 +123,9 @@ class AnalyticsService {
         tickets: a.openTickets || 0
       }));
     } catch (error) {
-      console.warn('Using mock monthly data');
-      return this.getMockMonthlyData();
+      console.warn('Error fetching monthly data:', error);
+      return [];
     }
-  }
-
-  // Datos mock para cuando el backend no está disponible
-  getMockAnalytics() {
-    return {
-      monthlyRevenue: 25000,
-      monthlyData: [
-        { month: 'Ene', revenue: 20000, projects: 3, clients: 2 },
-        { month: 'Feb', revenue: 22000, projects: 4, clients: 3 },
-        { month: 'Mar', revenue: 25000, projects: 5, clients: 4 },
-        { month: 'Abr', revenue: 28000, projects: 6, clients: 5 },
-        { month: 'May', revenue: 30000, projects: 7, clients: 6 },
-        { month: 'Jun', revenue: 32000, projects: 8, clients: 7 },
-        { month: 'Jul', revenue: 35000, projects: 9, clients: 8 },
-        { month: 'Ago', revenue: 38000, projects: 10, clients: 9 },
-        { month: 'Sep', revenue: 40000, projects: 11, clients: 10 },
-        { month: 'Oct', revenue: 42000, projects: 12, clients: 11 },
-        { month: 'Nov', revenue: 45000, projects: 13, clients: 12 },
-        { month: 'Dic', revenue: 48000, projects: 14, clients: 13 }
-      ]
-    };
-  }
-
-  getMockKPIs() {
-    return {
-      totalSpent: 25000,
-      activeProjects: 5,
-      openTickets: 3,
-      avgResponseTime: 2.5
-    };
-  }
-
-  getMockMonthlyData() {
-    return [
-      { month: 'Ene', spent: 20000, projects: 3, tickets: 2 },
-      { month: 'Feb', spent: 22000, projects: 4, tickets: 3 },
-      { month: 'Mar', spent: 25000, projects: 5, tickets: 4 },
-      { month: 'Abr', spent: 28000, projects: 6, tickets: 5 },
-      { month: 'May', spent: 30000, projects: 7, tickets: 6 },
-      { month: 'Jun', spent: 32000, projects: 8, tickets: 7 },
-      { month: 'Jul', spent: 35000, projects: 9, tickets: 8 },
-      { month: 'Ago', spent: 38000, projects: 10, tickets: 9 },
-      { month: 'Sep', spent: 40000, projects: 11, tickets: 10 },
-      { month: 'Oct', spent: 42000, projects: 12, tickets: 11 },
-      { month: 'Nov', spent: 45000, projects: 13, tickets: 12 },
-      { month: 'Dic', spent: 48000, projects: 14, tickets: 13 }
-    ];
   }
 }
 

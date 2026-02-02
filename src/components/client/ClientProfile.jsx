@@ -111,14 +111,43 @@ const ClientProfile = () => {
     { id: 'notifications', name: t('client.notifications'), icon: BellIcon }
   ];
 
-  const handleSave = () => {
-    setIsEditing(false);
-    // Aquí se guardarían los cambios
+  const handleSave = async () => {
+    try {
+      setIsLoading(true);
+      // Simular actualización
+      // await userService.updateUser(clientId, profileData);
+      setTimeout(() => {
+        setIsEditing(false);
+        setIsLoading(false);
+        alert(t('client.profileUpdated'));
+      }, 500);
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      setIsLoading(false);
+    }
   };
 
   const handleCancel = () => {
     setIsEditing(false);
-    // Aquí se cancelarían los cambios
+    // Resetear datos si fuera necesario
+  };
+
+  const handleToggleTwoFactor = () => {
+    // Implementar lógica de 2FA
+    setSecuritySettings(prev => ({
+      ...prev,
+      twoFactorEnabled: !prev.twoFactorEnabled
+    }));
+  };
+
+  const handleToggleNotification = (key) => {
+    setPreferences(prev => ({
+      ...prev,
+      notifications: {
+        ...prev.notifications,
+        [key]: !prev.notifications[key]
+      }
+    }));
   };
 
   // Mostrar loading
@@ -196,8 +225,8 @@ const ClientProfile = () => {
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={`flex items-center py-4 px-1 border-b-2 font-medium text-sm transition-colors ${activeTab === tab.id
-                    ? 'border-primary-500 text-primary-400'
-                    : 'border-transparent text-gray-400 hover:text-gray-300 hover:border-gray-300'
+                  ? 'border-primary-500 text-primary-400'
+                  : 'border-transparent text-gray-400 hover:text-gray-300 hover:border-gray-300'
                   }`}
               >
                 <tab.icon className="h-5 w-5 mr-2" />
@@ -499,12 +528,14 @@ const ClientProfile = () => {
                   </div>
                   <div className="flex items-center space-x-3">
                     <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${securitySettings.twoFactorEnabled
-                        ? 'text-green-400 bg-green-400/10'
-                        : 'text-red-400 bg-red-400/10'
+                      ? 'text-green-400 bg-green-400/10'
+                      : 'text-red-400 bg-red-400/10'
                       }`}>
                       {securitySettings.twoFactorEnabled ? t('client.enabled') : t('client.disabled')}
                     </span>
-                    <button className="px-3 py-1 bg-primary-600 hover:bg-primary-700 text-white rounded text-sm transition-colors">
+                    <button
+                      onClick={handleToggleTwoFactor}
+                      className="px-3 py-1 bg-primary-600 hover:bg-primary-700 text-white rounded text-sm transition-colors">
                       {securitySettings.twoFactorEnabled ? t('client.disable') : t('client.enable')}
                     </button>
                   </div>
@@ -552,7 +583,7 @@ const ClientProfile = () => {
             <div className="space-y-6">
               <div className="space-y-4">
                 {Object.entries(preferences.notifications).map(([key, value]) => (
-                  <div key={key} className="flex items-center justify-between p-4 bg-gray-700/30 rounded-lg">
+                  <div className="flex items-center justify-between p-4 bg-gray-700/30 rounded-lg">
                     <div>
                       <h4 className="text-sm font-medium text-white">
                         {t(`client.${key}`)}
@@ -561,8 +592,10 @@ const ClientProfile = () => {
                         {t(`client.${key}Desc`)}
                       </p>
                     </div>
-                    <button className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${value ? 'bg-primary-600' : 'bg-gray-600'
-                      }`}>
+                    <button
+                      onClick={() => handleToggleNotification(key)}
+                      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${value ? 'bg-primary-600' : 'bg-gray-600'
+                        }`}>
                       <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${value ? 'translate-x-6' : 'translate-x-1'
                         }`} />
                     </button>

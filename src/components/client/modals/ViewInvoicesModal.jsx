@@ -84,14 +84,20 @@ const ViewInvoicesModal = ({ isOpen, onClose }) => {
 
   const totalAmount = filteredInvoices.reduce((sum, invoice) => sum + invoice.amount, 0);
 
-  const handleDownload = (invoice) => {
-    console.log('Descargando factura:', invoice.id);
-    // Aquí se implementaría la descarga real
+  const handleDownload = async (invoice) => {
+    try {
+      console.log('Descargando factura:', invoice.id);
+      await invoiceService.downloadInvoice(invoice.id);
+      alert(t('client.downloadSuccess') || 'Descarga iniciada');
+    } catch (error) {
+      console.error('Error downloading invoice:', error);
+      alert(t('client.errorDownloading') || 'Error al descargar la factura');
+    }
   };
 
   const handleView = (invoice) => {
-    console.log('Viendo factura:', invoice.id);
-    // Aquí se implementaría la vista previa
+    alert(`Visualizando factura #${invoice.number}`);
+    // Aquí se implementaría la vista previa real o navegación
   };
 
   if (!isOpen) return null;

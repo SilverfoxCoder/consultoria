@@ -2,8 +2,12 @@ import React, { useState } from 'react';
 import { useTranslations } from '../../../hooks/useTranslations';
 import { ExclamationTriangleIcon, XMarkIcon, PaperClipIcon } from '@heroicons/react/24/outline';
 
+import { supportService } from '../../../services/supportService';
+import { useAuth } from '../../../contexts/AuthContext';
+
 const CreateTicketModal = ({ isOpen, onClose, onSubmit }) => {
   const { t } = useTranslations();
+  const { user, clientId } = useAuth();
 
   const [formData, setFormData] = useState({
     title: '',
@@ -68,13 +72,19 @@ const CreateTicketModal = ({ isOpen, onClose, onSubmit }) => {
     setIsSubmitting(true);
 
     try {
-      // Aquí se enviaría el ticket al backend
-      console.log('Creando ticket:', formData);
+      const finalClientId = clientId || user?.id || 1;
+      const ticketData = {
+        ...formData,
+        clientId: finalClientId,
+        status: 'open',
+        // Handle attachments if supported by backend, otherwise they are just in state
+      };
 
-      // Simular envío
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      console.log('Creando ticket:', ticketData);
 
-      onSubmit && onSubmit(formData);
+      const newTicket = await supportService.createTicket(ticketData);
+
+      onSubmit && onSubmit(newTicket);
       onClose();
 
       // Resetear formulario
@@ -86,8 +96,10 @@ const CreateTicketModal = ({ isOpen, onClose, onSubmit }) => {
         project: '',
         attachments: []
       });
+      alert(t('client.ticketCreatedSuccess') || 'Ticket creado con éxito');
     } catch (error) {
       console.error('Error al crear ticket:', error);
+      alert(t('client.errorCreatingTicket') || 'Error al crear el ticket');
     } finally {
       setIsSubmitting(false);
     }

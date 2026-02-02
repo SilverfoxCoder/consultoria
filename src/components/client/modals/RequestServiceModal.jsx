@@ -2,9 +2,13 @@ import React, { useState } from 'react';
 import { useTranslations } from '../../../hooks/useTranslations';
 import { WrenchScrewdriverIcon, XMarkIcon } from '@heroicons/react/24/outline';
 
+import { serviceService } from '../../../services/serviceService';
+import { useAuth } from '../../../contexts/AuthContext';
+
 const RequestServiceModal = ({ isOpen, onClose, onSubmit }) => {
   const { t } = useTranslations();
-  
+  const { user, clientId } = useAuth();
+
   const [formData, setFormData] = useState({
     serviceType: '',
     title: '',
@@ -58,17 +62,22 @@ const RequestServiceModal = ({ isOpen, onClose, onSubmit }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
+
     try {
-      // Aquí se enviaría la solicitud de servicio al backend
-      console.log('Solicitando servicio:', formData);
-      
-      // Simular envío
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      onSubmit && onSubmit(formData);
+      const finalClientId = clientId || user?.id || 1;
+      const serviceData = {
+        ...formData,
+        clientId: finalClientId,
+        status: 'pending' // Default status
+      };
+
+      console.log('Solicitando servicio:', serviceData);
+
+      const newService = await serviceService.createService(serviceData);
+
+      onSubmit && onSubmit(newService);
       onClose();
-      
+
       // Resetear formulario
       setFormData({
         serviceType: '',
@@ -79,8 +88,11 @@ const RequestServiceModal = ({ isOpen, onClose, onSubmit }) => {
         budget: '',
         requirements: ''
       });
+      alert(t('client.serviceRequestedSuccess') || 'Servicio solicitado con éxito');
+
     } catch (error) {
       console.error('Error al solicitar servicio:', error);
+      alert(t('client.errorRequestingService') || 'Error al solicitar el servicio');
     } finally {
       setIsSubmitting(false);
     }

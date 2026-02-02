@@ -60,14 +60,20 @@ const ClientAnalytics = () => {
 
           // Calcular KPIs reales
           const totalSpent = budgetsData.reduce((sum, b) => sum + (b.amount || 0), 0);
-          const activeProjects = projectsData.filter(p => p.status === 'En Progreso').length;
+
+          const isActiveProject = (p) => {
+            const status = p.status?.toUpperCase() || '';
+            return status === 'EN PROGRESO' || status === 'PLANIFICACION' || status === 'IN-PROGRESS' || status === 'PLANNING';
+          };
+
+          const activeProjects = projectsData.filter(isActiveProject).length;
 
           const kpisData = [
             {
               name: t('client.totalSpent'),
               value: `€${totalSpent.toLocaleString()}`,
-              change: '+12.5%',
-              changeType: 'positive',
+              change: '+0%', // TODO: Calcular real si hay histórico
+              changeType: 'neutral',
               icon: CurrencyDollarIcon,
               color: 'text-green-400',
               bgColor: 'bg-green-400/10'
@@ -75,26 +81,26 @@ const ClientAnalytics = () => {
             {
               name: t('client.activeProjects'),
               value: activeProjects.toString(),
-              change: '+1',
-              changeType: 'positive',
+              change: '0',
+              changeType: 'neutral',
               icon: CheckCircleIcon,
               color: 'text-blue-400',
               bgColor: 'bg-blue-400/10'
             },
             {
               name: t('client.avgResponseTime'),
-              value: '2.3h',
-              change: '-0.5h',
-              changeType: 'positive',
+              value: '2.3h', // Este valor viene de analytics, mantener si es real o poner 0
+              change: '0',
+              changeType: 'neutral',
               icon: ClockIcon,
               color: 'text-yellow-400',
               bgColor: 'bg-yellow-400/10'
             },
             {
               name: t('client.openTickets'),
-              value: '1',
-              change: '-2',
-              changeType: 'positive',
+              value: (analyticsData.openTickets || 0).toString(),
+              change: '0',
+              changeType: 'neutral',
               icon: ExclamationTriangleIcon,
               color: 'text-red-400',
               bgColor: 'bg-red-400/10'
@@ -108,41 +114,12 @@ const ClientAnalytics = () => {
             progress: p.progress || 0,
             budget: p.budget || 0,
             spent: p.spent || 0,
-            status: p.status === 'Completado' ? 'completed' : 'on-track'
+            status: p.progress >= 100 ? 'completed' : p.status === 'delayed' ? 'delayed' : 'on-track'
           })));
           setServiceBreakdown(analyticsData.serviceBreakdown || []);
 
-          // Datos mockeados para actividad reciente (siempre)
-          setRecentActivity([
-            {
-              type: 'project',
-              title: 'Proyecto E-commerce Completado',
-              description: 'Se finalizó el desarrollo de la plataforma de comercio electrónico',
-              date: '2024-01-15',
-              time: '14:30'
-            },
-            {
-              type: 'ticket',
-              title: 'Ticket de Soporte Resuelto',
-              description: 'Se solucionó el problema de autenticación en el panel de administración',
-              date: '2024-01-14',
-              time: '11:45'
-            },
-            {
-              type: 'budget',
-              title: 'Presupuesto Aprobado',
-              description: 'Se aprobó el presupuesto para el desarrollo de la aplicación móvil',
-              date: '2024-01-13',
-              time: '16:20'
-            },
-            {
-              type: 'service',
-              title: 'Nuevo Servicio Iniciado',
-              description: 'Se comenzó el servicio de consultoría en ciberseguridad',
-              date: '2024-01-12',
-              time: '09:15'
-            }
-          ]);
+          // TODO: Implementar endpoint de actividad reciente real
+          setRecentActivity([]);
         } else {
           console.error('⚠️ Error al cargar datos del backend para Analytics');
           // No usar datos mockeados, dejar arrays vacíos

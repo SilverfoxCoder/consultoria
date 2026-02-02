@@ -14,7 +14,8 @@ import { ChevronUpDownIcon, CheckIcon as CheckIconSolid } from '@heroicons/react
 import { serviceService } from '../../services/serviceService';
 import { useAuth } from '../../contexts/AuthContext';
 
-import RequestServiceModal from './RequestServiceModal';
+import ViewInvoicesModal from './modals/ViewInvoicesModal';
+import RequestServiceModal from './modals/RequestServiceModal';
 
 const ClientServices = () => {
   const { t } = useTranslations();
@@ -27,6 +28,7 @@ const ClientServices = () => {
   const [statusFilter, setStatusFilter] = useState('all');
   const [sortBy, setSortBy] = useState('date');
   const [isRequestModalOpen, setIsRequestModalOpen] = useState(false);
+  const [isInvoicesModalOpen, setIsInvoicesModalOpen] = useState(false);
 
   // Cargar datos
   const loadServices = React.useCallback(async () => {
@@ -51,6 +53,21 @@ const ClientServices = () => {
   useEffect(() => {
     loadServices();
   }, [loadServices]);
+
+  const handleDownloadInvoice = async (serviceId) => {
+    // TODO: Implementar descarga real
+    alert(t('client.downloadingInvoice'));
+  };
+
+  const handleDownloadDeliverables = async (serviceId) => {
+    // TODO: Implementar descarga real
+    alert(t('client.downloadingDeliverables'));
+  };
+
+  const handleViewDetails = (service) => {
+    // TODO: Implementar vista detallada
+    alert(`${t('client.viewDetails')}: ${service.title}`);
+  };
 
   const statusOptions = [
     { value: 'all', label: t('client.allStatuses') },
@@ -155,6 +172,10 @@ const ClientServices = () => {
         onClose={() => setIsRequestModalOpen(false)}
         onServiceCreated={loadServices}
       />
+      <ViewInvoicesModal
+        isOpen={isInvoicesModalOpen}
+        onClose={() => setIsInvoicesModalOpen(false)}
+      />
 
       {/* Header */}
       <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700">
@@ -168,7 +189,9 @@ const ClientServices = () => {
             </p>
           </div>
           <div className="mt-4 sm:mt-0 flex space-x-3">
-            <button className="flex items-center px-4 py-2 bg-gray-600 hover:bg-gray-500 text-white rounded-lg transition-colors">
+            <button
+              onClick={() => setIsInvoicesModalOpen(true)}
+              className="flex items-center px-4 py-2 bg-gray-600 hover:bg-gray-500 text-white rounded-lg transition-colors">
               <CurrencyDollarIcon className="h-5 w-5 mr-2" />
               {t('client.viewInvoices')}
             </button>
@@ -393,18 +416,24 @@ const ClientServices = () => {
 
                   {/* Actions */}
                   <div className="flex flex-col sm:flex-row gap-2 mt-4 lg:mt-0 lg:ml-6">
-                    <button className="flex items-center justify-center px-3 py-2 bg-gray-600 hover:bg-gray-500 text-white rounded-lg transition-colors">
+                    <button
+                      onClick={() => handleViewDetails(service)}
+                      className="flex items-center justify-center px-3 py-2 bg-gray-600 hover:bg-gray-500 text-white rounded-lg transition-colors">
                       <EyeIcon className="h-4 w-4 mr-2" />
                       {t('client.viewDetails')}
                     </button>
                     {service.invoice && (
-                      <button className="flex items-center justify-center px-3 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg transition-colors">
+                      <button
+                        onClick={() => handleDownloadInvoice(service.id)}
+                        className="flex items-center justify-center px-3 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg transition-colors">
                         <ArrowDownTrayIcon className="h-4 w-4 mr-2" />
                         {t('client.downloadInvoice')}
                       </button>
                     )}
                     {service.status === 'completed' && (
-                      <button className="flex items-center justify-center px-3 py-2 bg-green-600 hover:bg-green-500 text-white rounded-lg transition-colors">
+                      <button
+                        onClick={() => handleDownloadDeliverables(service.id)}
+                        className="flex items-center justify-center px-3 py-2 bg-green-600 hover:bg-green-500 text-white rounded-lg transition-colors">
                         <ArrowDownTrayIcon className="h-4 w-4 mr-2" />
                         {t('client.downloadDeliverables')}
                       </button>
