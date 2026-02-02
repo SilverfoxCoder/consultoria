@@ -84,8 +84,6 @@ const ProjectManagement = () => {
     budget: '',
     priority: 'Media',
     description: '',
-    priority: 'Media',
-    description: '',
     team: [],
     teamMemberIds: [],
     jiraIntegration: {
