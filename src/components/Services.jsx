@@ -3,11 +3,11 @@ import { useTranslations } from '../hooks/useTranslations';
 
 const Services = ({ onServiceClick }) => {
   const { t, translations } = useTranslations();
-  
+
   // Rutas de servicios en el mismo orden que en translations
   const serviceRoutes = [
     'desarrollo-web',
-    'aplicaciones-moviles', 
+    'aplicaciones-moviles',
     'consultoria-it',
     'cloud-devops',
     'inteligencia-artificial',
@@ -95,7 +95,8 @@ const Services = ({ onServiceClick }) => {
     description: service?.description || 'Descripción del servicio',
     price: service?.price || 'Consultar precio',
     route: serviceRoutes[index] || 'servicio',
-    icon: serviceIcons[index] || serviceIcons[0] // Fallback al primer icono
+    icon: serviceIcons[index] || serviceIcons[0], // Fallback al primer icono
+    extraLink: service?.extraLink
   })) || [];
 
   return (
@@ -130,6 +131,21 @@ const Services = ({ onServiceClick }) => {
               <p className="text-gray-700 mb-6 leading-relaxed">
                 {service.description}
               </p>
+
+              {/* Extra Link */}
+              {service.extraLink && (
+                <div className="mb-4">
+                  <a
+                    href={service.extraLink.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm text-primary-500 hover:text-primary-700 underline font-medium"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    {service.extraLink.text}
+                  </a>
+                </div>
+              )}
 
               {/* Price */}
               <div className="flex items-center justify-between">
