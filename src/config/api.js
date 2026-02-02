@@ -1,7 +1,7 @@
 // Configuración de la API para comunicación REST con Spring Boot
 export const API_CONFIG = {
-  // BASE_URL: process.env.REACT_APP_API_BASE_URL || 'http://127.0.0.1:8080/api',
-  BASE_URL: 'https://back-42ulc873.b4a.run/api',
+  BASE_URL: process.env.REACT_APP_API_BASE_URL || 'https://test2-ida01tly.b4a.run/api',
+  // BASE_URL: 'https://test2-ida01tly.b4a.run/api',
   TIMEOUT: 10000,
   RETRY_ATTEMPTS: 3,
   RETRY_DELAY: 1000,
