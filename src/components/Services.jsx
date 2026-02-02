@@ -135,15 +135,27 @@ const Services = ({ onServiceClick }) => {
               {/* Extra Link */}
               {service.extraLink && (
                 <div className="mb-4">
-                  <a
-                    href={service.extraLink.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-sm text-primary-500 hover:text-primary-700 underline font-medium"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    {service.extraLink.text}
-                  </a>
+                  {service.extraLink.url.startsWith('http') ? (
+                    <a
+                      href={service.extraLink.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sm text-primary-500 hover:text-primary-700 underline font-medium"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      {service.extraLink.text}
+                    </a>
+                  ) : (
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onServiceClick(service.extraLink.url);
+                      }}
+                      className="text-sm text-primary-500 hover:text-primary-700 underline font-medium focus:outline-none"
+                    >
+                      {service.extraLink.text}
+                    </button>
+                  )}
                 </div>
               )}
 

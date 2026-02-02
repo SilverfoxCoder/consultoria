@@ -43,7 +43,7 @@ export const translations = {
           price: "Desde 500 €",
           extraLink: {
             text: "Más info sobre posicionamiento SEO",
-            url: "https://www.cicerocomunicacion.es/posicionamiento-organico/"
+            url: "posicionamiento-seo"
           }
         },
         {

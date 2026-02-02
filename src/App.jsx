@@ -32,6 +32,7 @@ import APIsMicroservicios from './components/services/APIsMicroservicios';
 import MarketingCorporativo from './components/services/MarketingCorporativo';
 import FormacionDigital from './components/services/FormacionDigital';
 import DigitalizacionPYMES from './components/services/DigitalizacionPYMES';
+import SEO from './components/services/SEO';
 import OpenAPITester from './components/OpenAPITester';
 
 const AppContent = () => {
@@ -260,6 +261,7 @@ const AppContent = () => {
         {currentPage === 'marketing-corporativo' && <MarketingCorporativo />}
         {currentPage === 'formacion-digital' && <FormacionDigital />}
         {currentPage === 'digitalizacion-pymes' && <DigitalizacionPYMES />}
+        {currentPage === 'posicionamiento-seo' && <SEO />}
         {currentPage === 'openapi-tester' && <OpenAPITester />}
       </main>
 
