@@ -218,7 +218,7 @@ export const createOpenAPIClient = (spec) => {
 // Cliente predefinido para las operaciones más comunes
 export const createDefaultClient = () => {
   const defaultSpec = {
-    servers: [{ url: 'http://localhost:8080' }],
+    servers: [{ url: 'https://test2-ida01tly.b4a.run/api' }],
     paths: {
       '/api/auth/login': {
         post: {

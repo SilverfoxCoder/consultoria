@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "http://localhost:8080",
+      "url": "https://test2-ida01tly.b4a.run/api",
       "description": "Servidor de desarrollo"
     }
   ],
