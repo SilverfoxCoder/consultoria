@@ -89,28 +89,8 @@ class SupportService {
       method: 'DELETE'
     });
   }
-
-  // Obtener estadísticas de tickets
-  async getTicketStats() {
-    try {
-      const tickets = await this.getAllTickets();
-      
-      return {
-        total: tickets.length,
-        abiertos: tickets.filter(t => t.status === 'open').length,
-        enProgreso: tickets.filter(t => t.status === 'in-progress').length,
-        cerrados: tickets.filter(t => t.status === 'closed').length,
-        alta: tickets.filter(t => t.priority === 'high').length,
-        media: tickets.filter(t => t.priority === 'medium').length,
-        baja: tickets.filter(t => t.priority === 'low').length
-      };
-    } catch (error) {
-      console.warn('Using mock ticket stats');
-      return this.getMockTicketStats();
-    }
-  }
-
-
 }
+
+
 
 export const supportService = new SupportService(); 

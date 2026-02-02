@@ -1,64 +1,54 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslations } from '../../../hooks/useTranslations';
-import { 
-  CurrencyDollarIcon, 
-  XMarkIcon, 
-  DocumentTextIcon, 
-  EyeIcon, 
-  ArrowDownTrayIcon 
+import {
+  CurrencyDollarIcon,
+  XMarkIcon,
+  DocumentTextIcon,
+  EyeIcon,
+  ArrowDownTrayIcon
 } from '@heroicons/react/24/outline';
+
+import { invoiceService } from '../../../services/invoiceService';
+import { useAuth } from '../../../contexts/AuthContext';
 
 const ViewInvoicesModal = ({ isOpen, onClose }) => {
   const { t } = useTranslations();
-  
+  const { user, clientId } = useAuth();
+
   const [invoices, setInvoices] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [filterStatus, setFilterStatus] = useState('all');
 
-  // Simular datos de facturas
   useEffect(() => {
-    if (isOpen) {
+    let isMounted = true;
+
+    const loadInvoices = async () => {
+      if (!isOpen) return;
+
       setIsLoading(true);
-      
-      // Simular carga de datos
-      setTimeout(() => {
-        const mockInvoices = [
-          {
-            id: 'INV-001',
-            number: '2024-001',
-            date: '2024-01-15',
-            dueDate: '2024-02-15',
-            amount: 550.00,
-            status: 'paid',
-            project: 'Web citas Peluqueria',
-            description: 'Desarrollo de sitio web'
-          },
-          {
-            id: 'INV-002',
-            number: '2024-002',
-            date: '2024-01-20',
-            dueDate: '2024-02-20',
-            amount: 1200.00,
-            status: 'pending',
-            project: 'Sistema de gestión',
-            description: 'Consultoría y análisis'
-          },
-          {
-            id: 'INV-003',
-            number: '2024-003',
-            date: '2024-02-01',
-            dueDate: '2024-03-01',
-            amount: 800.00,
-            status: 'overdue',
-            project: 'Mantenimiento mensual',
-            description: 'Servicios de mantenimiento'
-          }
-        ];
-        
-        setInvoices(mockInvoices);
-        setIsLoading(false);
-      }, 1000);
-    }
+      try {
+        const finalClientId = clientId || user?.id || 1;
+        const data = await invoiceService.getInvoicesByClient(finalClientId);
+        if (isMounted) {
+          setInvoices(data || []);
+        }
+      } catch (error) {
+        console.error('Error loading invoices:', error);
+        if (isMounted) {
+          setInvoices([]);
+        }
+      } finally {
+        if (isMounted) {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    loadInvoices();
+
+    return () => {
+      isMounted = false;
+    };
   }, [isOpen]);
 
   const getStatusColor = (status) => {
@@ -163,9 +153,9 @@ const ViewInvoicesModal = ({ isOpen, onClose }) => {
             <div>
               <p className="text-sm text-gray-400">Estado</p>
               <p className="text-lg font-medium text-white">
-                {filterStatus === 'all' ? 'Todas' : 
-                 filterStatus === 'paid' ? 'Pagadas' :
-                 filterStatus === 'pending' ? 'Pendientes' : 'Vencidas'}
+                {filterStatus === 'all' ? 'Todas' :
+                  filterStatus === 'paid' ? 'Pagadas' :
+                    filterStatus === 'pending' ? 'Pendientes' : 'Vencidas'}
               </p>
             </div>
           </div>

@@ -1,14 +1,15 @@
 import { api } from '../config/api';
-import { mockDataService } from './mockDataService';
+
 
 export const serviceService = {
+  // Obtener todos los servicios
   // Obtener todos los servicios
   getAllServices: async () => {
     try {
       return await api.get('/services');
     } catch (error) {
-      console.warn('API error, using mock data:', error);
-      return mockDataService.getMockServices();
+      console.warn('API error fetching services:', error);
+      return [];
     }
   },
 
@@ -32,7 +33,6 @@ export const serviceService = {
     try {
       const response = await api.get(`/services/client/${clientId}`);
       return response || [];
-      return response || [];
     } catch (error) {
       console.error('Error fetching services:', error);
       return [];
@@ -44,8 +44,8 @@ export const serviceService = {
     try {
       return await api.post('/services', serviceData);
     } catch (error) {
-      console.warn('API error creating service, using mock:', error);
-      return mockDataService.createMockService(serviceData);
+      console.error('API error creating service:', error);
+      throw error;
     }
   },
 
