@@ -67,6 +67,7 @@ export const apiRequest = async (endpoint, options = {}) => {
   const url = `${API_CONFIG.BASE_URL}${endpoint}`;
   const config = {
     headers: API_CONFIG.HEADERS,
+    credentials: 'include',
     ...options
   };
 

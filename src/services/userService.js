@@ -6,6 +6,7 @@ class UserService {
     console.log(`📡 UserService: Request to ${url}`);
     const config = {
       headers: API_CONFIG.HEADERS,
+      credentials: 'include',
       ...options
     };
 
@@ -131,6 +132,7 @@ class UserService {
       const response = await fetch(`${API_CONFIG.BASE_URL}/auth/login`, {
         method: 'POST',
         headers: API_CONFIG.HEADERS,
+        credentials: 'include',
         body: JSON.stringify({
           email: email.trim(),
           password: password
@@ -157,7 +159,7 @@ class UserService {
   // Verificar autenticación
   async verifyAuth(token) {
     try {
-      const response = await fetch(`${this.baseURL}/auth/verify`, {
+      const response = await fetch(`${API_CONFIG.BASE_URL}/auth/verify`, {
         method: 'GET',
         headers: {
           ...API_CONFIG.HEADERS,
@@ -175,7 +177,7 @@ class UserService {
   // Cerrar sesión
   async logout(token) {
     try {
-      const response = await fetch(`${this.baseURL}/auth/logout`, {
+      const response = await fetch(`${API_CONFIG.BASE_URL}/auth/logout`, {
         method: 'POST',
         headers: {
           ...API_CONFIG.HEADERS,
@@ -193,7 +195,7 @@ class UserService {
   // Cambiar contraseña
   async changePassword(userId, oldPassword, newPassword, token) {
     try {
-      const response = await fetch(`${this.baseURL}/auth/change-password`, {
+      const response = await fetch(`${API_CONFIG.BASE_URL}/auth/change-password`, {
         method: 'POST',
         headers: {
           ...API_CONFIG.HEADERS,
@@ -221,7 +223,7 @@ class UserService {
   // Verificar si es el primer login
   async checkFirstLogin(userId, token) {
     try {
-      const response = await fetch(`${this.baseURL}/auth/first-login/${userId}`, {
+      const response = await fetch(`${API_CONFIG.BASE_URL}/auth/first-login/${userId}`, {
         method: 'GET',
         headers: {
           ...API_CONFIG.HEADERS,
