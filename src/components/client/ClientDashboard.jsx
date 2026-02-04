@@ -36,7 +36,7 @@ const ClientDashboard = () => {
   const [showBudgetModal, setShowBudgetModal] = useState(false);
   const [showTicketModal, setShowTicketModal] = useState(false);
   const [showServiceModal, setShowServiceModal] = useState(false);
-  const [showServiceModal, setShowServiceModal] = useState(false);
+
   const [showInvoicesModal, setShowInvoicesModal] = useState(false);
   const [selectedProjectForDocs, setSelectedProjectForDocs] = useState(null);
 
