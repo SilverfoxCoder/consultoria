@@ -8,13 +8,15 @@ import {
   ClockIcon,
   CheckCircleIcon,
   UserGroupIcon,
-  CalendarIcon
+  CalendarIcon,
+  DocumentTextIcon
 } from '@heroicons/react/24/outline';
 import { Listbox } from '@headlessui/react';
 import { ChevronUpDownIcon, CheckIcon as CheckIconSolid } from '@heroicons/react/20/solid';
 import { projectService } from '../../services/projectService';
 import { useAuth } from '../../contexts/AuthContext';
 import ClientProjectDetails from './ClientProjectDetails';
+import ProjectDocumentsModal from './modals/ProjectDocumentsModal';
 
 const ClientProjects = () => {
   const { t } = useTranslations();
@@ -29,6 +31,7 @@ const ClientProjects = () => {
   const [sortBy, setSortBy] = useState('date');
   const [showProjectDetails, setShowProjectDetails] = useState(false);
   const [currentProject, setCurrentProject] = useState(null);
+  const [selectedProjectForDocs, setSelectedProjectForDocs] = useState(null);
 
   // Cargar datos al montar el componente
   useEffect(() => {
@@ -305,6 +308,12 @@ const ClientProjects = () => {
                       <ArrowDownTrayIcon className="h-4 w-4 mr-2" />
                       {t('client.downloadReport')}
                     </button>
+                    <button
+                      onClick={() => setSelectedProjectForDocs(project)}
+                      className="flex items-center justify-center px-3 py-2 bg-gray-600 hover:bg-gray-500 text-white rounded-lg transition-colors">
+                      <DocumentTextIcon className="h-4 w-4 mr-2" />
+                      Ver Documentos
+                    </button>
                   </div>
                 </div>
 
@@ -402,6 +411,12 @@ const ClientProjects = () => {
           onBack={handleBackFromDetails}
         />
       )}
+
+      <ProjectDocumentsModal
+        isOpen={!!selectedProjectForDocs}
+        onClose={() => setSelectedProjectForDocs(null)}
+        project={selectedProjectForDocs}
+      />
     </div>
   );
 };
