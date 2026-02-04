@@ -148,6 +148,11 @@ class ProjectService {
     });
   }
 
+  // Obtener reporte del proyecto
+  async getProjectReport(projectId) {
+    return this.request(`/projects/${projectId}/report`);
+  }
+
   // Obtener URL de descarga (helper para usar en href)
   getDownloadDocumentUrl(documentId) {
     return `${this.baseURL}/documents/${documentId}/download`;

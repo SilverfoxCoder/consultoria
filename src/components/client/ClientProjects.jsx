@@ -17,6 +17,8 @@ import { projectService } from '../../services/projectService';
 import { useAuth } from '../../contexts/AuthContext';
 import ClientProjectDetails from './ClientProjectDetails';
 import ProjectDocumentsModal from './modals/ProjectDocumentsModal';
+import RequestBudgetModal from './modals/RequestBudgetModal';
+import ProjectTimelineModal from './modals/ProjectTimelineModal';
 
 const ClientProjects = () => {
   const { t } = useTranslations();
@@ -32,6 +34,8 @@ const ClientProjects = () => {
   const [showProjectDetails, setShowProjectDetails] = useState(false);
   const [currentProject, setCurrentProject] = useState(null);
   const [selectedProjectForDocs, setSelectedProjectForDocs] = useState(null);
+  const [showNewProjectModal, setShowNewProjectModal] = useState(false);
+  const [showTimelineModal, setShowTimelineModal] = useState(false);
 
   // Cargar datos al montar el componente
   useEffect(() => {
@@ -124,17 +128,33 @@ const ClientProjects = () => {
   };
 
   const handleNewProject = () => {
-    // Redirigir a solicitar servicio o mostrar modal
-    // Por ahora alerta
-    alert(t('client.contactSupportToStartProject'));
+    setShowNewProjectModal(true);
   };
 
   const handleViewTimeline = () => {
-    alert(t('client.timelineViewComingSoon'));
+    setShowTimelineModal(true);
   };
 
-  const handleDownloadReport = (project) => {
-    alert(`${t('client.downloadingReport')} ${project.title}...`);
+  const handleDownloadReport = async (project) => {
+    try {
+      const report = await projectService.getProjectReport(project.id);
+
+      // Create a downloadable file from the JSON report
+      const dataStr = JSON.stringify(report, null, 2);
+      const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
+
+      const exportFileDefaultName = `Reporte-${project.title.replace(/\s+/g, '-')}.json`;
+
+      const linkElement = document.createElement('a');
+      linkElement.setAttribute('href', dataUri);
+      linkElement.setAttribute('download', exportFileDefaultName);
+      linkElement.click();
+
+      alert(t('client.reportDownloaded') || 'Reporte descargado con éxito');
+    } catch (err) {
+      console.error('Error downloading report:', err);
+      alert(t('client.errorDownloadingReport') || 'Error al descargar el reporte');
+    }
   };
 
   const getTaskStatusColor = (status) => {
@@ -416,6 +436,21 @@ const ClientProjects = () => {
         isOpen={!!selectedProjectForDocs}
         onClose={() => setSelectedProjectForDocs(null)}
         project={selectedProjectForDocs}
+      />
+
+      <RequestBudgetModal
+        isOpen={showNewProjectModal}
+        onClose={() => setShowNewProjectModal(false)}
+        onSubmit={(data) => {
+          console.log('Nuevo proyecto solicitado:', data);
+          // Opcional: recargar lista de proyectos
+        }}
+      />
+
+      <ProjectTimelineModal
+        isOpen={showTimelineModal}
+        onClose={() => setShowTimelineModal(false)}
+        projects={projects}
       />
     </div>
   );
