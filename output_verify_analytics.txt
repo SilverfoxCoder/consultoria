@@ -1,0 +1,79 @@
+
+> xperiecia-consulting-landing@1.0.0 build
+> react-scripts build
+
+Creating an optimized production build...
+Browserslist: browsers data (caniuse-lite) is 8 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+Browserslist: browsers data (caniuse-lite) is 8 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+Compiled with warnings.
+
+[eslint] 
+src\components\admin\ProjectManagement.jsx
+  Line 169:7:  Duplicate key 'priority'     no-dupe-keys
+  Line 170:7:  Duplicate key 'description'  no-dupe-keys
+  Line 202:7:  Duplicate key 'description'  no-dupe-keys
+
+src\components\client\ClientAnalytics.jsx
+  Line 14:8:  'budgetService' is defined but never used  no-unused-vars
+
+src\components\client\ClientProjects.jsx
+  Line 5:3:    'MagnifyingGlassIcon' is defined but never used       no-unused-vars
+  Line 8:3:    'ClockIcon' is defined but never used                 no-unused-vars
+  Line 9:3:    'CheckCircleIcon' is defined but never used           no-unused-vars
+  Line 14:10:  'Listbox' is defined but never used                   no-unused-vars
+  Line 15:10:  'ChevronUpDownIcon' is defined but never used         no-unused-vars
+  Line 15:42:  'CheckIconSolid' is defined but never used            no-unused-vars
+  Line 31:22:  'setSearchTerm' is assigned a value but never used    no-unused-vars
+  Line 32:24:  'setStatusFilter' is assigned a value but never used  no-unused-vars
+  Line 33:18:  'setSortBy' is assigned a value but never used        no-unused-vars
+  Line 59:9:   'statusOptions' is assigned a value but never used    no-unused-vars
+  Line 67:9:   'sortOptions' is assigned a value but never used      no-unused-vars
+
+src\components\client\modals\ProjectDocumentsModal.jsx
+  Line 14:8:  React Hook useEffect has a missing dependency: 'loadDocuments'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src\components\client\modals\ProjectTimelineModal.jsx
+  Line 6:5:  'CheckCircleIcon' is defined but never used  no-unused-vars
+
+src\components\client\modals\ViewInvoicesModal.jsx
+  Line 52:6:  React Hook useEffect has missing dependencies: 'clientId' and 'user?.id'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+src\components\services\SEO.jsx
+  Line 13:13:  't' is assigned a value but never used  no-unused-vars
+
+src\services\projectService.js
+  Line 177:7:  Duplicate key 'jiraUrl'         no-dupe-keys
+  Line 178:7:  Duplicate key 'jiraProjectKey'  no-dupe-keys
+
+src\translations\translations.js
+  Line 1202:7:  Duplicate key 'projectTeam'   no-dupe-keys
+  Line 1203:7:  Duplicate key 'tasks'         no-dupe-keys
+  Line 1204:7:  Duplicate key 'deliverables'  no-dupe-keys
+  Line 1205:7:  Duplicate key 'viewDetails'   no-dupe-keys
+  Line 1282:7:  Duplicate key 'spent'         no-dupe-keys
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+File sizes after gzip:
+
+  325.03 kB (-117 B)  build\static\js\main.c61f273a.js
+  10.46 kB            build\static\css\main.f8d64a19.css
+
+The project was built assuming it is hosted at /.
+You can control this with the homepage field in your package.json.
+
+The build folder is ready to be deployed.
+You may serve it with a static server:
+
+  npm install -g serve
+  serve -s build
+
+Find out more about deployment here:
+
+  https://cra.link/deployment
+

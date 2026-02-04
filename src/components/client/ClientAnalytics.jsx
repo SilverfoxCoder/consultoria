@@ -37,42 +37,17 @@ const ClientAnalytics = () => {
       setIsLoading(true);
 
       try {
-        // Intentar cargar datos del backend primero
         const finalClientId = clientId || user?.id || 1;
-        const [analytics, budgets, projects] = await Promise.allSettled([
-          analyticsService.getAnalyticsByClient(finalClientId),
-          budgetService.getBudgetsByClient(finalClientId),
-          projectService.getProjectsByClient(finalClientId)
-        ]);
+        const data = await analyticsService.getDashboardAnalytics(finalClientId);
 
-        // Verificar si el backend respondió correctamente
-        const hasBackendData = analytics.status === 'fulfilled' &&
-          budgets.status === 'fulfilled' &&
-          projects.status === 'fulfilled';
-
-        if (hasBackendData) {
-          console.log('✅ Backend disponible - usando datos reales para Analytics');
-
-          // Usar datos del backend
-          const analyticsData = analytics.value || {};
-          const budgetsData = Array.isArray(budgets.value) ? budgets.value : [];
-          const projectsData = Array.isArray(projects.value) ? projects.value : [];
-
-          // Calcular KPIs reales
-          const totalSpent = budgetsData.reduce((sum, b) => sum + (b.amount || 0), 0);
-
-          const isActiveProject = (p) => {
-            const status = p.status?.toUpperCase() || '';
-            return status === 'EN PROGRESO' || status === 'PLANIFICACION' || status === 'IN-PROGRESS' || status === 'PLANNING';
-          };
-
-          const activeProjects = projectsData.filter(isActiveProject).length;
+        if (data) {
+          console.log('✅ Datos de analíticas recibidos:', data);
 
           const kpisData = [
             {
               name: t('client.totalSpent'),
-              value: `€${totalSpent.toLocaleString()}`,
-              change: '+0%', // TODO: Calcular real si hay histórico
+              value: `€${(data.totalSpent || 0).toLocaleString()}`,
+              change: '+0%',
               changeType: 'neutral',
               icon: CurrencyDollarIcon,
               color: 'text-green-400',
@@ -80,7 +55,7 @@ const ClientAnalytics = () => {
             },
             {
               name: t('client.activeProjects'),
-              value: activeProjects.toString(),
+              value: (data.activeProjects || 0).toString(),
               change: '0',
               changeType: 'neutral',
               icon: CheckCircleIcon,
@@ -89,7 +64,7 @@ const ClientAnalytics = () => {
             },
             {
               name: t('client.avgResponseTime'),
-              value: '2.3h', // Este valor viene de analytics, mantener si es real o poner 0
+              value: '2.3h',
               change: '0',
               changeType: 'neutral',
               icon: ClockIcon,
@@ -98,7 +73,7 @@ const ClientAnalytics = () => {
             },
             {
               name: t('client.openTickets'),
-              value: (analyticsData.openTickets || 0).toString(),
+              value: (data.openTickets || 0).toString(),
               change: '0',
               changeType: 'neutral',
               icon: ExclamationTriangleIcon,
@@ -108,21 +83,33 @@ const ClientAnalytics = () => {
           ];
 
           setKpis(kpisData);
-          setMonthlyData(analyticsData.monthlyData || []);
-          setProjectPerformance(projectsData.map(p => ({
-            name: p.name,
-            progress: p.progress || 0,
-            budget: p.budget || 0,
-            spent: p.spent || 0,
-            status: p.progress >= 100 ? 'completed' : p.status === 'delayed' ? 'delayed' : 'on-track'
-          })));
-          setServiceBreakdown(analyticsData.serviceBreakdown || []);
+          setMonthlyData(data.monthlySpending || []);
+          setServiceBreakdown(data.serviceBreakdown || []);
+          setRecentActivity(data.recentActivity || []);
 
-          // TODO: Implementar endpoint de actividad reciente real
-          setRecentActivity([]);
+          // Project performance needs to come from projects list still? 
+          // Actually let's fetch projects separately to keep that detailed view or simplify it.
+          // For now, let's keep it separate or we can add it to DTO if needed.
+          // Re-fetching projects here to keep the detailed list functionality 
+          // or we can just mock it empty if we want to rely solely on the dashboard endpoint.
+          // But the dashboard endpoint returned activeProjects count, not the list.
+          // Let's fetch projects briefly to populate the list view.
+          try {
+            const projects = await projectService.getProjectsByClient(finalClientId);
+            const projectsData = Array.isArray(projects) ? projects : [];
+            setProjectPerformance(projectsData.map(p => ({
+              name: p.name || p.title,
+              progress: p.progress || 0,
+              budget: p.budget || 0,
+              spent: p.spent || 0,
+              status: p.progress >= 100 ? 'completed' : p.status === 'delayed' ? 'delayed' : 'on-track'
+            })));
+          } catch (e) {
+            console.warn('Could not load project details for list', e);
+            setProjectPerformance([]);
+          }
+
         } else {
-          console.error('⚠️ Error al cargar datos del backend para Analytics');
-          // No usar datos mockeados, dejar arrays vacíos
           setKpis([]);
           setMonthlyData([]);
           setProjectPerformance([]);
@@ -132,10 +119,6 @@ const ClientAnalytics = () => {
       } catch (error) {
         console.error('❌ Error al cargar datos del dashboard:', error);
         setKpis([]);
-        setMonthlyData([]);
-        setProjectPerformance([]);
-        setServiceBreakdown([]);
-        setRecentActivity([]);
       } finally {
         if (isMounted) {
           setIsLoading(false);

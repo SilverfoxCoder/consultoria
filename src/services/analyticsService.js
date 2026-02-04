@@ -127,6 +127,10 @@ class AnalyticsService {
       return [];
     }
   }
+  // Obtener datos del dashboard en tiempo real
+  async getDashboardAnalytics(clientId) {
+    return this.request(`/analytics/dashboard/${clientId}`);
+  }
 }
 
 export const analyticsService = new AnalyticsService(); 
