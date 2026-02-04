@@ -171,6 +171,13 @@ const ClientManagement = () => {
       setIsLoading(true);
 
       if (modalType === 'add') {
+        // Validar campos requeridos
+        if (!formData.name?.trim() || !formData.company?.trim() || !formData.email?.trim()) {
+          setError('Por favor complete todos los campos obligatorios (Nombre, Empresa, Email)');
+          setIsLoading(false);
+          return;
+        }
+
         // Crear nuevo cliente
         const newClient = await clientService.createClient(formData);
         setClients([...clients, newClient]);
