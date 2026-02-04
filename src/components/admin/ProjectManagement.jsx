@@ -163,6 +163,7 @@ const ProjectManagement = () => {
       startDate: '',
       endDate: '',
       budget: '',
+      spent: '',
       priority: 'Media',
       description: '',
       priority: 'Media',
@@ -195,6 +196,7 @@ const ProjectManagement = () => {
       startDate: project.startDate,
       endDate: project.endDate,
       budget: project.budget.toString(),
+      spent: (project.spent || 0).toString(),
       priority: project.priority,
       description: project.description,
       description: project.description,
@@ -292,7 +294,7 @@ const ProjectManagement = () => {
         startDate: formData.startDate,
         endDate: formData.endDate,
         budget: budgetValue,
-        spent: 0, // ✅ Add default spent amount
+        spent: parseFloat(formData.spent) || 0, // ✅ Add spent amount
         priority: priorityMapping[formData.priority] || 'MEDIA', // ✅ Convert to uppercase enum
         description: formData.description || '',
         teamMemberIds: formData.teamMemberIds
@@ -322,6 +324,7 @@ const ProjectManagement = () => {
         startDate: '',
         endDate: '',
         budget: '',
+        spent: '',
         priority: 'Media',
         description: '',
         team: [],
@@ -899,6 +902,17 @@ const ProjectManagement = () => {
                     onChange={handleInputChange}
                     className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
                     required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-200 mb-2">{t('projectManagement.stats.totalSpent')}</label>
+                  <input
+                    type="number"
+                    name="spent"
+                    value={formData.spent || 0}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
                   />
                 </div>
 

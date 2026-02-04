@@ -100,6 +100,59 @@ class ProjectService {
     return this.request(`/project-teams/project/${projectId}`);
   }
 
+  // --- Gestión de Documentos ---
+
+  // Obtener documentos del proyecto
+  async getProjectDocuments(projectId) {
+    return this.request(`/projects/${projectId}/documents`);
+  }
+
+  // Subir documento
+  async uploadProjectDocument(projectId, file) {
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    // Custom request for FormData (no JSON headers)
+    const url = `${this.baseURL}/projects/${projectId}/documents`;
+    const token = localStorage.getItem('token'); // Assuming auth token is stored there if needed
+    
+    const headers = {};
+    if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+    }
+    // Note: Content-Type for FormData is set automatically by browser
+
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            body: formData,
+            headers: headers
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.error || `HTTP ${response.status}: ${response.statusText}`);
+        }
+
+        return await response.json();
+    } catch (error) {
+        const errorMessage = handleCorsError(error);
+        throw new Error(errorMessage);
+    }
+  }
+
+  // Eliminar documento
+  async deleteDocument(documentId) {
+    return this.request(`/documents/${documentId}`, {
+      method: 'DELETE'
+    });
+  }
+
+  // Obtener URL de descarga (helper para usar en href)
+  getDownloadDocumentUrl(documentId) {
+    return `${this.baseURL}/documents/${documentId}/download`;
+  }
+
   // Sanitizar datos del proyecto para enviar al backend
   sanitizeProjectData(data) {
     return {

@@ -18,6 +18,7 @@ import RequestBudgetModal from './modals/RequestBudgetModal';
 import CreateTicketModal from './modals/CreateTicketModal';
 import RequestServiceModal from './modals/RequestServiceModal';
 import ViewInvoicesModal from './modals/ViewInvoicesModal';
+import ProjectDocumentsModal from './modals/ProjectDocumentsModal';
 
 const ClientDashboard = () => {
   const { t } = useTranslations();
@@ -35,7 +36,9 @@ const ClientDashboard = () => {
   const [showBudgetModal, setShowBudgetModal] = useState(false);
   const [showTicketModal, setShowTicketModal] = useState(false);
   const [showServiceModal, setShowServiceModal] = useState(false);
+  const [showServiceModal, setShowServiceModal] = useState(false);
   const [showInvoicesModal, setShowInvoicesModal] = useState(false);
+  const [selectedProjectForDocs, setSelectedProjectForDocs] = useState(null);
 
   // Cargar datos al montar el componente
   useEffect(() => {
@@ -464,6 +467,12 @@ const ClientDashboard = () => {
       <ViewInvoicesModal
         isOpen={showInvoicesModal}
         onClose={() => setShowInvoicesModal(false)}
+      />
+
+      <ProjectDocumentsModal
+        isOpen={!!selectedProjectForDocs}
+        onClose={() => setSelectedProjectForDocs(null)}
+        project={selectedProjectForDocs}
       />
     </div >
   );

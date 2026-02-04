@@ -16,7 +16,10 @@ import {
   TrashIcon,
   PlusIcon,
   XMarkIcon,
-  CheckIcon
+  CheckIcon,
+  PaperClipIcon,
+  CloudArrowUpIcon,
+  ArrowDownTrayIcon
 } from '@heroicons/react/24/outline';
 import { useAuth } from '../../contexts/AuthContext';
 import { taskService } from '../../services/taskService';
@@ -64,7 +67,55 @@ const ProjectDetails = ({ project, onBack, onUpdate }) => {
   ]);
 
   const [newTask, setNewTask] = useState({ title: '', assignedTo: '', date: '' });
+
   const [newComment, setNewComment] = useState('');
+
+  // Estados para documentos
+  const [documents, setDocuments] = useState([]);
+  const [isUploading, setIsUploading] = useState(false);
+
+  // Cargar documentos
+  const loadDocuments = React.useCallback(async () => {
+    if (!project?.id) return;
+    try {
+      const docs = await projectService.getProjectDocuments(project.id);
+      setDocuments(docs);
+    } catch (error) {
+      console.error('Error loading documents:', error);
+    }
+  }, [project?.id]);
+
+  useEffect(() => {
+    if (activeTab === 'documents') {
+      loadDocuments();
+    }
+  }, [activeTab, loadDocuments]);
+
+  const handleFileUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    try {
+      setIsUploading(true);
+      const newDoc = await projectService.uploadProjectDocument(project.id, file);
+      setDocuments([...documents, newDoc]);
+    } catch (error) {
+      console.error('Error uploading document:', error);
+      // Podrías añadir un estado de error específico para documentos si lo deseas
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const handleDeleteDocument = async (docId) => {
+    if (!window.confirm('¿Estás seguro de que quieres eliminar este documento?')) return;
+    try {
+      await projectService.deleteDocument(docId);
+      setDocuments(documents.filter(d => d.id !== docId));
+    } catch (error) {
+      console.error('Error deleting document:', error);
+    }
+  };
 
   useEffect(() => {
     if (project) {
@@ -398,6 +449,7 @@ const ProjectDetails = ({ project, onBack, onUpdate }) => {
                 {[
                   { id: 'overview', name: 'Resumen', icon: EyeIcon },
                   { id: 'tasks', name: 'Tareas', icon: DocumentTextIcon },
+                  { id: 'documents', name: 'Documentos', icon: PaperClipIcon }, // Nueva pestaña
                   { id: 'timeline', name: 'Cronograma', icon: CalendarIcon },
                   { id: 'budget', name: 'Presupuesto', icon: CurrencyEuroIcon },
                   { id: 'analytics', name: 'Analytics', icon: ChartBarIcon },
@@ -662,6 +714,83 @@ const ProjectDetails = ({ project, onBack, onUpdate }) => {
                             : 'bg-yellow-500/10 text-yellow-400'
                             }`}>
                             {task.statusDisplay || (task.status === 'COMPLETADA' ? 'Completado' : 'Pendiente')}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+
+
+
+              {activeTab === 'documents' && (
+                <div>
+                  <div className="flex items-center justify-between mb-6">
+                    <h3 className="text-xl font-semibold text-white">Documentos del Proyecto</h3>
+                    <div className="relative">
+                      <input
+                        type="file"
+                        id="file-upload"
+                        className="hidden"
+                        onChange={handleFileUpload}
+                        disabled={isUploading}
+                      />
+                      <label
+                        htmlFor="file-upload"
+                        className={`flex items-center space-x-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors duration-200 cursor-pointer ${isUploading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                      >
+                        {isUploading ? (
+                          <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                        ) : (
+                          <CloudArrowUpIcon className="h-5 w-5" />
+                        )}
+                        <span>{isUploading ? 'Subiendo...' : 'Subir Documento'}</span>
+                      </label>
+                    </div>
+                  </div>
+
+                  {documents.length === 0 ? (
+                    <div className="text-center py-12 text-gray-400 border-2 border-dashed border-gray-700 rounded-xl">
+                      <PaperClipIcon className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                      <p className="text-lg font-medium text-gray-300">No hay documentos</p>
+                      <p className="text-sm">Sube contratos, reportes o cualquier archivo relevante.</p>
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {documents.map((doc) => (
+                        <div key={doc.id} className="bg-gray-700/30 border border-gray-600/50 rounded-xl p-4 hover:bg-gray-700/50 transition-colors group">
+                          <div className="flex items-start justify-between">
+                            <div className="flex items-center space-x-3">
+                              <div className="p-2 bg-blue-500/10 rounded-lg">
+                                <DocumentTextIcon className="h-8 w-8 text-blue-400" />
+                              </div>
+                              <div className="overflow-hidden">
+                                <h4 className="text-white font-medium truncate" title={doc.originalFilename}>
+                                  {doc.originalFilename}
+                                </h4>
+                                <p className="text-xs text-gray-400">
+                                  {(doc.fileSize / 1024).toFixed(1)} KB • {new Date(doc.uploadedAt).toLocaleDateString()}
+                                </p>
+                              </div>
+                            </div>
+                            <div className="flex space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                              <a
+                                href={projectService.getDownloadDocumentUrl(doc.id)}
+                                className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-600 rounded-lg transition-colors"
+                                title="Descargar"
+                                download
+                              >
+                                <ArrowDownTrayIcon className="h-5 w-5" />
+                              </a>
+                              <button
+                                onClick={() => handleDeleteDocument(doc.id)}
+                                className="p-1.5 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-colors"
+                                title="Eliminar"
+                              >
+                                <TrashIcon className="h-5 w-5" />
+                              </button>
+                            </div>
                           </div>
                         </div>
                       ))}
