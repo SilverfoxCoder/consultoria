@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslations } from '../hooks/useTranslations';
 import { useAuth } from '../contexts/AuthContext';
+import HubAppsSection from './HubAppsSection';
 
 const Home = ({ onShowRegister, onShowDashboard, onShowServices }) => {
   const { t } = useTranslations();
@@ -72,6 +73,11 @@ const Home = ({ onShowRegister, onShowDashboard, onShowServices }) => {
             >
               {isAuthenticated ? t('home.cta.viewServices') : t('home.cta.learnMore')}
             </button>
+          </div>
+
+          {/* Apps Hub */}
+          <div className="mt-16 w-full text-left">
+            <HubAppsSection />
           </div>
 
           {/* Branding Banner */}

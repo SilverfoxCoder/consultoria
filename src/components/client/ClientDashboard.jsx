@@ -19,6 +19,7 @@ import CreateTicketModal from './modals/CreateTicketModal';
 import RequestServiceModal from './modals/RequestServiceModal';
 import ViewInvoicesModal from './modals/ViewInvoicesModal';
 import ProjectDocumentsModal from './modals/ProjectDocumentsModal';
+import HubAppsSection from '../HubAppsSection';
 
 const ClientDashboard = () => {
   const { t } = useTranslations();
@@ -398,6 +399,9 @@ const ClientDashboard = () => {
           )}
         </div>
       </div>
+
+      {/* Hub de Aplicaciones */}
+      <HubAppsSection variant="dark" />
 
       {/* Quick Actions */}
       <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700">

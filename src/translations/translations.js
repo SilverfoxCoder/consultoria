@@ -2391,6 +2391,7 @@ export const translations = {
       ready: "Listo",
       userTraining: "Formación de Usuario",
       open: "Abierto",
+      hubApps: "Hub de Aplicaciones",
       
       // Dashboard
       welcomeBack: "Bienvenido de vuelta",

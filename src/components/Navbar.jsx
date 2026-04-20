@@ -52,18 +52,7 @@ const Navbar = ({ onNavClick, currentPage, onShowLogin, onShowRegister, onShowDa
                 }`}>XperiecIA Consulting</span>
             </button>
 
-            {/* Black Ribbon for Adamuz */}
-            <div
-              className="ml-3 text-black cursor-help transition-transform hover:scale-110 flex items-center justify-center"
-              title="Desde XperiecIA Consulting, enviamos nuestras más sentidas condolencias a los familiares y amigos de los fallecidos en los trágicos accidentes de Adamuz, Córdoba."
-            >
-              <img
-                src="/lazo_negro.png"
-                alt="Lazo negro"
-                className="w-8 h-8 drop-shadow-md"
-                style={{ filter: 'drop-shadow(0px 0px 1px rgba(255,255,255,1))' }}
-              />
-            </div>
+
           </div>
 
           {/* Desktop Navigation */}

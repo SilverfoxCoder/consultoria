@@ -5,7 +5,7 @@ import { translations } from '../translations/translations';
 export const useTranslations = () => {
   const { currentLanguage } = useLanguage();
   
-  const t = useCallback((key) => {
+  const t = useCallback((key, fallback) => {
     const keys = key.split('.');
     let value = translations[currentLanguage];
     
@@ -14,7 +14,7 @@ export const useTranslations = () => {
         value = value[k];
       } else {
         console.warn(`Translation key not found: ${key} for language: ${currentLanguage}`);
-        return key; // Return the key if translation not found
+        return fallback || key; // Return the fallback or key if translation not found
       }
     }
     
