@@ -30,7 +30,8 @@ const apps = [
     color: 'text-orange-500',
     darkColor: 'text-orange-400',
     bgColor: 'bg-orange-500/10',
-    darkBgColor: 'bg-orange-400/10'
+    darkBgColor: 'bg-orange-400/10',
+    image: '/assets/images/branding/Gemini_Generated_Image_ec7obmec7obmec7o.png'
   },
   {
     id: 'pelutech',
@@ -103,9 +104,22 @@ const HubAppsSection = ({ variant = 'light' }) => {
             }
             style={{ animationDelay: `${index * 0.6}s` }}
           >
-            <div className={`p-3 lg:p-4 rounded-xl w-fit ${isDark ? app.darkBgColor : app.bgColor} mb-4 lg:mb-6 group-hover:scale-110 transition-transform`}>
-              <app.icon className={`h-6 w-6 lg:h-8 lg:w-8 ${isDark ? app.darkColor : app.color}`} />
-            </div>
+            {app.image ? (
+              <div className="w-full h-32 lg:h-36 mb-5 rounded-2xl overflow-hidden relative shadow-lg shadow-black/20">
+                <img 
+                  src={app.image} 
+                  alt={app.name} 
+                  className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700" 
+                />
+                <div className="absolute top-2 right-2 p-2 rounded-xl backdrop-blur-md bg-black/30 border border-white/10">
+                   <app.icon className="h-5 w-5 text-white" />
+                </div>
+              </div>
+            ) : (
+              <div className={`p-3 lg:p-4 rounded-xl w-fit ${isDark ? app.darkBgColor : app.bgColor} mb-4 lg:mb-6 group-hover:scale-110 transition-transform`}>
+                <app.icon className={`h-6 w-6 lg:h-8 lg:w-8 ${isDark ? app.darkColor : app.color}`} />
+              </div>
+            )}
             
             <h4 className="text-white font-bold text-xl mb-3">
               {app.name}
